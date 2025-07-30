@@ -27,6 +27,8 @@ dependencies {
 
 spotless {
 	java {
+		googleJavaFormat('1.19.2')
+
 		importOrder(
 				'java|javax|jakarta',
 				'org.springframework',
@@ -35,9 +37,8 @@ spotless {
 				'org.junit|org.mockito',
 				'\\#',
 				'\\#org.junit'
-		)
+				)
 
-		googleJavaFormat('1.19.2')
 
 		formatAnnotations()
 
