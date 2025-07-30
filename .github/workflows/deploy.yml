@@ -9,8 +9,7 @@ permissions:
   contents: read
 
 env:
-  AWS_REGION: ap-northeast-2
-  ECR_URI: ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com/proj/dnd-13th-9-backend
+  ECR_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPO_NAME }}
   IMAGE_TAG: latest
 
 jobs:
@@ -31,8 +30,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/ECR-CICD-ROLE
-          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.ECR_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to ECR
         id: ecr-login
@@ -50,17 +49,17 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/ECR-CICD-ROLE
-          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ ECR_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Deploy to EC2 via SSM
         run: |
           aws ssm send-command \
-            --instance-ids ${{ vars.EC2_INSTANCE_ID }} \
+            --instance-ids ${{ secrets.EC2_INSTANCE_ID }} \
             --document-name AWS-RunShellScript \
             --comment "Deploy myproj" \
             --parameters commands='[
-              "aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com",
+              "aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com",
               "docker pull ${{ env.ECR_URI }}:${{ env.IMAGE_TAG }}",
               "docker stop myapp || true",
               "docker rm myapp || true",
