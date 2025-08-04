@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: DND_13th_9_BE
+  profiles:
+    active: dev
