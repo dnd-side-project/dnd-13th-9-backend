@@ -35,5 +35,10 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### env ###
 .env.dev
 .env.prod
+
+### QueryDSL Q class ###
+/build/generated/
