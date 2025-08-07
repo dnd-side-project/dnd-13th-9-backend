@@ -29,12 +29,17 @@ dependencies {
 	// Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 
 	// QueryDSL
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
 	annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
 	annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
 	annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
+	testAnnotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
+	testAnnotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+	testAnnotationProcessor 'jakarta.persistence:jakarta.persistence-api'
 }
 
 spotless {
@@ -78,10 +83,6 @@ tasks.withType(JavaCompile).configureEach {
 
 sourceSets {
 	main.java.srcDirs += [querydslDir]
-}
-
-clean.doLast {
-	file(querydslDir).deleteDir()
 }
 
 clean {
