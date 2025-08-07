@@ -27,9 +27,9 @@ public class PropertyImageEntity {
   @JoinColumn(name = "property_id", nullable = false)
   private PropertyRecordEntity propertyRecord;
 
-  @Column(name = "image_url")
+  @Column(name = "image_url", nullable = false)
   private String imageUrl;
 
-  @Column(name = "image_order")
+  @Column(name = "image_order", nullable = false)
   private Integer imageOrder;
 }

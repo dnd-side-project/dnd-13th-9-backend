@@ -41,14 +41,8 @@ public class ChecklistItemEntity {
   private String description;
 
   @Comment("체크리스트 옵션 값")
-  @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(
+      mappedBy = "item",
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private List<ChecklistOptionEntity> options;
-
-  @Comment("사용자 지정 필수 확인")
-  @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<UserChecklistFavoriteEntity> favorites;
-
-  @Comment("매물 정보에서 선택한 아이템")
-  @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<PropertyChecklistAnswerEntity> answers;
 }

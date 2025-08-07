@@ -1,7 +1,9 @@
 package com.example.dnd_13th_9_be.property.persistence;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 
 import lombok.AccessLevel;
@@ -74,25 +77,34 @@ public class PropertyRecordEntity {
   @Column(name = "house_type")
   private HouseType houseType;
 
-  @Comment("월세인 경우 1000/65")
-  @Column(nullable = false)
-  private String price;
+  @Comment("보증금/전세금/매매가 (만원)")
+  @Column(name = "price", nullable = false)
+  private BigDecimal price;
+
+  @Comment("집 유형이 월세인 경우 월세 값")
+  @Column(name = "monthly_rent_price")
+  private BigDecimal monthlyRentPrice;
 
   @Comment("관리비")
   @Column(name = "management_fee", nullable = false)
-  private String managementFee;
+  private BigDecimal managementFee;
 
-  @Comment("입주 가능 시기")
-  @Column(name = "available_date")
-  private String availableDate;
+  @Comment("입주 가능 시기 (예: 9월 초, 즉시입주, 협의 가능)")
+  @Column(name = "move_in_info")
+  private String moveInInfo;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)
   private LocalDateTime createdAt;
 
-  @OneToMany(mappedBy = "propertyRecord", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OrderBy("imageOrder ASC")
+  @OneToMany(
+      mappedBy = "propertyRecord",
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private List<PropertyImageEntity> images;
 
-  @OneToMany(mappedBy = "propertyRecord", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<PropertyTransportEntity> transports;
+  @OneToMany(
+      mappedBy = "propertyRecord",
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  private Set<PropertyTransportEntity> transports;
 }

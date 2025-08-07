@@ -1,7 +1,7 @@
 package com.example.dnd_13th_9_be.collection.persistence;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,6 +44,8 @@ public class CollectionEntity {
   @Column(name = "created_at", nullable = false, updatable = false)
   private LocalDateTime createdAt;
 
-  @OneToMany(mappedBy = "collection", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<FolderEntity> folders;
+  @OneToMany(
+      mappedBy = "collection",
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  private Set<FolderEntity> folders;
 }

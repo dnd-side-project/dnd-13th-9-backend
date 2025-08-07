@@ -27,9 +27,9 @@ public class LocationImageEntity {
   @JoinColumn(name = "location_id", nullable = false)
   private LocationRecordEntity locationRecord;
 
-  @Column(name = "image_url")
+  @Column(name = "image_url", nullable = false)
   private String imageUrl;
 
-  @Column(name = "image_order")
+  @Column(name = "image_order", nullable = false)
   private Integer imageOrder;
 }

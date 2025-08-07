@@ -65,6 +65,8 @@ public class LocationRecordEntity {
   @Column(name = "created_at", nullable = false, updatable = false)
   private LocalDateTime createdAt;
 
-  @OneToMany(mappedBy = "locationRecord", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(
+      mappedBy = "locationRecord",
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private List<LocationImageEntity> images;
 }
