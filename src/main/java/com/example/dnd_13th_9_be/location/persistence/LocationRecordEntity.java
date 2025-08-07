@@ -1,10 +1,12 @@
-package com.example.dnd_13th_9_be.folder.persistence;
+package com.example.dnd_13th_9_be.location.persistence;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,36 +20,51 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import com.example.dnd_13th_9_be.collection.persistence.CollectionEntity;
-import com.example.dnd_13th_9_be.location.persistence.LocationRecordEntity;
-import com.example.dnd_13th_9_be.property.persistence.PropertyRecordEntity;
+import com.example.dnd_13th_9_be.folder.persistence.FolderEntity;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
-@Table(name = "folder")
+@Table(name = "location_record")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FolderEntity {
+public class LocationRecordEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "collection_id", nullable = false)
-  private CollectionEntity collection;
+  @JoinColumn(name = "folder_id", nullable = false)
+  private FolderEntity folder;
 
-  @Comment("폴더 명")
+  @Comment("장소 메모 제목")
+  private String title;
+
+  @Comment("주소")
   @Column(nullable = false)
-  private String name;
+  private String address;
+
+  @Comment("위도")
+  @Column(nullable = false)
+  private Double latitude;
+
+  @Comment("경도")
+  @Column(nullable = false)
+  private Double longitude;
+
+  @Comment("메모 유형")
+  @Enumerated(EnumType.STRING)
+  @Column(name = "record_type")
+  private LocationRecordType recordType;
+
+  @Comment("메모")
+  @Column(length = 2000)
+  private String memo;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)
   private LocalDateTime createdAt;
 
-  @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<PropertyRecordEntity> propertyRecords;
-
-  @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<LocationRecordEntity> locationRecords;
+  @OneToMany(mappedBy = "locationRecord", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<LocationImageEntity> images;
 }
