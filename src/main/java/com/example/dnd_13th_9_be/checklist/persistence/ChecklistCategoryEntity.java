@@ -1,6 +1,5 @@
-package com.example.dnd_13th_9_be.user.persistence;
+package com.example.dnd_13th_9_be.checklist.persistence;
 
-import java.time.LocalDateTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,21 +11,18 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Comment;
 
 @Entity
-@Table(name = "user")
+@Table(name = "checklist_category")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserEntity {
+public class ChecklistCategoryEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false, unique = true)
-  private String email;
-
-  @CreationTimestamp
-  @Column(name = "created_at", nullable = false, updatable = false)
-  private LocalDateTime createdAt;
+  @Comment("메인 공간, 창문, 건물")
+  @Column(nullable = false, length = 10)
+  private String name;
 }

@@ -42,3 +42,4 @@ out/
 
 ### QueryDSL Q class ###
 /build/generated/
+src/main/generated
