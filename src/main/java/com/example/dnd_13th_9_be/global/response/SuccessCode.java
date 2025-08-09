@@ -7,8 +7,8 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public enum SuccessCode implements ResponseCode {
-  SUCCESS(HttpStatus.OK, "00000", "성공했습니다"),
-  CREATED(HttpStatus.CREATED, "00001", "생성되었습니다"),
+  SUCCESS(HttpStatus.OK, "20000", "성공했습니다"),
+  CREATED(HttpStatus.CREATED, "20100", "생성되었습니다"),
   ;
 
   private final HttpStatus status;

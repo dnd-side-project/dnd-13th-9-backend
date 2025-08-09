@@ -22,7 +22,7 @@ public class ApiResponse<T> {
     this.data = data;
   }
 
-  public static ApiResponse<Map<Object, Object>> ok() {
+  public static ApiResponse<Map<String, Object>> ok() {
     return success(Map.of());
   }
 
@@ -38,7 +38,7 @@ public class ApiResponse<T> {
     return new ApiResponse<>(code.code(), code.defaultMessage(), data);
   }
 
-  public static ResponseEntity<ApiResponse<Map<Object, Object>>> okEntity() {
+  public static ResponseEntity<ApiResponse<Map<String, Object>>> okEntity() {
     return ResponseEntity.ok(ok());
   }
 
