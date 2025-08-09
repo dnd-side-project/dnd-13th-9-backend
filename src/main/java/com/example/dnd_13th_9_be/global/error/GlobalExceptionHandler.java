@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import lombok.extern.slf4j.Slf4j;
 
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
+import io.swagger.v3.oas.annotations.Hidden;
 
 @Slf4j
+@Hidden
 @RestControllerAdvice
 public class GlobalExceptionHandler {
   @ExceptionHandler(MethodArgumentNotValidException.class)
