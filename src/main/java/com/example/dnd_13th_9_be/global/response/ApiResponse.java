@@ -43,7 +43,7 @@ public class ApiResponse<T> {
   }
 
   public static <T> ResponseEntity<ApiResponse<T>> successEntity(T data) {
-    return ResponseEntity.status(SuccessCode.SUCCESS.httpStatus()).body(ApiResponse.success(data));
+    return ResponseEntity.ok(ApiResponse.success(data));
   }
 
   public static <T> ResponseEntity<ApiResponse<T>> errorEntity(ErrorCode code) {
