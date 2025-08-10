@@ -3,3 +3,19 @@ spring:
     name: DND_13th_9_BE
   profiles:
     active: dev
+
+# Swagger springdoc-ui Configuration
+springdoc:
+  packages-to-scan: com.example.dnd_13th_9_be
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  cache:
+    disabled: true
+  api-docs:
+    path: /api-docs
+    groups:
+      enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
