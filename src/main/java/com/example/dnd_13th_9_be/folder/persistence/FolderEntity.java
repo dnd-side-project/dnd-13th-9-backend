@@ -15,7 +15,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import com.example.dnd_13th_9_be.collection.persistence.CollectionEntity;
+import com.example.dnd_13th_9_be.plan.persistence.PlanEntity;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -29,8 +29,8 @@ public class FolderEntity {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "collection_id", nullable = false)
-  private CollectionEntity collection;
+  @JoinColumn(name = "plan_id", nullable = false)
+  private PlanEntity plan;
 
   @Comment("폴더 명")
   @Column(nullable = false)

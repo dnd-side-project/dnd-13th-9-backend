@@ -1,4 +1,4 @@
-package com.example.dnd_13th_9_be.collection.persistence;
+package com.example.dnd_13th_9_be.plan.persistence;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -24,10 +24,10 @@ import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
-@Table(name = "collection")
+@Table(name = "plan")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CollectionEntity {
+public class PlanEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -36,7 +36,7 @@ public class CollectionEntity {
   @JoinColumn(name = "user_id", nullable = false)
   private UserEntity user;
 
-  @Comment("컬렉션 이름")
+  @Comment("계획 이름")
   @Column(nullable = false)
   private String name;
 
@@ -45,7 +45,7 @@ public class CollectionEntity {
   private LocalDateTime createdAt;
 
   @OneToMany(
-      mappedBy = "collection",
+      mappedBy = "plan",
       cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private Set<FolderEntity> folders;
 }
