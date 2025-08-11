@@ -1,6 +1,11 @@
 package com.example.dnd_13th_9_be.plan.persistence;
 
+import static com.example.dnd_13th_9_be.global.error.ErrorCode.NOT_FOUND_USER;
+
+import com.example.dnd_13th_9_be.global.error.BusinessException;
+import com.example.dnd_13th_9_be.user.persistence.QUserEntity;
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.folder.persistence.QFolderEntity;
@@ -15,21 +20,29 @@ public class PlanRepositoryImpl implements PlanRepositoryCustom {
 
   @Override
   public List<PlanSummary> findSummariesByUserId(Long userId) {
-    final QPlanEntity planEntity = QPlanEntity.planEntity;
-    final QFolderEntity folderEntity = QFolderEntity.folderEntity;
+    var plan = QPlanEntity.planEntity;
+    var folder = QFolderEntity.folderEntity;
+
+    // TODO: spring security 도입 후 제거
+    var user = QUserEntity.userEntity;
+    boolean isInvalidUser = query.selectOne().from(user).where(user.id.eq(userId)).fetchOne() == null;
+    if (isInvalidUser) {
+      throw new BusinessException(NOT_FOUND_USER);
+    }
+
     return query
         .select(
             Projections.constructor(
                 PlanSummary.class,
-                planEntity.id,
-                planEntity.name,
-                planEntity.createdAt,
-                folderEntity.id.countDistinct()))
-        .from(planEntity)
-        .leftJoin(planEntity.folders, folderEntity)
-        .where(planEntity.user.id.eq(userId))
-        .groupBy(planEntity.id, planEntity.name, planEntity.createdAt)
-        .orderBy(planEntity.createdAt.desc())
+                plan.id,
+                plan.name,
+                plan.createdAt,
+                folder.id.countDistinct()))
+        .from(plan)
+        .leftJoin(plan.folders, folder)
+        .where(plan.user.id.eq(userId))
+        .groupBy(plan.id, plan.name, plan.createdAt)
+        .orderBy(plan.createdAt.desc())
         .fetch();
   }
 }
