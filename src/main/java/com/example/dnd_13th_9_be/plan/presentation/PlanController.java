@@ -16,7 +16,7 @@ import com.example.dnd_13th_9_be.plan.presentation.dto.PlanSummaryResponse;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/plan")
+@RequestMapping("/api/v1/plan")
 public class PlanController {
   private final PlanService planService;
 

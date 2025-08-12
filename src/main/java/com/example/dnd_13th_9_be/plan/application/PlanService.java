@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
+import com.example.dnd_13th_9_be.plan.application.dto.PlanSummaryResult;
+
 @Service
 @RequiredArgsConstructor
 public class PlanService {

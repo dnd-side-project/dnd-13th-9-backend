@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.plan.application.PlanQueryPort;
-import com.example.dnd_13th_9_be.plan.application.PlanSummaryResult;
+import com.example.dnd_13th_9_be.plan.application.dto.PlanSummaryResult;
 
 @Component
 @RequiredArgsConstructor

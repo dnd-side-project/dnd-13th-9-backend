@@ -14,6 +14,7 @@ public enum ErrorCode implements ResponseCode {
   VALIDATION_ERROR(HttpStatus.UNPROCESSABLE_ENTITY, "42200", "검증 오류가 발생했습니다"),
   NOT_FOUND(HttpStatus.NOT_FOUND, "40400", "대상을 찾을 수 없습니다"),
   NOT_FOUND_USER(HttpStatus.NOT_FOUND, "40401", "사용자를 찾을 수 없습니다."),
+  NOT_FOUND_PLAN(HttpStatus.NOT_FOUND, "40402", "유효하지 않은 계획입니다"),
 
   // server error
   INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "50000", "서버 내부 오류입니다"),
