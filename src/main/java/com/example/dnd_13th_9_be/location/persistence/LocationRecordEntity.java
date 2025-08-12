@@ -23,6 +23,8 @@ import lombok.NoArgsConstructor;
 import com.example.dnd_13th_9_be.folder.persistence.FolderEntity;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "location_record")
@@ -35,6 +37,7 @@ public class LocationRecordEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "folder_id", nullable = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private FolderEntity folder;
 
   @Comment("장소 메모 제목")

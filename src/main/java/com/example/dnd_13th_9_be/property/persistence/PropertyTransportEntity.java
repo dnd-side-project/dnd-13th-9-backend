@@ -15,6 +15,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "property_transport")
@@ -27,6 +29,7 @@ public class PropertyTransportEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "property_id", nullable = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private PropertyRecordEntity propertyRecord;
 
   @Comment("목적지")

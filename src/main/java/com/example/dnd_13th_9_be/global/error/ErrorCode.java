@@ -33,10 +33,9 @@ public enum ErrorCode implements ResponseCode {
 
   FOLDER_CREATION_LIMIT(HttpStatus.BAD_REQUEST, "72001", "최대 생성할 수 있는 폴더 갯수를 초과했습니다"),
   FOLDER_RENAME_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "72002", "폴더 이름 변경에 실패했습니다"),
-  FOLDER_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "71003", "폴더 삭제에 실패했습니다"),
+  FOLDER_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "72003", "폴더 삭제에 실패했습니다"),
 
   DEFAULT_FOLDER_CANNOT_BE_DELETE(HttpStatus.FORBIDDEN, "72004", "기본 폴더는 삭제 할 수 없습니다"),
-
   ;
 
   private final HttpStatus status;

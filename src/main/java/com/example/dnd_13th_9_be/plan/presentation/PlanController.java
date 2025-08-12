@@ -26,7 +26,7 @@ import com.example.dnd_13th_9_be.plan.presentation.dto.response.PlanSummaryRespo
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/plan")
+@RequestMapping("/api/plan")
 public class PlanController {
   private final PlanService planService;
 
@@ -39,7 +39,10 @@ public class PlanController {
     var results = planService.getPlanList(tempUserId);
     var data =
         results.stream()
-            .map(r -> new PlanSummaryResponse(r.planId(), r.name(), r.createdAt(), r.folderCount()))
+            .map(
+                r ->
+                    new PlanSummaryResponse(
+                        r.planId(), r.name(), r.createdAt(), r.folderCount(), r.isDefault()))
             .toList();
     return ApiResponse.successEntity(data);
   }
@@ -49,7 +52,7 @@ public class PlanController {
       @RequestParam("userId") Long tempUserId, @Valid @RequestBody CreatePlanRequest request) {
     var planDetail = planService.createPlan(tempUserId, request.name());
     var response =
-        new PlanDetailResponse(planDetail.planId(), planDetail.name(), planDetail.createdAt());
+        new PlanDetailResponse(planDetail.planId(), planDetail.name(), planDetail.createdAt(), planDetail.isDefault());
     return ApiResponse.successEntity(response);
   }
 

@@ -1,8 +1,5 @@
 package com.example.dnd_13th_9_be.plan.application;
 
-import com.example.dnd_13th_9_be.plan.application.port.PlanCommandPort;
-import com.example.dnd_13th_9_be.plan.application.port.PlanQueryPort;
-import com.example.dnd_13th_9_be.plan.application.port.UserAccessPort;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -13,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import com.example.dnd_13th_9_be.global.error.BusinessException;
 import com.example.dnd_13th_9_be.plan.application.dto.PlanDetailResult;
 import com.example.dnd_13th_9_be.plan.application.dto.PlanSummaryResult;
+import com.example.dnd_13th_9_be.plan.application.port.PlanCommandPort;
+import com.example.dnd_13th_9_be.plan.application.port.PlanQueryPort;
+import com.example.dnd_13th_9_be.plan.application.port.UserAccessPort;
 
 import static com.example.dnd_13th_9_be.global.error.ErrorCode.DEFAULT_PLAN_CANNOT_BE_DELETE;
 import static com.example.dnd_13th_9_be.global.error.ErrorCode.NOT_FOUND_USER;
@@ -29,6 +29,10 @@ public class PlanService {
 
   @Transactional(readOnly = true)
   public List<PlanSummaryResult> getPlanList(Long userId) {
+    var isNotExistsUser = !userAccessPort.existsById(userId);
+    if (isNotExistsUser) {
+      throw new BusinessException(NOT_FOUND_USER);
+    }
     return planQueryPort.findSummariesByUserId(userId);
   }
 

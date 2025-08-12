@@ -7,4 +7,5 @@ public record FolderSummary(
     String name,
     LocalDateTime createdAt,
     long locationRecordCount,
-    long propertyRecordCount) {}
+    long propertyRecordCount,
+    boolean isDefault) {}

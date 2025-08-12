@@ -1,19 +1,19 @@
 package com.example.dnd_13th_9_be.folder.persistence.adapter;
 
-import static com.example.dnd_13th_9_be.global.error.ErrorCode.NOT_FOUND_FOLDER;
-
-import com.example.dnd_13th_9_be.folder.application.dto.FolderDetailResult;
-import com.example.dnd_13th_9_be.folder.persistence.FolderEntity;
-import com.example.dnd_13th_9_be.folder.persistence.FolderRepository;
-import com.example.dnd_13th_9_be.global.error.BusinessException;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 
-import com.example.dnd_13th_9_be.folder.application.port.FolderQueryPort;
+import com.example.dnd_13th_9_be.folder.application.dto.FolderDetailResult;
 import com.example.dnd_13th_9_be.folder.application.dto.FolderSummaryResult;
+import com.example.dnd_13th_9_be.folder.application.port.FolderQueryPort;
+import com.example.dnd_13th_9_be.folder.persistence.FolderEntity;
+import com.example.dnd_13th_9_be.folder.persistence.FolderRepository;
+import com.example.dnd_13th_9_be.global.error.BusinessException;
+
+import static com.example.dnd_13th_9_be.global.error.ErrorCode.NOT_FOUND_FOLDER;
 
 @Component
 @RequiredArgsConstructor
@@ -29,7 +29,8 @@ public class FolderQueryAdapter implements FolderQueryPort {
                     r.id(),
                     r.name(),
                     r.createdAt(),
-                    r.locationRecordCount() + r.propertyRecordCount()))
+                    r.locationRecordCount() + r.propertyRecordCount(),
+                    r.isDefault()))
         .toList();
   }
 
@@ -48,10 +49,11 @@ public class FolderQueryAdapter implements FolderQueryPort {
 
   @Override
   public FolderDetailResult findById(Long folderId) {
-    FolderEntity entity = folderRepository.findById(folderId)
-        .orElseThrow(() -> new BusinessException(NOT_FOUND_FOLDER));
+    FolderEntity entity =
+        folderRepository
+            .findById(folderId)
+            .orElseThrow(() -> new BusinessException(NOT_FOUND_FOLDER));
     return new FolderDetailResult(
-        entity.getId(), entity.getName(), entity.getCreatedAt(), entity.isDefault()
-    );
+        entity.getId(), entity.getName(), entity.getCreatedAt(), entity.isDefault());
   }
 }

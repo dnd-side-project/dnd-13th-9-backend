@@ -1,7 +1,5 @@
 package com.example.dnd_13th_9_be.plan.persistence.adapter;
 
-import com.example.dnd_13th_9_be.plan.persistence.entity.PlanEntity;
-import com.example.dnd_13th_9_be.plan.persistence.PlanRepository;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -9,9 +7,11 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.global.error.BusinessException;
-import com.example.dnd_13th_9_be.plan.application.port.PlanQueryPort;
 import com.example.dnd_13th_9_be.plan.application.dto.PlanDetailResult;
 import com.example.dnd_13th_9_be.plan.application.dto.PlanSummaryResult;
+import com.example.dnd_13th_9_be.plan.application.port.PlanQueryPort;
+import com.example.dnd_13th_9_be.plan.persistence.PlanRepository;
+import com.example.dnd_13th_9_be.plan.persistence.entity.PlanEntity;
 
 import static com.example.dnd_13th_9_be.global.error.ErrorCode.NOT_FOUND_PLAN;
 
@@ -23,7 +23,10 @@ public class PlanQueryAdapter implements PlanQueryPort {
   @Override
   public List<PlanSummaryResult> findSummariesByUserId(Long userId) {
     return planRepository.findSummariesByUserId(userId).stream()
-        .map(r -> new PlanSummaryResult(r.id(), r.name(), r.createdAt(), r.folderCount()))
+        .map(
+            r ->
+                new PlanSummaryResult(
+                    r.id(), r.name(), r.createdAt(), r.folderCount(), r.isDefault()))
         .toList();
   }
 

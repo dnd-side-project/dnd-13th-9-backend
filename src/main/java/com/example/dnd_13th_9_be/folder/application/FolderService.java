@@ -1,8 +1,5 @@
 package com.example.dnd_13th_9_be.folder.application;
 
-import com.example.dnd_13th_9_be.folder.application.dto.FolderDetailResult;
-import com.example.dnd_13th_9_be.folder.application.port.FolderCommandPort;
-import com.example.dnd_13th_9_be.folder.application.port.FolderQueryPort;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -10,7 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
+import com.example.dnd_13th_9_be.folder.application.dto.FolderDetailResult;
 import com.example.dnd_13th_9_be.folder.application.dto.FolderSummaryResult;
+import com.example.dnd_13th_9_be.folder.application.port.FolderCommandPort;
+import com.example.dnd_13th_9_be.folder.application.port.FolderQueryPort;
 import com.example.dnd_13th_9_be.folder.application.port.PlanAccessPort;
 import com.example.dnd_13th_9_be.global.error.BusinessException;
 
@@ -29,19 +29,13 @@ public class FolderService {
 
   @Transactional(readOnly = true)
   public List<FolderSummaryResult> getFolderList(Long planId) {
-    var isNotExistPlan = !planAccessPort.existById(planId);
-    if (isNotExistPlan) {
-      throw new BusinessException(NOT_FOUND_PLAN);
-    }
+    verifyPlanExists(planId);
     return folderQueryPort.findSummariesByPlanId(planId);
   }
 
   @Transactional
   public FolderDetailResult createFolder(Long planId, String name) {
-    var isNotExistPlan = !planAccessPort.existById(planId);
-    if (isNotExistPlan) {
-      throw new BusinessException(NOT_FOUND_PLAN);
-    }
+    verifyPlanExists(planId);
 
     boolean isFolderLimitExceed = folderQueryPort.countByPlanId(planId) >= 10;
     if (isFolderLimitExceed) {
@@ -70,6 +64,12 @@ public class FolderService {
     boolean isFailDelete = !folderCommandPort.delete(folderId);
     if (isFailDelete) {
       throw new BusinessException(FOLDER_DELETE_FAILED);
+    }
+  }
+
+  private void verifyPlanExists(Long planId) {
+    if (!planAccessPort.existsById(planId)) {
+      throw new BusinessException(NOT_FOUND_PLAN);
     }
   }
 }

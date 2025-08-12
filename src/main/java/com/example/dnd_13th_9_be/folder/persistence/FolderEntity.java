@@ -2,6 +2,7 @@ package com.example.dnd_13th_9_be.folder.persistence;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +16,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import com.example.dnd_13th_9_be.global.converter.BooleanAttributeConverter;
 import com.example.dnd_13th_9_be.plan.persistence.entity.PlanEntity;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
@@ -36,11 +39,13 @@ public class FolderEntity {
   private PlanEntity plan;
 
   @Comment("폴더 명")
-  @Column(nullable = false)
+  @Column(nullable = false, length = 10)
   private String name;
 
   @Comment("기본 폴더 여부")
-  @Column(name = "default_yn", nullable = false)
+  @Column(name = "default_yn", nullable = false, columnDefinition = "TINYINT", length = 1)
+  @Convert(converter = BooleanAttributeConverter.class)
+  @ColumnDefault("0")
   private boolean isDefault;
 
   @CreationTimestamp

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.folder.application.port.PlanAccessPort;
-import com.example.dnd_13th_9_be.plan.persistence.QPlanEntity;
+import com.example.dnd_13th_9_be.plan.persistence.entity.QPlanEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Component
@@ -14,7 +14,7 @@ public class PlanAccessAdapter implements PlanAccessPort {
   private final JPAQueryFactory query;
 
   @Override
-  public boolean existById(Long planId) {
+  public boolean existsById(Long planId) {
     var plan = QPlanEntity.planEntity;
 
     return query.selectOne().from(plan).where(plan.id.eq(planId)).fetchFirst() != null;

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -19,6 +20,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import com.example.dnd_13th_9_be.folder.persistence.FolderEntity;
+import com.example.dnd_13th_9_be.global.converter.BooleanAttributeConverter;
 import com.example.dnd_13th_9_be.user.persistence.UserEntity;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
@@ -42,12 +44,13 @@ public class PlanEntity {
   private String name;
 
   @Comment("기본 계획 여부")
-  @Column(name = "default_yn", nullable = false)
+  @Column(name = "default_yn", nullable = false, columnDefinition = "TINYINT", length = 1)
+  @Convert(converter = BooleanAttributeConverter.class)
+  @ColumnDefault("0")
   private boolean isDefault;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)
-  @ColumnDefault("false")
   private LocalDateTime createdAt;
 
   @OneToMany(
