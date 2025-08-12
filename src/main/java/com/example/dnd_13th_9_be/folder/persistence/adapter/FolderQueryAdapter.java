@@ -1,8 +1,10 @@
-package com.example.dnd_13th_9_be.folder.persistence;
+package com.example.dnd_13th_9_be.folder.persistence.adapter;
 
 import static com.example.dnd_13th_9_be.global.error.ErrorCode.NOT_FOUND_FOLDER;
 
 import com.example.dnd_13th_9_be.folder.application.dto.FolderDetailResult;
+import com.example.dnd_13th_9_be.folder.persistence.FolderEntity;
+import com.example.dnd_13th_9_be.folder.persistence.FolderRepository;
 import com.example.dnd_13th_9_be.global.error.BusinessException;
 import java.util.List;
 
@@ -10,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 
-import com.example.dnd_13th_9_be.folder.application.FolderQueryPort;
+import com.example.dnd_13th_9_be.folder.application.port.FolderQueryPort;
 import com.example.dnd_13th_9_be.folder.application.dto.FolderSummaryResult;
 
 @Component

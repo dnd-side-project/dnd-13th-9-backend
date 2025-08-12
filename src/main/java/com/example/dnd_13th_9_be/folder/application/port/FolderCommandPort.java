@@ -1,4 +1,4 @@
-package com.example.dnd_13th_9_be.folder.application;
+package com.example.dnd_13th_9_be.folder.application.port;
 
 import com.example.dnd_13th_9_be.folder.application.dto.FolderDetailResult;
 

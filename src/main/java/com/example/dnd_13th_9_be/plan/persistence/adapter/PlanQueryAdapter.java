@@ -1,5 +1,7 @@
-package com.example.dnd_13th_9_be.plan.persistence;
+package com.example.dnd_13th_9_be.plan.persistence.adapter;
 
+import com.example.dnd_13th_9_be.plan.persistence.entity.PlanEntity;
+import com.example.dnd_13th_9_be.plan.persistence.PlanRepository;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -7,7 +9,7 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.global.error.BusinessException;
-import com.example.dnd_13th_9_be.plan.application.PlanQueryPort;
+import com.example.dnd_13th_9_be.plan.application.port.PlanQueryPort;
 import com.example.dnd_13th_9_be.plan.application.dto.PlanDetailResult;
 import com.example.dnd_13th_9_be.plan.application.dto.PlanSummaryResult;
 

@@ -1,7 +1,8 @@
 package com.example.dnd_13th_9_be.folder.application;
 
 import com.example.dnd_13th_9_be.folder.application.dto.FolderDetailResult;
-import com.example.dnd_13th_9_be.plan.application.dto.PlanDetailResult;
+import com.example.dnd_13th_9_be.folder.application.port.FolderCommandPort;
+import com.example.dnd_13th_9_be.folder.application.port.FolderQueryPort;
 import java.util.List;
 
 import org.springframework.stereotype.Service;

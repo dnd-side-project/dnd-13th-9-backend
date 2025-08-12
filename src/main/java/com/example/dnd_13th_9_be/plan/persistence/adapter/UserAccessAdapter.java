@@ -1,10 +1,10 @@
-package com.example.dnd_13th_9_be.plan.persistence;
+package com.example.dnd_13th_9_be.plan.persistence.adapter;
 
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 
-import com.example.dnd_13th_9_be.plan.application.UserAccessPort;
+import com.example.dnd_13th_9_be.plan.application.port.UserAccessPort;
 import com.example.dnd_13th_9_be.user.persistence.UserRepository;
 
 @Component

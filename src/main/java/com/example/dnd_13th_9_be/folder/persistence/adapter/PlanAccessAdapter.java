@@ -1,4 +1,4 @@
-package com.example.dnd_13th_9_be.folder.persistence;
+package com.example.dnd_13th_9_be.folder.persistence.adapter;
 
 import org.springframework.stereotype.Component;
 

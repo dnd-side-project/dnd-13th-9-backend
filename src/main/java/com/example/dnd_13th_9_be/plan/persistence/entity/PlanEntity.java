@@ -1,4 +1,4 @@
-package com.example.dnd_13th_9_be.plan.persistence;
+package com.example.dnd_13th_9_be.plan.persistence.entity;
 
 import java.time.LocalDateTime;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package com.example.dnd_13th_9_be.plan.application;
+package com.example.dnd_13th_9_be.plan.application.port;
 
 import java.util.List;
 

@@ -1,12 +1,14 @@
-package com.example.dnd_13th_9_be.plan.persistence;
+package com.example.dnd_13th_9_be.plan.persistence.adapter;
 
+import com.example.dnd_13th_9_be.plan.persistence.entity.PlanEntity;
+import com.example.dnd_13th_9_be.plan.persistence.PlanRepository;
 import jakarta.persistence.EntityManager;
 
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 
-import com.example.dnd_13th_9_be.plan.application.PlanCommandPort;
+import com.example.dnd_13th_9_be.plan.application.port.PlanCommandPort;
 import com.example.dnd_13th_9_be.plan.application.dto.PlanDetailResult;
 import com.example.dnd_13th_9_be.user.persistence.UserEntity;
 

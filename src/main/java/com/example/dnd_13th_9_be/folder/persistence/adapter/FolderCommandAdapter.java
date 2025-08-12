@@ -1,8 +1,10 @@
-package com.example.dnd_13th_9_be.folder.persistence;
+package com.example.dnd_13th_9_be.folder.persistence.adapter;
 
-import com.example.dnd_13th_9_be.folder.application.FolderCommandPort;
+import com.example.dnd_13th_9_be.folder.application.port.FolderCommandPort;
 import com.example.dnd_13th_9_be.folder.application.dto.FolderDetailResult;
-import com.example.dnd_13th_9_be.plan.persistence.PlanEntity;
+import com.example.dnd_13th_9_be.folder.persistence.FolderEntity;
+import com.example.dnd_13th_9_be.folder.persistence.FolderRepository;
+import com.example.dnd_13th_9_be.plan.persistence.entity.PlanEntity;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
