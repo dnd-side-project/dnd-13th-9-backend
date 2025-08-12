@@ -14,6 +14,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 @Table(name = "location_image")
 @Getter
@@ -25,6 +28,7 @@ public class LocationImageEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "location_id", nullable = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private LocationRecordEntity locationRecord;
 
   @Column(name = "image_url", nullable = false)

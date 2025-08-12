@@ -1,9 +1,10 @@
-package com.example.dnd_13th_9_be.collection.persistence;
+package com.example.dnd_13th_9_be.plan.persistence.entity;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -19,15 +20,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import com.example.dnd_13th_9_be.folder.persistence.FolderEntity;
+import com.example.dnd_13th_9_be.global.converter.BooleanAttributeConverter;
 import com.example.dnd_13th_9_be.user.persistence.UserEntity;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
-@Table(name = "collection")
+@Table(name = "plan")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CollectionEntity {
+public class PlanEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -36,16 +39,32 @@ public class CollectionEntity {
   @JoinColumn(name = "user_id", nullable = false)
   private UserEntity user;
 
-  @Comment("컬렉션 이름")
-  @Column(nullable = false)
+  @Comment("계획 이름")
+  @Column(nullable = false, length = 10)
   private String name;
+
+  @Comment("기본 계획 여부")
+  @Column(name = "default_yn", nullable = false, columnDefinition = "TINYINT", length = 1)
+  @Convert(converter = BooleanAttributeConverter.class)
+  @ColumnDefault("0")
+  private boolean isDefault;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)
   private LocalDateTime createdAt;
 
   @OneToMany(
-      mappedBy = "collection",
+      mappedBy = "plan",
       cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private Set<FolderEntity> folders;
+
+  private PlanEntity(UserEntity user, String name, boolean isDefault) {
+    this.user = user;
+    this.name = name;
+    this.isDefault = isDefault;
+  }
+
+  public static PlanEntity of(UserEntity user, String name, boolean isDefault) {
+    return new PlanEntity(user, name, isDefault);
+  }
 }
