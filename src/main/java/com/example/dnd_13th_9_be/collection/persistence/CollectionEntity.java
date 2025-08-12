@@ -2,6 +2,8 @@ package com.example.dnd_13th_9_be.collection.persistence;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+
+import com.example.dnd_13th_9_be.user.persistence.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,7 +21,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import com.example.dnd_13th_9_be.folder.persistence.FolderEntity;
-import com.example.dnd_13th_9_be.user.persistence.UserEntity;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -34,7 +35,7 @@ public class CollectionEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
-  private UserEntity user;
+  private User user;
 
   @Comment("컬렉션 이름")
   @Column(nullable = false)
