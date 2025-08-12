@@ -1,9 +1,13 @@
 package com.example.dnd_13th_9_be.folder.application;
 
+import com.example.dnd_13th_9_be.folder.application.dto.FolderDetailResult;
 import java.util.List;
 
 import com.example.dnd_13th_9_be.folder.application.dto.FolderSummaryResult;
 
 public interface FolderQueryPort {
   List<FolderSummaryResult> findSummariesByPlanId(Long planId);
+  long countByPlanId(Long planId);
+  void verifyById(Long folderId);
+  FolderDetailResult findById(Long folderId);
 }

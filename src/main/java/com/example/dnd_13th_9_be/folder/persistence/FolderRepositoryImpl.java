@@ -45,4 +45,35 @@ public class FolderRepositoryImpl implements FolderRepositoryCustom {
         .orderBy(folder.createdAt.desc())
         .fetch();
   }
+
+  @Override
+  public boolean rename(Long folderId, String newName) {
+    var folder = QFolderEntity.folderEntity;
+    long affected = query
+        .update(folder)
+        .set(folder.name, newName)
+        .where(folder.id.eq(folderId))
+        .execute();
+    return affected == 1L;
+  }
+
+  @Override
+  public boolean delete(Long folderId) {
+    var folder = QFolderEntity.folderEntity;
+    var affected = query
+        .delete(folder)
+        .where(folder.id.eq(folderId))
+        .execute();
+    return affected == 1L;
+  }
+
+  @Override
+  public Long countByPlanId(Long planId) {
+    var folder = QFolderEntity.folderEntity;
+    return query
+        .select(folder.id.count())
+        .from(folder)
+        .where(folder.plan.id.eq(planId))
+        .fetchOne();
+  }
 }

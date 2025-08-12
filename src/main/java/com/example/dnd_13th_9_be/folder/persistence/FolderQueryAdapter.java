@@ -1,5 +1,9 @@
 package com.example.dnd_13th_9_be.folder.persistence;
 
+import static com.example.dnd_13th_9_be.global.error.ErrorCode.NOT_FOUND_FOLDER;
+
+import com.example.dnd_13th_9_be.folder.application.dto.FolderDetailResult;
+import com.example.dnd_13th_9_be.global.error.BusinessException;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -25,5 +29,27 @@ public class FolderQueryAdapter implements FolderQueryPort {
                     r.createdAt(),
                     r.locationRecordCount() + r.propertyRecordCount()))
         .toList();
+  }
+
+  @Override
+  public long countByPlanId(Long planId) {
+    return folderRepository.countByPlanId(planId);
+  }
+
+  @Override
+  public void verifyById(Long folderId) {
+    var isNotExist = !folderRepository.existsById(folderId);
+    if (isNotExist) {
+      throw new BusinessException(NOT_FOUND_FOLDER);
+    }
+  }
+
+  @Override
+  public FolderDetailResult findById(Long folderId) {
+    FolderEntity entity = folderRepository.findById(folderId)
+        .orElseThrow(() -> new BusinessException(NOT_FOUND_FOLDER));
+    return new FolderDetailResult(
+        entity.getId(), entity.getName(), entity.getCreatedAt(), entity.isDefault()
+    );
   }
 }
