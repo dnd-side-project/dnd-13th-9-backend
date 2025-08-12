@@ -42,4 +42,24 @@ public class PlanRepositoryImpl implements PlanRepositoryCustom {
         .orderBy(plan.createdAt.desc())
         .fetch();
   }
+
+  @Override
+  public boolean renmae(Long planId, String newName) {
+    var plan = QPlanEntity.planEntity;
+    long affected = query.update(plan).set(plan.name, newName).where(plan.id.eq(planId)).execute();
+    return affected == 1L;
+  }
+
+  @Override
+  public boolean delete(Long planId) {
+    var plan = QPlanEntity.planEntity;
+    long affected = query.delete(plan).where(plan.id.eq(planId)).execute();
+    return affected == 1L;
+  }
+
+  @Override
+  public Long countByUserId(Long userId) {
+    var plan = QPlanEntity.planEntity;
+    return query.select(plan.id.count()).from(plan).where(plan.user.id.eq(userId)).fetchOne();
+  }
 }

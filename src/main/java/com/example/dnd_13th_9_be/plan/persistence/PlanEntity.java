@@ -20,6 +20,7 @@ import lombok.NoArgsConstructor;
 
 import com.example.dnd_13th_9_be.folder.persistence.FolderEntity;
 import com.example.dnd_13th_9_be.user.persistence.UserEntity;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -37,15 +38,30 @@ public class PlanEntity {
   private UserEntity user;
 
   @Comment("계획 이름")
-  @Column(nullable = false)
+  @Column(nullable = false, length = 10)
   private String name;
+
+  @Comment("기본 계획 여부")
+  @Column(name = "default_yn", nullable = false)
+  private boolean isDefault;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)
+  @ColumnDefault("false")
   private LocalDateTime createdAt;
 
   @OneToMany(
       mappedBy = "plan",
       cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private Set<FolderEntity> folders;
+
+  private PlanEntity(UserEntity user, String name, boolean isDefault) {
+    this.user = user;
+    this.name = name;
+    this.isDefault = isDefault;
+  }
+
+  public static PlanEntity of(UserEntity user, String name, boolean isDefault) {
+    return new PlanEntity(user, name, isDefault);
+  }
 }
