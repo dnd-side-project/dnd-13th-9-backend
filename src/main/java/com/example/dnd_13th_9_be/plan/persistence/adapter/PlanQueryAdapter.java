@@ -48,6 +48,6 @@ public class PlanQueryAdapter implements PlanQueryPort {
     PlanEntity entity =
         planRepository.findById(planId).orElseThrow(() -> new BusinessException(NOT_FOUND_PLAN));
     return new PlanDetailResult(
-        entity.getId(), entity.getName(), entity.getCreatedAt(), entity.isDefault());
+        entity.getId(), entity.getName(), entity.getCreatedAt(), entity.getIsDefault());
   }
 }

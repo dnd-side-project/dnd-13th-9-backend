@@ -27,7 +27,7 @@ public class PlanCommandAdapter implements PlanCommandPort {
         planEntity.getId(),
         planEntity.getName(),
         planEntity.getCreatedAt(),
-        planEntity.isDefault());
+        planEntity.getIsDefault());
   }
 
   @Override

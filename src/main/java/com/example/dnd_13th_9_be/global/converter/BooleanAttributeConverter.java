@@ -6,6 +6,7 @@ public class BooleanAttributeConverter implements AttributeConverter<Boolean, In
 
   @Override
   public Integer convertToDatabaseColumn(Boolean attribute) {
+    if (attribute == null) return 0;
     if (attribute) {
       return 1;
     } else {
@@ -15,6 +16,7 @@ public class BooleanAttributeConverter implements AttributeConverter<Boolean, In
 
   @Override
   public Boolean convertToEntityAttribute(Integer dbData) {
+    if (dbData == null) return false;
     return dbData == 1;
   }
 }

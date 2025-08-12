@@ -47,7 +47,7 @@ public class PlanEntity {
   @Column(name = "default_yn", nullable = false, columnDefinition = "TINYINT", length = 1)
   @Convert(converter = BooleanAttributeConverter.class)
   @ColumnDefault("0")
-  private boolean isDefault;
+  private Boolean isDefault;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)

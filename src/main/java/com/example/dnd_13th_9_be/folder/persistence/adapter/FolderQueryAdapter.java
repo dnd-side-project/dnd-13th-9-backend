@@ -54,6 +54,6 @@ public class FolderQueryAdapter implements FolderQueryPort {
             .findById(folderId)
             .orElseThrow(() -> new BusinessException(NOT_FOUND_FOLDER));
     return new FolderDetailResult(
-        entity.getId(), entity.getName(), entity.getCreatedAt(), entity.isDefault());
+        entity.getId(), entity.getName(), entity.getCreatedAt(), entity.getIsDefault());
   }
 }

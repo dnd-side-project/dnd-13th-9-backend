@@ -27,7 +27,7 @@ public class FolderCommandAdapter implements FolderCommandPort {
         folderEntity.getId(),
         folderEntity.getName(),
         folderEntity.getCreatedAt(),
-        folderEntity.isDefault());
+        folderEntity.getIsDefault());
   }
 
   @Override
