@@ -6,7 +6,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.junit.jupiter.api.Test;
 
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles("local")
 class Dnd13th9BeApplicationTests {
 
   @Test
