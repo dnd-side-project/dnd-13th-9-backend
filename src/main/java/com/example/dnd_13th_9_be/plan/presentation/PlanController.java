@@ -52,7 +52,8 @@ public class PlanController {
       @RequestParam("userId") Long tempUserId, @Valid @RequestBody CreatePlanRequest request) {
     var planDetail = planService.createPlan(tempUserId, request.name());
     var response =
-        new PlanDetailResponse(planDetail.planId(), planDetail.name(), planDetail.createdAt(), planDetail.isDefault());
+        new PlanDetailResponse(
+            planDetail.planId(), planDetail.name(), planDetail.createdAt(), planDetail.isDefault());
     return ApiResponse.successEntity(response);
   }
 

@@ -38,7 +38,11 @@ public class FolderController {
             .map(
                 r ->
                     new FolderSummaryResponse(
-                        r.folderId(), r.name(), r.createdAt(), r.recordCount(), r.isDefaultFolder()))
+                        r.folderId(),
+                        r.name(),
+                        r.createdAt(),
+                        r.recordCount(),
+                        r.isDefaultFolder()))
             .toList();
     return ApiResponse.successEntity(data);
   }
@@ -49,7 +53,10 @@ public class FolderController {
     var folderDetail = folderService.createFolder(request.planId(), request.name());
     var response =
         new FolderDetailResponse(
-            folderDetail.folderId(), folderDetail.name(), folderDetail.createdAt(), folderDetail.isDefault());
+            folderDetail.folderId(),
+            folderDetail.name(),
+            folderDetail.createdAt(),
+            folderDetail.isDefault());
     return ApiResponse.successEntity(response);
   }
 
