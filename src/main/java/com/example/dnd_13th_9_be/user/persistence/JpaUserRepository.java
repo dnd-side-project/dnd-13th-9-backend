@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface JpaUserRepository extends JpaRepository<User, Long> {
 
   Optional<User> findByProviderId(String providerId);
+
+  boolean existsByProviderId(String providerId);
 }
