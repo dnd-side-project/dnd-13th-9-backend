@@ -32,4 +32,9 @@ public class UserRepositoryImpl implements UserRepository {
     User savedUser = jpaUserRepository.save(user);
     return userConverter.from(savedUser);
   }
+
+  @Override
+  public boolean existsByProviderId(String providerId) {
+    return jpaUserRepository.existsByProviderId(providerId);
+  }
 }

@@ -11,4 +11,6 @@ public interface UserRepository {
   Optional<UserModel> findByProviderId(String providerId);
 
   UserModel save(UserModel userModel);
+
+  boolean existsByProviderId(String providerId);
 }
