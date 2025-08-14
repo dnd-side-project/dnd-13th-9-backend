@@ -2,6 +2,7 @@ package com.example.dnd_13th_9_be.folder.persistence;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -15,9 +16,13 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import com.example.dnd_13th_9_be.collection.persistence.CollectionEntity;
+import com.example.dnd_13th_9_be.global.converter.BooleanAttributeConverter;
+import com.example.dnd_13th_9_be.plan.persistence.entity.PlanEntity;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "folder")
@@ -29,14 +34,31 @@ public class FolderEntity {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "collection_id", nullable = false)
-  private CollectionEntity collection;
+  @JoinColumn(name = "plan_id", nullable = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private PlanEntity plan;
 
   @Comment("폴더 명")
-  @Column(nullable = false)
+  @Column(nullable = false, length = 10)
   private String name;
+
+  @Comment("기본 폴더 여부")
+  @Column(name = "default_yn", nullable = false, columnDefinition = "TINYINT", length = 1)
+  @Convert(converter = BooleanAttributeConverter.class)
+  @ColumnDefault("0")
+  private Boolean isDefault;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)
   private LocalDateTime createdAt;
+
+  private FolderEntity(PlanEntity plan, String name, boolean isDefault) {
+    this.plan = plan;
+    this.name = name;
+    this.isDefault = isDefault;
+  }
+
+  public static FolderEntity of(PlanEntity plan, String name, boolean isDefault) {
+    return new FolderEntity(plan, name, isDefault);
+  }
 }
