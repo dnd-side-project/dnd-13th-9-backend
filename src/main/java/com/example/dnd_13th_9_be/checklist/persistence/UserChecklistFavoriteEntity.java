@@ -13,7 +13,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import com.example.dnd_13th_9_be.user.persistence.UserEntity;
+import com.example.dnd_13th_9_be.user.persistence.User;
 
 @Entity
 @Table(name = "user_checklist_favorite")
@@ -26,7 +26,7 @@ public class UserChecklistFavoriteEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
-  private UserEntity user;
+  private User user;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "item_id", nullable = false)
