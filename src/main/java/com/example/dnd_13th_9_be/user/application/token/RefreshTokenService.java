@@ -29,19 +29,25 @@ public class RefreshTokenService {
   // TODO: 모델
   @Transactional
   public void createRefreshToken(String token, Instant expiration, UserModel userModel) {
-    refreshTokenRepository
-        .findByUserId(userModel.getId())
-        .ifPresent(existingToken -> refreshTokenRepository.deleteByToken(existingToken.getToken()));
+    Long userId = userModel.getId();
 
-    User user =
-        jpaUserRepository
-            .findById(userModel.getId())
-            .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다"));
+    try {
+      jpaRefreshTokenRepository.deleteByUserId(userId);
+      jpaRefreshTokenRepository.flush();
 
-    RefreshToken refreshTokenEntity =
-        RefreshToken.builder().token(token).expiryDate(expiration).user(user).build();
+      User userEntity = jpaUserRepository.findById(userId)
+              .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다"));
 
-    jpaRefreshTokenRepository.save(refreshTokenEntity);
+      RefreshToken refreshTokenEntity = RefreshToken.builder()
+              .token(token)
+              .expiryDate(expiration)
+              .user(userEntity)
+              .build();
+
+      jpaRefreshTokenRepository.save(refreshTokenEntity);
+    } catch (Exception e) {
+      throw new RuntimeException("리프레시 토큰 생성에 실패했습니다", e);
+    }
   }
 
   @Transactional
