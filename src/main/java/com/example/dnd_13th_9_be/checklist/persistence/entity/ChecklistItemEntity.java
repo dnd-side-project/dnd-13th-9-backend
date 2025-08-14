@@ -1,4 +1,4 @@
-package com.example.dnd_13th_9_be.checklist.persistence;
+package com.example.dnd_13th_9_be.checklist.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,19 +14,30 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import org.hibernate.annotations.Comment;
+
 @Entity
-@Table(name = "checklist_option")
+@Table(name = "checklist_item")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChecklistOptionEntity {
+public class ChecklistItemEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "item_id", nullable = false)
-  private ChecklistItemEntity item;
+  @JoinColumn(name = "category_id", nullable = false)
+  private ChecklistCategoryEntity category;
 
-  @Column(nullable = false, length = 10)
-  private String optionText;
+  @Comment("질문")
+  @Column(nullable = false, length = 100)
+  private String question;
+
+  @Comment("질문 설명")
+  @Column(length = 100)
+  private String description;
+
+  @Comment("노출 순서")
+  @Column(name = "sort_order", nullable = false)
+  private Integer sortOrder;
 }

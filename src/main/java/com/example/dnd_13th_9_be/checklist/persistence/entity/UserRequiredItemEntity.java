@@ -1,4 +1,4 @@
-package com.example.dnd_13th_9_be.checklist.persistence;
+package com.example.dnd_13th_9_be.checklist.persistence.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,10 +16,10 @@ import lombok.NoArgsConstructor;
 import com.example.dnd_13th_9_be.user.persistence.User;
 
 @Entity
-@Table(name = "user_checklist_favorite")
+@Table(name = "user_required_item")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserChecklistFavoriteEntity {
+public class UserRequiredItemEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

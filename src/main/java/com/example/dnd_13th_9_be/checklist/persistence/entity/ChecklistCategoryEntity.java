@@ -1,6 +1,8 @@
-package com.example.dnd_13th_9_be.checklist.persistence;
+package com.example.dnd_13th_9_be.checklist.persistence.entity;
 
+import com.example.dnd_13th_9_be.global.converter.BooleanAttributeConverter;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 @Entity
@@ -25,4 +28,8 @@ public class ChecklistCategoryEntity {
   @Comment("메인 공간, 창문, 건물")
   @Column(nullable = false, length = 10)
   private String name;
+
+  @Comment("노출 순서")
+  @Column(name = "sort_order", nullable = false)
+  private Integer sortOrder;
 }
