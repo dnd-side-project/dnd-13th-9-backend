@@ -59,15 +59,19 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
     String providerId = oAuth2Attribute.getProviderId();
     log.info("getOrCreateUser 시작 - providerId: {}", providerId);
 
-    return userRepository.findByProviderId(providerId)
-            .map(existingUser -> {
+    return userRepository
+        .findByProviderId(providerId)
+        .map(
+            existingUser -> {
               log.info("기존 사용자 로그인 - providerId: {}", providerId);
               return existingUser;
             })
-            .orElseGet(() -> {
+        .orElseGet(
+            () -> {
               log.info("신규 사용자 생성 시도 - providerId: {}", providerId);
               try {
-                UserModel newUser = UserModel.builder()
+                UserModel newUser =
+                    UserModel.builder()
                         .providerId(providerId)
                         .name(oAuth2Attribute.getName())
                         .role(RoleAttribute.ROLE_USER)
@@ -79,8 +83,9 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
 
               } catch (Exception e) {
                 log.warn("사용자 생성 실패, 재조회 시도 - providerId: {}, 에러: {}", providerId, e.getMessage());
-                return userRepository.findByProviderId(providerId)
-                        .orElseThrow(() -> new RuntimeException("사용자 생성 및 조회 모두 실패: " + providerId));
+                return userRepository
+                    .findByProviderId(providerId)
+                    .orElseThrow(() -> new RuntimeException("사용자 생성 및 조회 모두 실패: " + providerId));
               }
             });
   }

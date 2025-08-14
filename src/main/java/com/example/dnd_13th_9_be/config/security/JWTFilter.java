@@ -43,7 +43,6 @@ public class JWTFilter extends OncePerRequestFilter {
       return;
     }
 
-
     try {
 
       Optional<Cookie> OptionalCookie = cookieUtil.find(request.getCookies(), "Access");

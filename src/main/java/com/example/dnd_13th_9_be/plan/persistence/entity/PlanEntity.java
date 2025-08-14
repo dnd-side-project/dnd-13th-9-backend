@@ -20,8 +20,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import com.example.dnd_13th_9_be.folder.persistence.FolderEntity;
-import com.example.dnd_13th_9_be.user.persistence.User;
 import com.example.dnd_13th_9_be.global.converter.BooleanAttributeConverter;
+import com.example.dnd_13th_9_be.user.persistence.User;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
