@@ -12,10 +12,8 @@ import com.example.dnd_13th_9_be.plan.application.dto.PlanDetailResult;
 import com.example.dnd_13th_9_be.plan.application.dto.PlanSummaryResult;
 import com.example.dnd_13th_9_be.plan.application.port.PlanCommandPort;
 import com.example.dnd_13th_9_be.plan.application.port.PlanQueryPort;
-import com.example.dnd_13th_9_be.plan.application.port.UserAccessPort;
 
 import static com.example.dnd_13th_9_be.global.error.ErrorCode.DEFAULT_PLAN_CANNOT_BE_DELETE;
-import static com.example.dnd_13th_9_be.global.error.ErrorCode.NOT_FOUND_USER;
 import static com.example.dnd_13th_9_be.global.error.ErrorCode.PLAN_CREATION_LIMIT;
 import static com.example.dnd_13th_9_be.global.error.ErrorCode.PLAN_DELETE_FAILED;
 import static com.example.dnd_13th_9_be.global.error.ErrorCode.PLAN_RENAME_FAILED;
@@ -25,24 +23,14 @@ import static com.example.dnd_13th_9_be.global.error.ErrorCode.PLAN_RENAME_FAILE
 public class PlanService {
   private final PlanQueryPort planQueryPort;
   private final PlanCommandPort planCommandPort;
-  private final UserAccessPort userAccessPort;
 
   @Transactional(readOnly = true)
   public List<PlanSummaryResult> getPlanList(Long userId) {
-    var isNotExistsUser = !userAccessPort.existsById(userId);
-    if (isNotExistsUser) {
-      throw new BusinessException(NOT_FOUND_USER);
-    }
     return planQueryPort.findSummariesByUserId(userId);
   }
 
   @Transactional
   public PlanDetailResult createPlan(Long userId, String name) {
-    var isNotExistsUser = !userAccessPort.existsById(userId);
-    if (isNotExistsUser) {
-      throw new BusinessException(NOT_FOUND_USER);
-    }
-
     boolean isPlanLimitExceed = planQueryPort.countByUserId(userId) >= 10;
     if (isPlanLimitExceed) {
       throw new BusinessException(PLAN_CREATION_LIMIT);
