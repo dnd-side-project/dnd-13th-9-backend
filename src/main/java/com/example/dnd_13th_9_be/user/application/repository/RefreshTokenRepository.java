@@ -10,10 +10,7 @@ public interface RefreshTokenRepository {
 
   RefreshTokenModel save(RefreshTokenModel refreshTokenModel);
 
-  /**
-   * @throws InvalidTokenException
-   */
-  RefreshTokenModel findByToken(String token);
+  Optional<RefreshTokenModel> findByToken(String token);
 
   Optional<RefreshTokenModel> findByUserId(Long userId);
 

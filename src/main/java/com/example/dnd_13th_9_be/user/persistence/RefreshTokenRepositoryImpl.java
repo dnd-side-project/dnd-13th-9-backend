@@ -27,11 +27,10 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
   }
 
   @Override
-  public RefreshTokenModel findByToken(String token) {
+  public Optional<RefreshTokenModel> findByToken(String token) {
     return jpaRefreshTokenRepository
         .findByToken(token)
-        .map(refreshTokenConverter::from)
-        .orElseThrow(InvalidTokenException::new);
+        .map(refreshTokenConverter::from);
   }
 
   @Override
