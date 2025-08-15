@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.example.dnd_13th_9_be.common.utils.CookieUtil;
 import com.example.dnd_13th_9_be.global.error.JwtAuthenticationException;
-import com.example.dnd_13th_9_be.user.application.dto.UserPrincipleDto;
+import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
 import com.example.dnd_13th_9_be.user.application.token.JwtTokenValidatorService;
 
 @Slf4j
@@ -49,10 +49,10 @@ public class JWTFilter extends OncePerRequestFilter {
       Cookie cookie =
           OptionalCookie.orElseThrow(() -> new IllegalStateException("Access Cookie not found"));
       String accessToken = cookie.getValue();
-      UserPrincipleDto userPrincipleDto = jwtTokenValidatorService.validateToken(accessToken);
+      UserPrincipalDto userPrincipalDto = jwtTokenValidatorService.validateToken(accessToken);
       Authentication authentication =
           new UsernamePasswordAuthenticationToken(
-              userPrincipleDto, null, userPrincipleDto.getAuthorities());
+                  userPrincipalDto, null, userPrincipalDto.getAuthorities());
 
       SecurityContextHolder.getContext().setAuthentication(authentication);
       filterChain.doFilter(request, response);
