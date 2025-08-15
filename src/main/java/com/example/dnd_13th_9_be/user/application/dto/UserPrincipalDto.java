@@ -13,13 +13,13 @@ import com.example.dnd_13th_9_be.user.application.model.UserModel;
 
 @Getter
 @Builder
-public class UserPrincipleDto implements UserDetails {
+public class UserPrincipalDto implements UserDetails {
 
   private Long userId;
   private RoleAttribute role;
 
-  public static UserPrincipleDto from(UserModel user) {
-    return UserPrincipleDto.builder().userId(user.getId()).role(user.getRole()).build();
+  public static UserPrincipalDto from(UserModel user) {
+    return UserPrincipalDto.builder().userId(user.getId()).role(user.getRole()).build();
   }
 
   @Override
