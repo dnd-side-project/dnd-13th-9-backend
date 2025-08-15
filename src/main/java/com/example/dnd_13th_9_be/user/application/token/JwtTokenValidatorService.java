@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import com.example.dnd_13th_9_be.common.utils.JWTUtil;
 import com.example.dnd_13th_9_be.global.error.InvalidTokenException;
 import com.example.dnd_13th_9_be.user.application.dto.RoleAttribute;
-import com.example.dnd_13th_9_be.user.application.dto.UserPrincipleDto;
+import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
 import com.example.dnd_13th_9_be.user.application.model.UserModel;
 import com.example.dnd_13th_9_be.user.application.repository.UserRepository;
 import com.google.common.base.Strings;
@@ -22,7 +22,7 @@ public class JwtTokenValidatorService {
   private final JWTUtil jwtUtil;
   private final UserRepository userRepository;
 
-  public UserPrincipleDto validateToken(String token) {
+  public UserPrincipalDto validateToken(String token) {
     if (Strings.isNullOrEmpty(token)) {
       throw new InvalidTokenException();
     }
@@ -45,6 +45,6 @@ public class JwtTokenValidatorService {
         userRepository
             .findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다. ID: " + userId));
-    return UserPrincipleDto.from(userModel);
+    return UserPrincipalDto.from(userModel);
   }
 }
