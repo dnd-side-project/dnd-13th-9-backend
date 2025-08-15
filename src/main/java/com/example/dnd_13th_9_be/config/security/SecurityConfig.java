@@ -39,7 +39,7 @@ public class SecurityConfig {
     return (web) ->
         web.ignoring()
             .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-            .requestMatchers("/h2-console/**", "/swagger-ui.html");
+            .requestMatchers("/h2-console/**", "/swagger-ui/**");
   }
 
   @Bean
