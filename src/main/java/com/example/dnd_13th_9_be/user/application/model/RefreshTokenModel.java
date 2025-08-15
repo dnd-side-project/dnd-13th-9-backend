@@ -33,7 +33,9 @@ public class RefreshTokenModel implements AbstractModel {
     return this.toBuilder().token(newToken).expiryDate(newExpiryDate).build();
   }
 
-  public boolean isInValid() {
-    return this.token == null || isExpired();
+  public boolean isValid() {
+    return this.token != null &&
+            !this.token.trim().isEmpty() &&
+            !isExpired();
   }
 }
