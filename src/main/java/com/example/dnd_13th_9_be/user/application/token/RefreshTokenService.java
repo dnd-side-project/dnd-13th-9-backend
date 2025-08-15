@@ -53,7 +53,7 @@ public class RefreshTokenService {
   @Transactional
   public RefreshTokenModel getRefreshToken(String token) {
     RefreshTokenModel refreshToken = refreshTokenRepository.findByToken(token);
-    if (!refreshToken.isValid()) {
+    if (refreshToken.isInValid()) {
       throw new InvalidTokenException("유효하지 않은 리프레시 토큰입니다.");
     }
     return refreshToken;
@@ -63,7 +63,7 @@ public class RefreshTokenService {
   public UserModel findUserByRefreshToken(String token) {
     RefreshTokenModel refreshTokenModel = refreshTokenRepository.findByToken(token);
 
-    if (!refreshTokenModel.isValid()) {
+    if (refreshTokenModel.isInValid()) {
       throw new InvalidTokenException("만료된 리프레시 토큰입니다.");
     }
 
