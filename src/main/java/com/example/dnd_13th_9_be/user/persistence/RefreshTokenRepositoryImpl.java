@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;
 
-import com.example.dnd_13th_9_be.global.error.InvalidTokenException;
 import com.example.dnd_13th_9_be.user.application.model.RefreshTokenModel;
 import com.example.dnd_13th_9_be.user.application.model.converter.RefreshTokenConverter;
 import com.example.dnd_13th_9_be.user.application.repository.RefreshTokenRepository;
@@ -28,9 +27,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
   @Override
   public Optional<RefreshTokenModel> findByToken(String token) {
-    return jpaRefreshTokenRepository
-        .findByToken(token)
-        .map(refreshTokenConverter::from);
+    return jpaRefreshTokenRepository.findByToken(token).map(refreshTokenConverter::from);
   }
 
   @Override

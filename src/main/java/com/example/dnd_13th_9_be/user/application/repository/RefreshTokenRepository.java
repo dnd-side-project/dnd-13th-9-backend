@@ -3,7 +3,6 @@ package com.example.dnd_13th_9_be.user.application.repository;
 import java.time.Instant;
 import java.util.Optional;
 
-import com.example.dnd_13th_9_be.global.error.InvalidTokenException;
 import com.example.dnd_13th_9_be.user.application.model.RefreshTokenModel;
 
 public interface RefreshTokenRepository {

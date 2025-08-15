@@ -2,13 +2,13 @@ package com.example.dnd_13th_9_be.user.application.token;
 
 import java.time.Instant;
 
-import com.example.dnd_13th_9_be.global.error.UserNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.global.error.InvalidTokenException;
+import com.example.dnd_13th_9_be.global.error.UserNotFoundException;
 import com.example.dnd_13th_9_be.user.application.model.RefreshTokenModel;
 import com.example.dnd_13th_9_be.user.application.model.UserModel;
 import com.example.dnd_13th_9_be.user.application.repository.RefreshTokenRepository;
@@ -18,7 +18,6 @@ import com.example.dnd_13th_9_be.user.persistence.RefreshToken;
 import com.example.dnd_13th_9_be.user.persistence.User;
 
 import static com.example.dnd_13th_9_be.global.error.ErrorCode.*;
-import static com.example.dnd_13th_9_be.user.persistence.QUser.user;
 
 @Service
 @RequiredArgsConstructor
@@ -37,14 +36,13 @@ public class RefreshTokenService {
       jpaRefreshTokenRepository.deleteByUserId(userId);
       jpaRefreshTokenRepository.flush();
 
-      User userEntity = jpaUserRepository.findById(userId)
+      User userEntity =
+          jpaUserRepository
+              .findById(userId)
               .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
 
-      RefreshToken refreshTokenEntity = RefreshToken.builder()
-              .token(token)
-              .expiryDate(expiration)
-              .user(userEntity)
-              .build();
+      RefreshToken refreshTokenEntity =
+          RefreshToken.builder().token(token).expiryDate(expiration).user(userEntity).build();
 
       jpaRefreshTokenRepository.save(refreshTokenEntity);
     } catch (Exception e) {
@@ -54,9 +52,10 @@ public class RefreshTokenService {
 
   @Transactional
   public RefreshTokenModel getRefreshToken(String token) {
-    return refreshTokenRepository.findByToken(token)
-            .filter(RefreshTokenModel::isValid)
-            .orElseThrow(() -> new InvalidTokenException(INVALID_REFRESH_TOKEN));
+    return refreshTokenRepository
+        .findByToken(token)
+        .filter(RefreshTokenModel::isValid)
+        .orElseThrow(() -> new InvalidTokenException(INVALID_REFRESH_TOKEN));
   }
 
   @Transactional

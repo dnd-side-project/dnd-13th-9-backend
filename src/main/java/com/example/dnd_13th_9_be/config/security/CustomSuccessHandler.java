@@ -1,6 +1,5 @@
 package com.example.dnd_13th_9_be.config.security;
 
-import com.example.dnd_13th_9_be.global.error.UserNotFoundException;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Map;
@@ -18,6 +17,7 @@ import com.example.dnd_13th_9_be.common.utils.CookieUtil;
 import com.example.dnd_13th_9_be.common.utils.JWTUtil;
 import com.example.dnd_13th_9_be.config.AppProperties;
 import com.example.dnd_13th_9_be.config.AppProperties.Security.Jwt;
+import com.example.dnd_13th_9_be.global.error.UserNotFoundException;
 import com.example.dnd_13th_9_be.user.application.dto.RoleAttribute;
 import com.example.dnd_13th_9_be.user.application.model.UserModel;
 import com.example.dnd_13th_9_be.user.application.repository.UserRepository;

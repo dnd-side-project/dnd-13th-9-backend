@@ -21,7 +21,7 @@ public class RefreshTokenModel implements AbstractModel {
 
   public boolean isExpired() {
     Instant exp = this.expiryDate;
-    if(exp == null) return true;
+    if (exp == null) return true;
     return Instant.now().isAfter(exp);
   }
 
@@ -34,8 +34,6 @@ public class RefreshTokenModel implements AbstractModel {
   }
 
   public boolean isValid() {
-    return this.token != null &&
-            !this.token.trim().isEmpty() &&
-            !isExpired();
+    return this.token != null && !this.token.trim().isEmpty() && !isExpired();
   }
 }

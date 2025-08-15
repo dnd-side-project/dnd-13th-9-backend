@@ -52,7 +52,7 @@ public class JWTFilter extends OncePerRequestFilter {
       UserPrincipalDto userPrincipalDto = jwtTokenValidatorService.validateToken(accessToken);
       Authentication authentication =
           new UsernamePasswordAuthenticationToken(
-                  userPrincipalDto, null, userPrincipalDto.getAuthorities());
+              userPrincipalDto, null, userPrincipalDto.getAuthorities());
 
       SecurityContextHolder.getContext().setAuthentication(authentication);
       filterChain.doFilter(request, response);

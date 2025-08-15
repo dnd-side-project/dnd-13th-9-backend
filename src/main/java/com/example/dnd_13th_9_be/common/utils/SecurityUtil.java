@@ -1,9 +1,9 @@
 package com.example.dnd_13th_9_be.common.utils;
 
-import com.example.dnd_13th_9_be.global.error.UserNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.example.dnd_13th_9_be.global.error.UserNotFoundException;
 import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
 
 public class SecurityUtil {
