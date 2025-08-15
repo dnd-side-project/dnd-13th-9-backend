@@ -20,9 +20,16 @@ public enum ErrorCode implements ResponseCode {
   TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "40102", "토큰이 만료되었습니다"),
   TOKEN_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "401003", "인증되지 않은 사용자입니다."),
 
+  //리프레시 토큰 관련 에러
+  REFRESH_TOKEN_NOT_CREATED(HttpStatus.UNAUTHORIZED, "40200", "리프레시 토큰 생성에 실패했습니다."),
+  INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "402001", "유효하지 않은 리프레시 토큰입니다."),
+  REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "402002", "만료된 리프레시 토큰입니다."),
+
+
+
   // 유저 관련 에러
   USER_NOT_FOUND(HttpStatus.NOT_FOUND, "60000", "해당 id에 맞는 유저가 없습니다"),
-  USER_ACCESS_DENIED(HttpStatus.FORBIDDEN, "403", "권한이 없습니다"),
+  USER_ACCESS_DENIED(HttpStatus.FORBIDDEN, "60001", "권한이 없습니다"),
 
   // server error
   INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "50000", "서버 내부 오류입니다"),
