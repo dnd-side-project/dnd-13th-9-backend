@@ -1,5 +1,6 @@
 package com.example.dnd_13th_9_be.config.security;
 
+import com.example.dnd_13th_9_be.global.error.UserNotFoundException;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Map;
@@ -43,7 +44,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
     UserModel userModel =
         userRepository
             .findById(userId)
-            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다. ID: " + userId));
+            .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다. ID: " + userId));
 
     RoleAttribute role = userModel.getRole();
     String accessToken = jwtUtil.createAccessToken(userId, role);
