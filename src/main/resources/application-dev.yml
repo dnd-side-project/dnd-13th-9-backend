@@ -17,3 +17,36 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
     format-sql: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ${KAKA0_CLIENT_ID}
+            client-secret: ${KAKAO_CLIENT_SECRET}
+            redirect-uri: ${KAKAO_REDIRECT_URI}
+            authorization-grant-type: authorization_code
+            scope: profile_nickname
+            client-name: Kakao
+            client-authentication-method: client_secret_post
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET}
+      access-token-expiration-ms: ${JWT_ACCESS_TOKEN_EXPIRATION_MS}
+      refresh-token-expiration-ms: ${JWT_REFRESH_TOKEN_EXPIRATION_MS}
+    oauth2:
+      frontend-redirect-base-url: ${OAUTH2_FRONTEND_REDIRECT_BASE_URL} # OAuth2 인증 후 리다이렉트 주소
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG
+    org.springframework.web.client.RestTemplate: DEBUG
+    com.example.dnd_13th_9_be: DEBUG
