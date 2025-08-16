@@ -10,7 +10,7 @@ import com.example.dnd_13th_9_be.plan.application.dto.PlanDetailResult;
 import com.example.dnd_13th_9_be.plan.application.port.PlanCommandPort;
 import com.example.dnd_13th_9_be.plan.persistence.PlanRepository;
 import com.example.dnd_13th_9_be.plan.persistence.entity.PlanEntity;
-import com.example.dnd_13th_9_be.user.persistence.UserEntity;
+import com.example.dnd_13th_9_be.user.persistence.User;
 
 @Component
 @RequiredArgsConstructor
@@ -20,7 +20,7 @@ public class PlanCommandAdapter implements PlanCommandPort {
 
   @Override
   public PlanDetailResult create(Long userId, String name, boolean isDefault) {
-    UserEntity userRef = em.getReference(UserEntity.class, userId);
+    User userRef = em.getReference(User.class, userId);
     PlanEntity planEntity = PlanEntity.of(userRef, name, isDefault);
     planRepository.save(planEntity);
     return new PlanDetailResult(

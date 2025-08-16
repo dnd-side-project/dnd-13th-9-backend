@@ -14,7 +14,22 @@ public enum ErrorCode implements ResponseCode {
   VALIDATION_ERROR(HttpStatus.UNPROCESSABLE_ENTITY, "42200", "검증 오류가 발생했습니다"),
   NOT_FOUND(HttpStatus.NOT_FOUND, "40400", "대상을 찾을 수 없습니다"),
 
-  // server error,
+  // 토큰 관련 에러
+  INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "40100", "유효하지 않은 토큰입니다"),
+  TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "40101", "토큰이 없습니다"),
+  TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "40102", "토큰이 만료되었습니다"),
+  TOKEN_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "401003", "인증되지 않은 사용자입니다."),
+
+  // 리프레시 토큰 관련 에러
+  REFRESH_TOKEN_NOT_CREATED(HttpStatus.UNAUTHORIZED, "40200", "리프레시 토큰 생성에 실패했습니다."),
+  INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "402001", "유효하지 않은 리프레시 토큰입니다."),
+  REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "402002", "만료된 리프레시 토큰입니다."),
+
+  // 유저 관련 에러
+  USER_NOT_FOUND(HttpStatus.NOT_FOUND, "60000", "해당 id에 맞는 유저가 없습니다"),
+  USER_ACCESS_DENIED(HttpStatus.FORBIDDEN, "60001", "권한이 없습니다"),
+
+  // server error
   INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "50000", "서버 내부 오류입니다"),
   SERVICE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "50300", "일시적으로 이용할 수 없습니다"),
 

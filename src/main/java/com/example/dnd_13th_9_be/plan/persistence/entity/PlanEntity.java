@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 
 import com.example.dnd_13th_9_be.folder.persistence.FolderEntity;
 import com.example.dnd_13th_9_be.global.converter.BooleanAttributeConverter;
-import com.example.dnd_13th_9_be.user.persistence.UserEntity;
+import com.example.dnd_13th_9_be.user.persistence.User;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
@@ -37,7 +37,7 @@ public class PlanEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
-  private UserEntity user;
+  private User user;
 
   @Comment("계획 이름")
   @Column(nullable = false, length = 10)
@@ -58,13 +58,13 @@ public class PlanEntity {
       cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private Set<FolderEntity> folders;
 
-  private PlanEntity(UserEntity user, String name, boolean isDefault) {
+  private PlanEntity(User user, String name, boolean isDefault) {
     this.user = user;
     this.name = name;
     this.isDefault = isDefault;
   }
 
-  public static PlanEntity of(UserEntity user, String name, boolean isDefault) {
+  public static PlanEntity of(User user, String name, boolean isDefault) {
     return new PlanEntity(user, name, isDefault);
   }
 }
