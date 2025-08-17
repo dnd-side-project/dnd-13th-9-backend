@@ -1,5 +1,6 @@
 package com.example.dnd_13th_9_be.checklist.presentation;
 
+import com.example.dnd_13th_9_be.checklist.presentation.docs.ChecklistDocs;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +17,10 @@ import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/checklist")
-public class ChecklistController {
+public class ChecklistController implements ChecklistDocs {
   private final ChecklistService checklistService;
 
+  @Override
   @GetMapping
   public ResponseEntity<ApiResponse<ChecklistResponse>> getChecklist(
       @AuthenticationPrincipal UserPrincipalDto userDetails) {
