@@ -1,26 +1,29 @@
 package com.example.dnd_13th_9_be.checklist.persistence.entity;
 
-import com.example.dnd_13th_9_be.global.converter.BooleanAttributeConverter;
+import java.util.List;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import org.hibernate.annotations.ColumnDefault;
+import com.example.dnd_13th_9_be.common.persistence.BaseEntity;
 import org.hibernate.annotations.Comment;
 
 @Entity
 @Table(name = "checklist_category")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChecklistCategoryEntity {
+public class ChecklistCategory extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -32,4 +35,16 @@ public class ChecklistCategoryEntity {
   @Comment("노출 순서")
   @Column(name = "sort_order", nullable = false)
   private Integer sortOrder;
+
+  @OrderBy("sortOrder ASC")
+  @OneToMany(
+      mappedBy = "category",
+      cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  private List<ChecklistItem> items;
+
+  @Builder
+  ChecklistCategory(String name, Integer sortOrder) {
+    this.name = name;
+    this.sortOrder = sortOrder;
+  }
 }

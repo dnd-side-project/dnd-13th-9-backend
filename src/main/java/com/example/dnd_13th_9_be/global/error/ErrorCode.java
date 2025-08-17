@@ -33,9 +33,6 @@ public enum ErrorCode implements ResponseCode {
   INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "50000", "서버 내부 오류입니다"),
   SERVICE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "50300", "일시적으로 이용할 수 없습니다"),
 
-  // user 6xxxx
-  NOT_FOUND_USER(HttpStatus.NOT_FOUND, "60401", "사용자를 찾을 수 없습니다"),
-
   // plan 71xxx,
   NOT_FOUND_PLAN(HttpStatus.NOT_FOUND, "71000", "유효하지 않은 계획입니다"),
   PLAN_CREATION_LIMIT(HttpStatus.BAD_REQUEST, "71001", "최대 생성할 수 있는 계획 갯수를 초과했습니다"),
@@ -51,6 +48,10 @@ public enum ErrorCode implements ResponseCode {
   FOLDER_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "72003", "폴더 삭제에 실패했습니다"),
 
   DEFAULT_FOLDER_CANNOT_BE_DELETE(HttpStatus.FORBIDDEN, "72004", "기본 폴더는 삭제 할 수 없습니다"),
+
+  // checklist 73xxx
+  NOT_FOUND_CHECKLIST_ITEM(HttpStatus.NOT_FOUND, "73000", "존재하지 않는 체크리스트 입니다"),
+  ALREADY_EXISTS_USER_REQUIRED_ITEM(HttpStatus.CONFLICT, "73001", "이미 필수 확인에 추가된 체크리스트 입니다"),
   ;
 
   private final HttpStatus status;
