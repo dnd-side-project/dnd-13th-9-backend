@@ -1,5 +1,6 @@
 package com.example.dnd_13th_9_be.checklist.persistence;
 
+import java.util.List;
 import jakarta.persistence.EntityManager;
 
 import org.springframework.stereotype.Repository;
@@ -38,5 +39,17 @@ public class UserRequiredItemRepositoryImpl implements UserRequiredItemRepositor
 
     UserRequiredItem savedUserRequiredItem = jpaUserRequiredItemRepository.save(entity);
     return userRequiredItemConverter.from(savedUserRequiredItem);
+  }
+
+  @Override
+  public long delete(Long userId, Long itemId) {
+    return jpaUserRequiredItemRepository.deleteByUserIdAndItemId(userId, itemId);
+  }
+
+  @Override
+  public List<UserRequiredItemModel> findAllByUserId(Long userId) {
+    List<UserRequiredItem> requiredItems =
+        jpaUserRequiredItemRepository.findAllByUserIdOrderByCreatedAtAsc(userId);
+    return requiredItems.stream().map(userRequiredItemConverter::from).toList();
   }
 }

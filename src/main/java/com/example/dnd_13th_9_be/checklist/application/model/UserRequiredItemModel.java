@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import com.example.dnd_13th_9_be.common.support.AbstractModel;
 
@@ -11,6 +12,7 @@ import com.example.dnd_13th_9_be.common.support.AbstractModel;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
+@ToString
 public class UserRequiredItemModel implements AbstractModel {
   private Long id;
   private Long userId;
