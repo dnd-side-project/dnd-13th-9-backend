@@ -13,16 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.checklist.application.service.UserRequiredItemService;
+import com.example.dnd_13th_9_be.checklist.presentation.docs.UserRequiredItemDocs;
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
 import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/required-item")
-public class UserRequiredItemController {
+public class UserRequiredItemController implements UserRequiredItemDocs {
 
   private final UserRequiredItemService userRequiredItemService;
 
+  @Override
   @PutMapping("/{itemId}")
   public ResponseEntity<ApiResponse<Map<String, Object>>> add(
       @AuthenticationPrincipal UserPrincipalDto userDetails, @PathVariable("itemId") Long itemId) {
@@ -30,6 +32,7 @@ public class UserRequiredItemController {
     return ApiResponse.okEntity();
   }
 
+  @Override
   @DeleteMapping("/{itemId}")
   public ResponseEntity<ApiResponse<Map<String, Object>>> delete(
       @AuthenticationPrincipal UserPrincipalDto userDetails, @PathVariable("itemId") Long itemId) {
