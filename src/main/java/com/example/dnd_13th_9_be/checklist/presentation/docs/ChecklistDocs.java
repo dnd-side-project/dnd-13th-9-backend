@@ -1,5 +1,8 @@
 package com.example.dnd_13th_9_be.checklist.presentation.docs;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 import com.example.dnd_13th_9_be.checklist.presentation.dto.ChecklistResponse;
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
 import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
@@ -10,31 +13,32 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 @Tag(name = "체크리스트 조회", description = "사용자 맞춤 체크리스트 카테고리/섹션/아이템 조회")
 public interface ChecklistDocs {
 
-        @Operation(
-            summary = "체크리스트 조회",
-            description = """
+  @Operation(
+      summary = "체크리스트 조회",
+      description =
+          """
           사용자별 체크리스트를 조회합니다.
           - Path: `/api/checklist`
           - Method: `GET`
           - Query Params: 없음
-          """
-        )
-        @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                responseCode = "200",
-                description = "성공",
-                content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ApiResponse.class),
-                    examples = @ExampleObject(
+          """)
+  @ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "200",
+        description = "성공",
+        content =
+            @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiResponse.class),
+                examples =
+                    @ExampleObject(
                         name = "성공 예시",
-                        value = """
+                        value =
+                            """
                       {
                         "code": "20000",
                         "message": "성공했습니다",
@@ -98,13 +102,8 @@ public interface ChecklistDocs {
                           ]
                         }
                       }
-                      """
-                    )
-                )
-            )
-        })
-        ResponseEntity<ApiResponse<ChecklistResponse>> getChecklist(
-        @Parameter(hidden = true)
-        @AuthenticationPrincipal UserPrincipalDto userDetails
-  );
+                      """)))
+  })
+  ResponseEntity<ApiResponse<ChecklistResponse>> getChecklist(
+      @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userDetails);
 }
