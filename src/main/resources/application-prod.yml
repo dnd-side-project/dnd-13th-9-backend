@@ -1,16 +1,52 @@
 spring:
+  config:
+    import: optional:file:.env.dev[.properties]
   datasource:
     url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     hikari:
-      maximum-pool-size: 20
+      maximum-pool-size: 10
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-    show-sql: false
+    show-sql: true
+    format-sql: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ${KAKAO_CLIENT_ID}
+            client-secret: ${KAKAO_CLIENT_SECRET}
+            redirect-uri: ${KAKAO_REDIRECT_URI}
+            authorization-grant-type: authorization_code
+            scope: profile_nickname
+            client-name: Kakao
+            client-authentication-method: client_secret_post
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET}
+      access-token-expiration-ms: ${JWT_ACCESS_TOKEN_EXPIRATION_MS}
+      refresh-token-expiration-ms: ${JWT_REFRESH_TOKEN_EXPIRATION_MS}
+    oauth2:
+      frontend-redirect-base-url: ${OAUTH2_FRONTEND_REDIRECT_BASE_URL}
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG
+    org.springframework.web.client.RestTemplate: DEBUG
+    com.example.dnd_13th_9_be: DEBUG
