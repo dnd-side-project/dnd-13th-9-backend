@@ -39,7 +39,7 @@ public class SecurityConfig {
     return (web) ->
         web.ignoring()
             .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-            .requestMatchers("/h2-console/**", "/swagger-ui/**");
+            .requestMatchers("/h2-console/**", "/swagger-ui/**", "/swagger-ui.html");
   }
 
   @Bean
@@ -70,7 +70,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(
             authorize ->
                 authorize
-                    .requestMatchers("/oauth2/**", "/login/oauth2/**", "/api/auth/refresh")
+                    .requestMatchers("/oauth2/**", "/login/oauth2/**", "/api/auth/refresh","/swagger-ui/**","/api-docs/**")
                     .permitAll()
                     .requestMatchers("/api/auth/my", "/api/auth/logout")
                     .hasAuthority(ROLE_USER.name())
