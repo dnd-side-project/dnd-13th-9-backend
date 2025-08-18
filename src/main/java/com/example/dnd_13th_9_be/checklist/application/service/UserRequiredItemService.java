@@ -49,9 +49,6 @@ public class UserRequiredItemService {
       throw new BusinessException(NOT_FOUND_CHECKLIST_ITEM);
     }
 
-    UserRequiredItemModel userRequiredItemModel =
-        UserRequiredItemModel.builder().userId(userId).itemId(itemId).build();
-
     long result = userRequiredItemRepository.delete(userId, itemId);
     if (result == 0) {
       throw new BusinessException(ALREADY_DELETED_USER_REQUIRED_ITEM);

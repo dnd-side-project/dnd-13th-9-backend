@@ -23,10 +23,6 @@ public class ChecklistItemConverter
 
   @Override
   public ChecklistItem toEntity(ChecklistItemModel checklistItemModel) {
-    return ChecklistItem.builder()
-        .question(checklistItemModel.getQuestion())
-        .description(checklistItemModel.getDescription())
-        .sortOrder(checklistItemModel.getSortOrder())
-        .build();
+    throw new UnsupportedOperationException("Use persistence layer repository with getReference()");
   }
 }

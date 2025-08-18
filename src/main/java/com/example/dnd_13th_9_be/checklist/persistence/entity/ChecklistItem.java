@@ -49,6 +49,6 @@ public class ChecklistItem extends BaseEntity {
     this.question = question;
     this.description = description;
     this.sortOrder = sortOrder;
-    this.category = category; // TODO: category 어떻게 받을 지 고민해 보기
+    this.category = category;
   }
 }

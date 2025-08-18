@@ -30,6 +30,7 @@ public class UserRequiredItemRepositoryImpl implements UserRequiredItemRepositor
   }
 
   @Override
+  @Transactional
   public UserRequiredItemModel create(UserRequiredItemModel userRequiredItemModel) {
     User userRef = em.getReference(User.class, userRequiredItemModel.getUserId());
     ChecklistItem checklistItemRef =
@@ -42,6 +43,7 @@ public class UserRequiredItemRepositoryImpl implements UserRequiredItemRepositor
   }
 
   @Override
+  @Transactional
   public long delete(Long userId, Long itemId) {
     return jpaUserRequiredItemRepository.deleteByUserIdAndItemId(userId, itemId);
   }

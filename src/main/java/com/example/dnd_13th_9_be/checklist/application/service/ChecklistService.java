@@ -1,8 +1,8 @@
 package com.example.dnd_13th_9_be.checklist.application.service;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.checklist.application.model.ChecklistCategoryModel;
-import com.example.dnd_13th_9_be.checklist.application.model.ChecklistItemModel;
 import com.example.dnd_13th_9_be.checklist.application.model.UserRequiredItemModel;
 import com.example.dnd_13th_9_be.checklist.application.repository.ChecklistCategoryRepository;
 import com.example.dnd_13th_9_be.checklist.application.repository.UserRequiredItemRepository;
@@ -39,31 +38,17 @@ public class ChecklistService {
     List<CategorySummary> categorySummaries = new ArrayList<>();
     categorySummaries.add(new CategorySummary(0, "필수 확인"));
 
-    categories.forEach(
-        c -> categorySummaries.add(new CategorySummary(c.getSortOrder(), c.getName())));
-
     List<SectionItem> requiredSectionItems = new ArrayList<>();
-
     List<Section> sections = new ArrayList<>();
-    List<ChecklistCategoryModel> orderedCategories =
-        categories.stream()
-            .sorted(Comparator.comparingInt(ChecklistCategoryModel::getSortOrder))
-            .toList();
 
-    for (ChecklistCategoryModel category : orderedCategories) {
-      List<SectionItem> categorySectionItems = new ArrayList<>();
-
-      for (ChecklistItemModel item : category.getItems()) {
-        if (requiredIds.contains(item.getId())) {
-          requiredSectionItems.add(
-              new SectionItem(item.getId(), item.getQuestion(), item.getDescription()));
-        } else {
-          categorySectionItems.add(
-              new SectionItem(item.getId(), item.getQuestion(), item.getDescription()));
-        }
-      }
-
-      sections.add(new Section(category.getName(), categorySectionItems));
+    for (ChecklistCategoryModel category : categories) {
+      categorySummaries.add(new CategorySummary(category.getSortOrder(), category.getName()));
+      Map<Boolean, List<SectionItem>> partitionedItems =
+          category.getItems().stream()
+              .map(item -> new SectionItem(item.getId(), item.getQuestion(), item.getDescription()))
+              .collect(Collectors.partitioningBy(item -> requiredIds.contains(item.id())));
+      requiredSectionItems.addAll(partitionedItems.get(true));
+      sections.add(new Section(category.getName(), partitionedItems.get(false)));
     }
     sections.addFirst(new Section("필수 확인", requiredSectionItems));
     return new ChecklistResponse(categorySummaries, sections);
