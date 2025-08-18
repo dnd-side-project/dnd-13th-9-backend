@@ -27,6 +27,11 @@ public class FolderService {
   private final FolderCommandPort folderCommandPort;
   private final PlanAccessPort planAccessPort;
 
+  @Transactional
+  public FolderDetailResult createDefaultFolder(Long planId) {
+    return folderCommandPort.create(planId, "기본 폴더", true);
+  }
+
   @Transactional(readOnly = true)
   public List<FolderSummaryResult> getFolderList(Long planId) {
     verifyPlanExists(planId);

@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.example.dnd_13th_9_be.folder.application.FolderService;
+import com.example.dnd_13th_9_be.plan.application.PlanService;
+import com.example.dnd_13th_9_be.plan.application.dto.PlanDetailResult;
 import com.example.dnd_13th_9_be.user.application.dto.KakaoAttribute;
 import com.example.dnd_13th_9_be.user.application.dto.OAuth2Attribute;
 import com.example.dnd_13th_9_be.user.application.dto.RoleAttribute;
@@ -26,6 +29,8 @@ import com.example.dnd_13th_9_be.user.application.repository.UserRepository;
 public class CustomOauth2UserService extends DefaultOAuth2UserService {
 
   private final UserRepository userRepository;
+  private final PlanService planService;
+  private final FolderService folderService;
 
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -79,6 +84,8 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
 
                 UserModel savedUser = userRepository.save(newUser);
                 log.info("신규 사용자 생성 완료 - providerId: {}, ID: {}", providerId, savedUser.getId());
+                PlanDetailResult plan = planService.createDefaultPlan(savedUser.getId());
+                folderService.createDefaultFolder(plan.planId());
                 return savedUser;
 
               } catch (Exception e) {

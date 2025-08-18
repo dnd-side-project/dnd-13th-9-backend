@@ -24,6 +24,11 @@ public class PlanService {
   private final PlanQueryPort planQueryPort;
   private final PlanCommandPort planCommandPort;
 
+  @Transactional
+  public PlanDetailResult createDefaultPlan(Long userId) {
+    return planCommandPort.create(userId, "기본 계획", true);
+  }
+
   @Transactional(readOnly = true)
   public List<PlanSummaryResult> getPlanList(Long userId) {
     return planQueryPort.findSummariesByUserId(userId);
