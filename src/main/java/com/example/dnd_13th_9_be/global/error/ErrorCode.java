@@ -51,8 +51,8 @@ public enum ErrorCode implements ResponseCode {
   DEFAULT_FOLDER_CANNOT_BE_DELETE(HttpStatus.FORBIDDEN, "72004", "기본 폴더는 삭제 할 수 없습니다"),
 
   //s3 manager 에러 80000
-  INVALID_FILE_URL(HttpStatus.BAD_REQUEST, "73000", "유효하지 않은 파일 URL입니다"),
-  FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "73001", "파일을 찾을 수 없습니다")
+  INVALID_FILE_URL(HttpStatus.BAD_REQUEST, "80000", "유효하지 않은 파일 URL입니다"),
+  FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "80001", "파일을 찾을 수 없습니다")
 ;
 
 
