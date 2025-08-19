@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -27,7 +28,12 @@ import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
-@Table(name = "plan")
+@Table(
+    name = "plan",
+    uniqueConstraints =
+        @UniqueConstraint(
+            name = "uk_plan_user_default",
+            columnNames = {"user_id", "default_yn"}))
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlanEntity {

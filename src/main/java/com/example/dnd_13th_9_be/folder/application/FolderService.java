@@ -27,9 +27,11 @@ public class FolderService {
   private final FolderCommandPort folderCommandPort;
   private final PlanAccessPort planAccessPort;
 
+  private static final String DEFAULT_FOLDER_NAME = "기본 폴더";
+
   @Transactional
-  public FolderDetailResult createDefaultFolder(Long planId) {
-    return folderCommandPort.create(planId, "기본 폴더", true);
+  public void createDefaultFolder(Long planId) {
+    folderCommandPort.create(planId, DEFAULT_FOLDER_NAME, true);
   }
 
   @Transactional(readOnly = true)
