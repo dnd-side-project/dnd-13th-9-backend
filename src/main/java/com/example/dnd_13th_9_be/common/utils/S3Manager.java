@@ -1,7 +1,5 @@
 package com.example.dnd_13th_9_be.common.utils;
 
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.dnd_13th_9_be.global.error.BusinessException;
 import com.example.dnd_13th_9_be.global.error.ErrorCode;
 import com.example.dnd_13th_9_be.global.error.S3ImageException;
@@ -11,6 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,41 +22,75 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class S3Manager {
 
-    private final AmazonS3Client amazonS3Client;
+    private final S3Client s3Client;
 
-    @Value("${cloud.aws.s3.bucket}")
-    private String BUCKET;
+    @Value("${spring.cloud.aws.s3.bucket}")
+    private String bucket;
 
     public String upload(MultipartFile file){
         String fileName = createUniqueFileName(file.getOriginalFilename());
 
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentType(file.getContentType());
-        metadata.setContentLength(file.getSize());
+        try (InputStream inputStream = file.getInputStream()) {
+            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                    .bucket(bucket)
+                    .key(fileName)
+                    .contentType(file.getContentType())
+                    .contentLength(file.getSize())
+                    .build();
 
-        amazonS3Client.putObject(BUCKET, fileName, getInputStream(file), metadata);
-        return amazonS3Client.getUrl(BUCKET, fileName).toString();
+            s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(inputStream, file.getSize()));
+        } catch (IOException e) {
+            throw new S3ImageException(ErrorCode.INVALID_FILE_URL, "파일 업로드 실패");
+        }
+
+        return generateFileUrl(fileName);
     }
 
     public String getImageUrl(String fileKey){
-        return amazonS3Client.getUrl(BUCKET, fileKey).toString();
+        return generateFileUrl(fileKey);
     }
 
     public String update(String oldFileUrl, MultipartFile newFile) {
+        String newFileUrl = upload(newFile);
         delete(oldFileUrl);
-        return upload(newFile);
+        return newFileUrl;
     }
 
     public void delete(String fileUrl) {
         if(!StringUtils.hasText(fileUrl)){
-            throw new BusinessException(ErrorCode.FILE_NOT_FOUND);
+            throw new S3ImageException(ErrorCode.FILE_NOT_FOUND);
         }
         String fileKey = extractFileKey(fileUrl);
-        amazonS3Client.deleteObject(BUCKET, fileKey);
+
+        DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
+                .bucket(bucket)
+                .key(fileKey)
+                .build();
+
+        s3Client.deleteObject(deleteRequest);
     }
 
     public void deleteMultiple(List<String> fileUrls) {
-        fileUrls.forEach(this::delete);
+        if (fileUrls == null || fileUrls.isEmpty()) {
+            throw new S3ImageException(ErrorCode.FILE_NOT_FOUND);
+        }
+
+        List<ObjectIdentifier> objectsToDelete = fileUrls.stream()
+                .filter(StringUtils::hasText)
+                .map(this::extractFileKey)
+                .map(key -> ObjectIdentifier.builder().key(key).build())
+                .toList();
+
+        if (objectsToDelete.isEmpty()) {
+            return;
+        }
+
+        DeleteObjectsRequest deleteObjectsRequest = DeleteObjectsRequest.builder()
+                .bucket(bucket)
+                .delete(Delete.builder().objects(objectsToDelete).build())
+                .build();
+
+        s3Client.deleteObjects(deleteObjectsRequest);
     }
 
     private String createUniqueFileName(String originalFileName) {
@@ -71,20 +106,15 @@ public class S3Manager {
             throw new S3ImageException(ErrorCode.INVALID_FILE_URL,"파일형식이 비어있습니다.");
         }
 
-        String[] parts = fileUrl.split(".amazonaws.com/");
+        String[] parts = fileUrl.split("\\.amazonaws\\.com/");
         if (parts.length != 2) {
             throw new S3ImageException(ErrorCode.INVALID_FILE_URL,"잘못된 S3 URL 형식입니다");
         }
         return parts[1];
     }
 
-    private InputStream getInputStream(MultipartFile file) {
-        try {
-            return file.getInputStream();
-        } catch (IOException e) {
-            throw new S3ImageException(ErrorCode.INVALID_FILE_URL, "파일 입력 스트림을 가져올 수 없습니다.");
-        }
+    private String generateFileUrl(String fileName) {
+        return String.format("https://%s.s3.amazonaws.com/%s", bucket, fileName);
     }
-
 
 }
