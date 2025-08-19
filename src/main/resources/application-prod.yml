@@ -15,8 +15,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-    show-sql: true
-    format-sql: true
+    show-sql: false
+    format-sql: false
 
   security:
     oauth2:
@@ -40,19 +40,15 @@ spring:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
-
-cloud:
-  aws:
-    s3:
-      bucket: ${AWS_S3_BUCKET_NAME}
-    region:
-      static: ${AWS_REGION}
-      auto: false
-    stack:
-      auto: false
-    credentials:
-      access-key: ${AWS_ACCESS_KEY_ID}
-      secret-key: ${AWS_SECRET_ACCESS_KEY}
+  cloud:
+    aws:
+      region:
+        static: ap-northeast-2
+      credentials:
+        access-key: ${AWS_ACCESS_KEY_ID}
+        secret-key: ${AWS_SECRET_ACCESS_KEY}
+      s3:
+        bucket: ${AWS_S3_BUCKET_NAME}
 app:
   security:
     jwt:
@@ -63,7 +59,7 @@ app:
       frontend-redirect-base-url: ${OAUTH2_FRONTEND_REDIRECT_BASE_URL}
 logging:
   level:
-    org.springframework.security: DEBUG
-    org.springframework.security.oauth2: DEBUG
-    org.springframework.web.client.RestTemplate: DEBUG
-    com.example.dnd_13th_9_be: DEBUG
+    org.springframework.security: INFO
+    org.springframework.security.oauth2: INFO
+    org.springframework.web.client.RestTemplate: INFO
+    com.example.dnd_13th_9_be: INFO
