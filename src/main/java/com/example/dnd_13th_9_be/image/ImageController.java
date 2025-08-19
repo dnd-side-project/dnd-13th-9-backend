@@ -18,7 +18,7 @@ public class ImageController {
     private final S3Manager s3Manager;
 
     @PostMapping
-    public String uploadTest(@RequestParam(name = "file")MultipartFile file) throws IOException {
+    public String uploadTest(@RequestParam(name = "file")MultipartFile file) {
         return s3Manager.upload(file);
     }
 }
