@@ -35,7 +35,9 @@ public class JWTFilter extends OncePerRequestFilter {
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
 
-    if (request.getRequestURI().startsWith("/login/oauth2/")
+    if (request.getRequestURI().startsWith("/api-docs")
+        ||request.getRequestURI().startsWith("/swagger-ui")
+        || request.getRequestURI().startsWith("/login/oauth2/")
         || request.getRequestURI().startsWith("/oauth2/authorization")
         || request.getRequestURI().equals("/api/auth/refresh")
         || request.getRequestURI().equals("/api/test/auth/token")) {
