@@ -1,66 +1,77 @@
 package com.example.dnd_13th_9_be.plan.persistence;
 
 import java.util.List;
+import jakarta.persistence.EntityManager;
 
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 
-import com.example.dnd_13th_9_be.folder.persistence.QFolderEntity;
-import com.example.dnd_13th_9_be.plan.persistence.dto.PlanSummary;
-import com.example.dnd_13th_9_be.plan.persistence.entity.QPlanEntity;
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.example.dnd_13th_9_be.global.error.BusinessException;
+import com.example.dnd_13th_9_be.plan.application.dto.PlanDetailResult;
+import com.example.dnd_13th_9_be.plan.application.dto.PlanSummaryResult;
+import com.example.dnd_13th_9_be.plan.application.repository.PlanRepository;
+import com.example.dnd_13th_9_be.plan.persistence.entity.Plan;
+import com.example.dnd_13th_9_be.user.persistence.User;
 
+import static com.example.dnd_13th_9_be.global.error.ErrorCode.NOT_FOUND_PLAN;
+
+@Component
 @RequiredArgsConstructor
-public class PlanRepositoryImpl implements PlanRepositoryCustom {
-
-  private final JPAQueryFactory query;
+public class PlanRepositoryImpl implements PlanRepository {
+  private final EntityManager em;
+  private final JpaPlanRepository planRepository;
 
   @Override
-  public List<PlanSummary> findSummariesByUserId(Long userId) {
-    var plan = QPlanEntity.planEntity;
-    var folder = QFolderEntity.folderEntity;
-
-    return query
-        .select(
-            Projections.constructor(
-                PlanSummary.class,
-                plan.id,
-                plan.name,
-                plan.createdAt,
-                folder.id.countDistinct(),
-                plan.isDefault))
-        .from(plan)
-        .leftJoin(plan.folders, folder)
-        .where(plan.user.id.eq(userId))
-        .groupBy(plan.id, plan.name, plan.createdAt)
-        .orderBy(plan.createdAt.desc())
-        .fetch();
+  public PlanDetailResult create(Long userId, String name, boolean isDefault) {
+    User userRef = em.getReference(User.class, userId);
+    Plan plan = Plan.of(userRef, name, isDefault);
+    planRepository.save(plan);
+    return new PlanDetailResult(
+        plan.getId(), plan.getName(), plan.getCreatedAt().toLocalDateTime(), plan.getIsDefault());
   }
 
   @Override
-  public boolean rename(Long planId, String newName) {
-    var plan = QPlanEntity.planEntity;
-    long affected = query.update(plan).set(plan.name, newName).where(plan.id.eq(planId)).execute();
-    return affected == 1L;
+  public boolean rename(Long userId, Long planId, String newName) {
+    return planRepository.rename(userId, planId, newName);
   }
 
   @Override
-  @Transactional
-  public boolean deleteByIdIfExists(Long planId) {
-    var folder = QFolderEntity.folderEntity;
-
-    query.delete(folder).where(folder.plan.id.eq(planId)).execute();
-
-    var plan = QPlanEntity.planEntity;
-    long affected = query.delete(plan).where(plan.id.eq(planId)).execute();
-    return affected == 1L;
+  public boolean delete(Long userId, Long planId) {
+    return planRepository.deleteByIdIfExists(userId, planId);
   }
 
   @Override
-  public Long countByUserId(Long userId) {
-    var plan = QPlanEntity.planEntity;
-    return query.select(plan.id.count()).from(plan).where(plan.user.id.eq(userId)).fetchOne();
+  public List<PlanSummaryResult> findSummariesByUserId(Long userId) {
+    return planRepository.findSummariesByUserId(userId).stream()
+        .map(
+            r ->
+                new PlanSummaryResult(
+                    r.id(), r.name(), r.createdAt(), r.folderCount(), r.isDefault()))
+        .toList();
+  }
+
+  @Override
+  public long countByUserId(Long userId) {
+    return planRepository.countByUserId(userId);
+  }
+
+  @Override
+  public void existsById(Long planId) {
+    var isNotExist = !planRepository.existsById(planId);
+    if (isNotExist) {
+      throw new BusinessException(NOT_FOUND_PLAN);
+    }
+  }
+
+  @Override
+  public PlanDetailResult findById(Long planId) {
+    Plan entity =
+        planRepository.findById(planId).orElseThrow(() -> new BusinessException(NOT_FOUND_PLAN));
+    return new PlanDetailResult(
+        entity.getId(),
+        entity.getName(),
+        entity.getCreatedAt().toLocalDateTime(),
+        entity.getIsDefault());
   }
 }

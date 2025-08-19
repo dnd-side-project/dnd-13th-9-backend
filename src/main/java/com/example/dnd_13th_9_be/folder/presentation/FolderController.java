@@ -5,6 +5,7 @@ import java.util.Map;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -22,6 +23,7 @@ import com.example.dnd_13th_9_be.folder.presentation.dto.request.RenameFolderReq
 import com.example.dnd_13th_9_be.folder.presentation.dto.response.FolderDetailResponse;
 import com.example.dnd_13th_9_be.folder.presentation.dto.response.FolderSummaryResponse;
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
+import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,8 +51,10 @@ public class FolderController {
 
   @PostMapping
   public ResponseEntity<ApiResponse<FolderDetailResponse>> create(
+      @AuthenticationPrincipal UserPrincipalDto userDetails,
       @Valid @RequestBody CreateFolderRequest request) {
-    var folderDetail = folderService.createFolder(request.planId(), request.name());
+    var folderDetail =
+        folderService.createFolder(userDetails.getUserId(), request.planId(), request.name());
     var response =
         new FolderDetailResponse(
             folderDetail.folderId(),
@@ -62,15 +66,18 @@ public class FolderController {
 
   @PatchMapping("/{folderId}")
   public ResponseEntity<ApiResponse<Map<String, Object>>> rename(
-      @PathVariable("folderId") Long folderId, @Valid @RequestBody RenameFolderRequest request) {
-    folderService.renameFolder(folderId, request.name());
+      @AuthenticationPrincipal UserPrincipalDto userDetails,
+      @PathVariable("folderId") Long folderId,
+      @Valid @RequestBody RenameFolderRequest request) {
+    folderService.renameFolder(userDetails.getUserId(), folderId, request.name());
     return ApiResponse.okEntity();
   }
 
   @DeleteMapping("/{folderId}")
   public ResponseEntity<ApiResponse<Map<String, Object>>> delete(
+      @AuthenticationPrincipal UserPrincipalDto userDetails,
       @PathVariable("folderId") Long folderId) {
-    folderService.deleteFolder(folderId);
+    folderService.deleteFolder(userDetails.getUserId(), folderId);
     return ApiResponse.okEntity();
   }
 }

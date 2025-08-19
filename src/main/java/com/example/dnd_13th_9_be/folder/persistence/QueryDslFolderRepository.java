@@ -4,12 +4,12 @@ import java.util.List;
 
 import com.example.dnd_13th_9_be.folder.persistence.dto.FolderSummary;
 
-public interface FolderRepositoryCustom {
+public interface QueryDslFolderRepository {
   List<FolderSummary> findSummariesByPlanId(Long planId);
 
-  boolean rename(Long folderId, String newName);
+  boolean rename(Long userId, Long folderId, String newName);
 
-  boolean deleteByIdIfExists(Long folderId);
+  boolean deleteByIdIfExists(Long userId, Long folderId);
 
   Long countByPlanId(Long planId);
 }

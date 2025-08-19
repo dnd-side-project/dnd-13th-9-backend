@@ -1,6 +1,6 @@
 package com.example.dnd_13th_9_be.plan.application.dto;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 public record PlanSummaryResult(
-    Long planId, String name, LocalDateTime createdAt, long folderCount, boolean isDefault) {}
+    Long planId, String name, Timestamp createdAt, long folderCount, boolean isDefault) {}
