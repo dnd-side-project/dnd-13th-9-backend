@@ -74,7 +74,8 @@ public class SecurityConfig {
                     .permitAll()
                     .requestMatchers("/api/auth/my", "/api/auth/logout")
                     .hasAuthority(ROLE_USER.name())
-                    .requestMatchers("/api/required-item/**", "/api/checklist")
+                    .requestMatchers(
+                        "/api/plan/**", "/api/folder/**", "/api/required-item/**", "/api/checklist")
                     .hasAuthority(ROLE_USER.name())
                     .anyRequest()
                     .authenticated());
