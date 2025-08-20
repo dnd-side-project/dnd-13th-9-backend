@@ -29,7 +29,7 @@ public class UserDefaultResourceHandler {
 
     try {
       PlanDetailResult plan = planService.createDefaultPlan(userId);
-      folderService.createDefaultFolder(plan.planId());
+      folderService.createDefaultFolder(userId, plan.planId());
     } catch (Exception e) {
       throw new BusinessException(ErrorCode.DEFAULT_FOLDER_PLAN_NOT_CREATED);
     }
