@@ -18,7 +18,8 @@ public class CookieUtil {
     cookie.setMaxAge((int) (expirationMs / 1000)); // 초 단위로 변환
     cookie.setPath("/");
     cookie.setHttpOnly(true);
-    cookie.setSecure(false); // TODO: https 적용후 true
+    cookie.setSecure(true); // TODO: https 적용후 true
+    cookie.setAttribute("SameSite", "None");
     return cookie;
   }
 
@@ -27,7 +28,8 @@ public class CookieUtil {
     cookie.setMaxAge(0);
     cookie.setPath("/");
     cookie.setHttpOnly(true);
-    cookie.setSecure(false); // TODO: https 적용후 true
+    cookie.setSecure(true); // TODO: https 적용후 true
+    cookie.setAttribute("SameSite", "None");
     return cookie;
   }
 
