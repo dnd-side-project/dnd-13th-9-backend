@@ -25,7 +25,6 @@ public class UserDefaultResourceHandler {
 
   @Async
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-  @Transactional
   public void createDefaultResources(UserCreatedEvent event) {
     Long userId = event.getUserId();
 

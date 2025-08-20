@@ -21,6 +21,7 @@ import com.example.dnd_13th_9_be.user.application.dto.OAuth2Attribute;
 import com.example.dnd_13th_9_be.user.application.dto.RoleAttribute;
 import com.example.dnd_13th_9_be.user.application.model.UserModel;
 import com.example.dnd_13th_9_be.user.application.repository.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -30,6 +31,7 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
   private final UserRepository userRepository;
   private final ApplicationEventPublisher eventPublisher;
 
+  @Transactional
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
     OAuth2User oAuth2User = super.loadUser(userRequest);
@@ -74,6 +76,7 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
                         .build();
 
                 UserModel savedUser = userRepository.save(newUser);
+
                 eventPublisher.publishEvent(new UserCreatedEvent(savedUser.getId()));
                 return savedUser;
 
