@@ -9,67 +9,65 @@ import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.folder.application.dto.FolderDetailResult;
 import com.example.dnd_13th_9_be.folder.application.dto.FolderSummaryResult;
-import com.example.dnd_13th_9_be.folder.application.port.FolderCommandPort;
-import com.example.dnd_13th_9_be.folder.application.port.FolderQueryPort;
-import com.example.dnd_13th_9_be.folder.application.port.PlanAccessPort;
+import com.example.dnd_13th_9_be.folder.application.repository.FolderRepository;
 import com.example.dnd_13th_9_be.global.error.BusinessException;
+import com.example.dnd_13th_9_be.plan.application.repository.PlanRepository;
 
 import static com.example.dnd_13th_9_be.global.error.ErrorCode.DEFAULT_FOLDER_CANNOT_BE_DELETE;
 import static com.example.dnd_13th_9_be.global.error.ErrorCode.FOLDER_CREATION_LIMIT;
 import static com.example.dnd_13th_9_be.global.error.ErrorCode.FOLDER_DELETE_FAILED;
 import static com.example.dnd_13th_9_be.global.error.ErrorCode.FOLDER_RENAME_FAILED;
-import static com.example.dnd_13th_9_be.global.error.ErrorCode.NOT_FOUND_PLAN;
 
 @Service
 @RequiredArgsConstructor
 public class FolderService {
-  private final FolderQueryPort folderQueryPort;
-  private final FolderCommandPort folderCommandPort;
-  private final PlanAccessPort planAccessPort;
+  private final FolderRepository folderRepository;
+  private final PlanRepository planRepository;
+
+  private static final String DEFAULT_FOLDER_NAME = "기본 폴더";
+
+  @Transactional
+  public void createDefaultFolder(Long planId) {
+    folderCommandPort.create(planId, DEFAULT_FOLDER_NAME, true);
+  }
 
   @Transactional(readOnly = true)
-  public List<FolderSummaryResult> getFolderList(Long planId) {
-    verifyPlanExists(planId);
-    return folderQueryPort.findSummariesByPlanId(planId);
+  public List<FolderSummaryResult> getFolderList(Long userId, Long planId) {
+    planRepository.verifyExistsById(userId, planId);
+    return folderRepository.findSummariesByPlanId(userId, planId);
   }
 
   @Transactional
-  public FolderDetailResult createFolder(Long planId, String name) {
-    verifyPlanExists(planId);
+  public FolderDetailResult createFolder(Long userId, Long planId, String name) {
+    planRepository.verifyExistsById(userId, planId);
 
-    boolean isFolderLimitExceed = folderQueryPort.countByPlanId(planId) >= 10;
+    boolean isFolderLimitExceed = folderRepository.countByPlanId(planId) >= 10;
     if (isFolderLimitExceed) {
       throw new BusinessException(FOLDER_CREATION_LIMIT);
     }
 
-    return folderCommandPort.create(planId, name, false);
+    return folderRepository.create(userId, planId, name, false);
   }
 
   @Transactional
-  public void renameFolder(Long folderId, String name) {
-    folderQueryPort.verifyById(folderId);
-    boolean isFailRename = !folderCommandPort.rename(folderId, name);
+  public void renameFolder(Long userId, Long folderId, String name) {
+    folderRepository.verifyById(folderId);
+    boolean isFailRename = !folderRepository.rename(userId, folderId, name);
     if (isFailRename) {
       throw new BusinessException(FOLDER_RENAME_FAILED);
     }
   }
 
   @Transactional
-  public void deleteFolder(Long folderId) {
-    FolderDetailResult folder = folderQueryPort.findById(folderId);
+  public void deleteFolder(Long userId, Long folderId) {
+    FolderDetailResult folder = folderRepository.findByIdAndUserId(folderId, userId);
     if (folder.isDefault()) {
       throw new BusinessException(DEFAULT_FOLDER_CANNOT_BE_DELETE);
     }
 
-    boolean isFailDelete = !folderCommandPort.delete(folderId);
+    boolean isFailDelete = !folderRepository.delete(userId, folderId);
     if (isFailDelete) {
       throw new BusinessException(FOLDER_DELETE_FAILED);
-    }
-  }
-
-  private void verifyPlanExists(Long planId) {
-    if (!planAccessPort.existsById(planId)) {
-      throw new BusinessException(NOT_FOUND_PLAN);
     }
   }
 }

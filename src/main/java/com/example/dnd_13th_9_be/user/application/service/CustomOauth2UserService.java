@@ -1,0 +1,90 @@
+package com.example.dnd_13th_9_be.user.application.service;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import com.example.dnd_13th_9_be.common.event.UserCreatedEvent;
+import com.example.dnd_13th_9_be.user.application.dto.KakaoAttribute;
+import com.example.dnd_13th_9_be.user.application.dto.OAuth2Attribute;
+import com.example.dnd_13th_9_be.user.application.dto.RoleAttribute;
+import com.example.dnd_13th_9_be.user.application.model.UserModel;
+import com.example.dnd_13th_9_be.user.application.repository.UserRepository;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class CustomOauth2UserService extends DefaultOAuth2UserService {
+
+  private final UserRepository userRepository;
+  private final ApplicationEventPublisher eventPublisher;
+
+  @Transactional
+  @Override
+  public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+    OAuth2User oAuth2User = super.loadUser(userRequest);
+
+    String registrationId = userRequest.getClientRegistration().getRegistrationId();
+    OAuth2Attribute oAuth2Attribute = getOAuth2Response(registrationId, oAuth2User.getAttributes());
+    UserModel userModel = getOrCreateUser(oAuth2Attribute);
+
+    Map<String, Object> modifiedAttributes = new HashMap<>(oAuth2User.getAttributes());
+    modifiedAttributes.put("userId", userModel.getId());
+
+    return new DefaultOAuth2User(
+        Collections.singletonList(userModel.getRole()),
+        modifiedAttributes,
+        userRequest
+            .getClientRegistration()
+            .getProviderDetails()
+            .getUserInfoEndpoint()
+            .getUserNameAttributeName());
+  }
+
+  private OAuth2Attribute getOAuth2Response(String registrationId, Map<String, Object> attributes) {
+    return switch (registrationId.toLowerCase()) {
+      case "kakao" -> new KakaoAttribute(attributes);
+      default -> throw new OAuth2AuthenticationException("지원하지 않는 OAuth2 제공자 입니다.");
+    };
+  }
+
+  private UserModel getOrCreateUser(OAuth2Attribute oAuth2Attribute) {
+    String providerId = oAuth2Attribute.getProviderId();
+
+    return userRepository
+        .findByProviderId(providerId)
+        .orElseGet(
+            () -> {
+              try {
+                UserModel newUser =
+                    UserModel.builder()
+                        .providerId(providerId)
+                        .name(oAuth2Attribute.getName())
+                        .role(RoleAttribute.ROLE_USER)
+                        .build();
+
+                UserModel savedUser = userRepository.save(newUser);
+
+                eventPublisher.publishEvent(new UserCreatedEvent(savedUser.getId()));
+                return savedUser;
+
+              } catch (Exception e) {
+                return userRepository
+                    .findByProviderId(providerId)
+                    .orElseThrow(() -> new RuntimeException("사용자 생성 및 조회 모두 실패: " + providerId));
+              }
+            });
+  }
+}

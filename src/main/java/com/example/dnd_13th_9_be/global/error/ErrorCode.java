@@ -14,12 +14,25 @@ public enum ErrorCode implements ResponseCode {
   VALIDATION_ERROR(HttpStatus.UNPROCESSABLE_ENTITY, "42200", "검증 오류가 발생했습니다"),
   NOT_FOUND(HttpStatus.NOT_FOUND, "40400", "대상을 찾을 수 없습니다"),
 
-  // server error,
+  // 토큰 관련 에러
+  INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "40100", "유효하지 않은 토큰입니다"),
+  TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "40101", "토큰이 없습니다"),
+  TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "40102", "토큰이 만료되었습니다"),
+  TOKEN_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "401003", "인증되지 않은 사용자입니다."),
+
+  // 리프레시 토큰 관련 에러
+  REFRESH_TOKEN_NOT_CREATED(HttpStatus.UNAUTHORIZED, "40200", "리프레시 토큰 생성에 실패했습니다."),
+  INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "402001", "유효하지 않은 리프레시 토큰입니다."),
+  REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "402002", "만료된 리프레시 토큰입니다."),
+
+  // 유저 관련 에러
+  USER_NOT_FOUND(HttpStatus.NOT_FOUND, "60000", "해당 id에 맞는 유저가 없습니다"),
+  USER_ACCESS_DENIED(HttpStatus.FORBIDDEN, "60001", "권한이 없습니다"),
+
+  // server error
   INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "50000", "서버 내부 오류입니다"),
   SERVICE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "50300", "일시적으로 이용할 수 없습니다"),
 
-  // user 6xxxx
-  NOT_FOUND_USER(HttpStatus.NOT_FOUND, "60401", "사용자를 찾을 수 없습니다"),
 
   // plan 71xxx,
   NOT_FOUND_PLAN(HttpStatus.NOT_FOUND, "71000", "유효하지 않은 계획입니다"),
@@ -36,7 +49,20 @@ public enum ErrorCode implements ResponseCode {
   FOLDER_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "72003", "폴더 삭제에 실패했습니다"),
 
   DEFAULT_FOLDER_CANNOT_BE_DELETE(HttpStatus.FORBIDDEN, "72004", "기본 폴더는 삭제 할 수 없습니다"),
+
+
+  //s3 manager 에러 80000
+  INVALID_FILE_URL(HttpStatus.BAD_REQUEST, "80000", "유효하지 않은 파일 URL입니다"),
+  FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "80001", "파일을 찾을 수 없습니다"),
+
+  // checklist 73xxx
+  NOT_FOUND_CHECKLIST_ITEM(HttpStatus.NOT_FOUND, "73000", "존재하지 않는 체크리스트 입니다"),
+  ALREADY_EXISTS_USER_REQUIRED_ITEM(HttpStatus.CONFLICT, "73001", "이미 필수 확인에 추가된 체크리스트입니다"),
+  ALREADY_DELETED_USER_REQUIRED_ITEM(HttpStatus.CONFLICT, "73002", "이미 필수 확인에서 삭제된 체크리스트입니다"),
+
+  DEFAULT_FOLDER_PLAN_NOT_CREATED(HttpStatus.CONFLICT, "61000", "기본 폴더, 플랙 생성 실패"),
   ;
+
 
   private final HttpStatus status;
   private final String code;

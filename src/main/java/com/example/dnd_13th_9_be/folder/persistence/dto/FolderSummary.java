@@ -1,11 +1,11 @@
 package com.example.dnd_13th_9_be.folder.persistence.dto;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 public record FolderSummary(
     Long id,
     String name,
-    LocalDateTime createdAt,
+    Timestamp createdAt,
     long locationRecordCount,
     long propertyRecordCount,
     boolean isDefault) {}

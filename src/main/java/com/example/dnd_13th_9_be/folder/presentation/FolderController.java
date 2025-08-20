@@ -5,6 +5,7 @@ import java.util.Map;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,60 +18,56 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.folder.application.FolderService;
+import com.example.dnd_13th_9_be.folder.presentation.docs.FolderDocs;
 import com.example.dnd_13th_9_be.folder.presentation.dto.request.CreateFolderRequest;
 import com.example.dnd_13th_9_be.folder.presentation.dto.request.RenameFolderRequest;
 import com.example.dnd_13th_9_be.folder.presentation.dto.response.FolderDetailResponse;
 import com.example.dnd_13th_9_be.folder.presentation.dto.response.FolderSummaryResponse;
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
+import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/folder")
-public class FolderController {
+public class FolderController implements FolderDocs {
   private final FolderService folderService;
 
+  @Override
   @GetMapping("/{planId}")
   public ResponseEntity<ApiResponse<List<FolderSummaryResponse>>> getFolderList(
-      @PathVariable("planId") Long planId) {
-    var results = folderService.getFolderList(planId);
-    var data =
-        results.stream()
-            .map(
-                r ->
-                    new FolderSummaryResponse(
-                        r.folderId(),
-                        r.name(),
-                        r.createdAt(),
-                        r.recordCount(),
-                        r.isDefaultFolder()))
-            .toList();
+      @AuthenticationPrincipal UserPrincipalDto userDetails, @PathVariable("planId") Long planId) {
+    var results = folderService.getFolderList(userDetails.getUserId(), planId);
+    var data = results.stream().map(FolderSummaryResponse::from).toList();
     return ApiResponse.successEntity(data);
   }
 
+  @Override
   @PostMapping
   public ResponseEntity<ApiResponse<FolderDetailResponse>> create(
+      @AuthenticationPrincipal UserPrincipalDto userDetails,
       @Valid @RequestBody CreateFolderRequest request) {
-    var folderDetail = folderService.createFolder(request.planId(), request.name());
-    var response =
-        new FolderDetailResponse(
-            folderDetail.folderId(),
-            folderDetail.name(),
-            folderDetail.createdAt(),
-            folderDetail.isDefault());
+    var folderDetail =
+        folderService.createFolder(userDetails.getUserId(), request.planId(), request.name());
+    var response = FolderDetailResponse.from(folderDetail);
     return ApiResponse.successEntity(response);
   }
 
+  @Override
   @PatchMapping("/{folderId}")
   public ResponseEntity<ApiResponse<Map<String, Object>>> rename(
-      @PathVariable("folderId") Long folderId, @Valid @RequestBody RenameFolderRequest request) {
-    folderService.renameFolder(folderId, request.name());
+      @AuthenticationPrincipal UserPrincipalDto userDetails,
+      @PathVariable("folderId") Long folderId,
+      @Valid @RequestBody RenameFolderRequest request) {
+    folderService.renameFolder(userDetails.getUserId(), folderId, request.name());
     return ApiResponse.okEntity();
   }
 
+  @Override
   @DeleteMapping("/{folderId}")
   public ResponseEntity<ApiResponse<Map<String, Object>>> delete(
+      @AuthenticationPrincipal UserPrincipalDto userDetails,
       @PathVariable("folderId") Long folderId) {
-    folderService.deleteFolder(folderId);
+    folderService.deleteFolder(userDetails.getUserId(), folderId);
     return ApiResponse.okEntity();
   }
 }
