@@ -27,8 +27,8 @@ public class FolderService {
   private static final String DEFAULT_FOLDER_NAME = "기본 폴더";
 
   @Transactional
-  public void createDefaultFolder(Long planId) {
-    folderCommandPort.create(planId, DEFAULT_FOLDER_NAME, true);
+  public void createDefaultFolder(Long userId, Long planId) {
+    folderRepository.create(userId, planId, DEFAULT_FOLDER_NAME, true);
   }
 
   @Transactional(readOnly = true)

@@ -70,7 +70,12 @@ public class SecurityConfig {
         .authorizeHttpRequests(
             authorize ->
                 authorize
-                    .requestMatchers("/oauth2/**", "/login/oauth2/**", "/api/auth/refresh","/swagger-ui/**","/api-docs/**")
+                    .requestMatchers(
+                        "/oauth2/**",
+                        "/login/oauth2/**",
+                        "/api/auth/refresh",
+                        "/swagger-ui/**",
+                        "/api-docs/**")
                     .permitAll()
                     .requestMatchers(
                         "/api/auth/my",

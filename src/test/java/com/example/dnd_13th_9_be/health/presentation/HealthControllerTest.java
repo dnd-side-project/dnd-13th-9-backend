@@ -1,19 +1,19 @@
-//package com.example.dnd_13th_9_be.health.presentation;
+// package com.example.dnd_13th_9_be.health.presentation;
 //
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-//import org.springframework.test.web.servlet.MockMvc;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+// import org.springframework.test.web.servlet.MockMvc;
 //
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
+// import org.junit.jupiter.api.DisplayName;
+// import org.junit.jupiter.api.Test;
 //
-//import static org.hamcrest.Matchers.is;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+// import static org.hamcrest.Matchers.is;
+// import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+// import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+// import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 //
-//@WebMvcTest(HealthController.class)
-//class HealthControllerTest {
+// @WebMvcTest(HealthController.class)
+// class HealthControllerTest {
 //  @Autowired private MockMvc mockMvc;
 //
 //  @Test
@@ -26,4 +26,4 @@
 //        .andExpect(jsonPath("$.timestamp").exists())
 //        .andExpect(jsonPath("$.timestamp").isString());
 //  }
-//}
+// }
