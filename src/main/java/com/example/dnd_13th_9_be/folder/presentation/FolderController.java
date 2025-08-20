@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.folder.application.FolderService;
+import com.example.dnd_13th_9_be.folder.presentation.docs.FolderDocs;
 import com.example.dnd_13th_9_be.folder.presentation.dto.request.CreateFolderRequest;
 import com.example.dnd_13th_9_be.folder.presentation.dto.request.RenameFolderRequest;
 import com.example.dnd_13th_9_be.folder.presentation.dto.response.FolderDetailResponse;
@@ -28,9 +29,10 @@ import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/folder")
-public class FolderController {
+public class FolderController implements FolderDocs {
   private final FolderService folderService;
 
+  @Override
   @GetMapping("/{planId}")
   public ResponseEntity<ApiResponse<List<FolderSummaryResponse>>> getFolderList(
       @PathVariable("planId") Long planId) {
@@ -49,6 +51,7 @@ public class FolderController {
     return ApiResponse.successEntity(data);
   }
 
+  @Override
   @PostMapping
   public ResponseEntity<ApiResponse<FolderDetailResponse>> create(
       @AuthenticationPrincipal UserPrincipalDto userDetails,
@@ -64,6 +67,7 @@ public class FolderController {
     return ApiResponse.successEntity(response);
   }
 
+  @Override
   @PatchMapping("/{folderId}")
   public ResponseEntity<ApiResponse<Map<String, Object>>> rename(
       @AuthenticationPrincipal UserPrincipalDto userDetails,
@@ -73,6 +77,7 @@ public class FolderController {
     return ApiResponse.okEntity();
   }
 
+  @Override
   @DeleteMapping("/{folderId}")
   public ResponseEntity<ApiResponse<Map<String, Object>>> delete(
       @AuthenticationPrincipal UserPrincipalDto userDetails,
