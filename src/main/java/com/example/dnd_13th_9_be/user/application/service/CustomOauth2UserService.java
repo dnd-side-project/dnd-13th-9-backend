@@ -4,19 +4,19 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.example.dnd_13th_9_be.folder.application.FolderService;
-import com.example.dnd_13th_9_be.plan.application.PlanService;
-import com.example.dnd_13th_9_be.plan.application.dto.PlanDetailResult;
+import com.example.dnd_13th_9_be.common.event.UserCreatedEvent;
 import com.example.dnd_13th_9_be.user.application.dto.KakaoAttribute;
 import com.example.dnd_13th_9_be.user.application.dto.OAuth2Attribute;
 import com.example.dnd_13th_9_be.user.application.dto.RoleAttribute;
@@ -29,9 +29,9 @@ import com.example.dnd_13th_9_be.user.application.repository.UserRepository;
 public class CustomOauth2UserService extends DefaultOAuth2UserService {
 
   private final UserRepository userRepository;
-  private final PlanService planService;
-  private final FolderService folderService;
+  private final ApplicationEventPublisher eventPublisher;
 
+  @Transactional
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
     OAuth2User oAuth2User = super.loadUser(userRequest);
@@ -62,18 +62,11 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
 
   private UserModel getOrCreateUser(OAuth2Attribute oAuth2Attribute) {
     String providerId = oAuth2Attribute.getProviderId();
-    log.info("getOrCreateUser 시작 - providerId: {}", providerId);
 
     return userRepository
         .findByProviderId(providerId)
-        .map(
-            existingUser -> {
-              log.info("기존 사용자 로그인 - providerId: {}", providerId);
-              return existingUser;
-            })
         .orElseGet(
             () -> {
-              log.info("신규 사용자 생성 시도 - providerId: {}", providerId);
               try {
                 UserModel newUser =
                     UserModel.builder()
@@ -83,13 +76,11 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
                         .build();
 
                 UserModel savedUser = userRepository.save(newUser);
-                log.info("신규 사용자 생성 완료 - providerId: {}, ID: {}", providerId, savedUser.getId());
-                PlanDetailResult plan = planService.createDefaultPlan(savedUser.getId());
-                folderService.createDefaultFolder(plan.planId());
+
+                eventPublisher.publishEvent(new UserCreatedEvent(savedUser.getId()));
                 return savedUser;
 
               } catch (Exception e) {
-                log.warn("사용자 생성 실패, 재조회 시도 - providerId: {}, 에러: {}", providerId, e.getMessage());
                 return userRepository
                     .findByProviderId(providerId)
                     .orElseThrow(() -> new RuntimeException("사용자 생성 및 조회 모두 실패: " + providerId));
