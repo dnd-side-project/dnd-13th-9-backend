@@ -26,7 +26,7 @@ public class PlanService {
 
   @Transactional
   public PlanDetailResult createDefaultPlan(Long userId) {
-    return planCommandPort.create(userId, DEFAULT_PLAN_NAME, true);
+    return planRepository.create(userId, DEFAULT_PLAN_NAME, true);
   }
 
   @Transactional(readOnly = true)
