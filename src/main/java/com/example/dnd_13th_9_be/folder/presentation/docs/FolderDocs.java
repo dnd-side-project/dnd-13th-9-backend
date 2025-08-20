@@ -86,6 +86,7 @@ public interface FolderDocs {
   })
   @GetMapping("/{planId}")
   ResponseEntity<ApiResponse<List<FolderSummaryResponse>>> getFolderList(
+      @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userDetails,
       @Parameter(description = "계획 고유 값", example = "1", required = true) @PathVariable("planId")
           Long planId);
 
@@ -187,7 +188,7 @@ public interface FolderDocs {
                     "code": "42200",
                     "message": "검증 오류가 발생했습니다",
                     "data": {
-                      "name": "크기가 0에서 10 사이여야 합니다"
+                      "name": "크기가 1에서 10 사이여야 합니다"
                     }
                   }
                   """)))
@@ -261,7 +262,7 @@ public interface FolderDocs {
                     "code": "42200",
                     "message": "검증 오류가 발생했습니다",
                     "data": {
-                      "name": "크기가 0에서 10 사이여야 합니다"
+                      "name": "크기가 1에서 10 사이여야 합니다"
                     }
                   }
                   """)))

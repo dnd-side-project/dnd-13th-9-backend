@@ -35,19 +35,9 @@ public class FolderController implements FolderDocs {
   @Override
   @GetMapping("/{planId}")
   public ResponseEntity<ApiResponse<List<FolderSummaryResponse>>> getFolderList(
-      @PathVariable("planId") Long planId) {
-    var results = folderService.getFolderList(planId);
-    var data =
-        results.stream()
-            .map(
-                r ->
-                    new FolderSummaryResponse(
-                        r.folderId(),
-                        r.name(),
-                        r.createdAt(),
-                        r.recordCount(),
-                        r.isDefaultFolder()))
-            .toList();
+      @AuthenticationPrincipal UserPrincipalDto userDetails, @PathVariable("planId") Long planId) {
+    var results = folderService.getFolderList(userDetails.getUserId(), planId);
+    var data = results.stream().map(FolderSummaryResponse::from).toList();
     return ApiResponse.successEntity(data);
   }
 
@@ -58,12 +48,7 @@ public class FolderController implements FolderDocs {
       @Valid @RequestBody CreateFolderRequest request) {
     var folderDetail =
         folderService.createFolder(userDetails.getUserId(), request.planId(), request.name());
-    var response =
-        new FolderDetailResponse(
-            folderDetail.folderId(),
-            folderDetail.name(),
-            folderDetail.createdAt(),
-            folderDetail.isDefault());
+    var response = FolderDetailResponse.from(folderDetail);
     return ApiResponse.successEntity(response);
   }
 
