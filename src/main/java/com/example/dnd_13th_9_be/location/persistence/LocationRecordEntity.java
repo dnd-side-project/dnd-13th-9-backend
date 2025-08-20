@@ -20,7 +20,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import com.example.dnd_13th_9_be.folder.persistence.FolderEntity;
+import com.example.dnd_13th_9_be.folder.persistence.entity.Folder;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
@@ -38,7 +38,7 @@ public class LocationRecordEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "folder_id", nullable = false)
   @OnDelete(action = OnDeleteAction.CASCADE)
-  private FolderEntity folder;
+  private Folder folder;
 
   @Comment("장소 메모 제목")
   private String title;
