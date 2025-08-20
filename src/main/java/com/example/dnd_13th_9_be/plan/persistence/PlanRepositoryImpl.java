@@ -69,9 +69,11 @@ public class PlanRepositoryImpl implements PlanRepository {
   }
 
   @Override
-  public PlanDetailResult findById(Long planId) {
+  public PlanDetailResult findByIdAndUserId(Long planId, Long userId) {
     Plan entity =
-        planRepository.findById(planId).orElseThrow(() -> new BusinessException(NOT_FOUND_PLAN));
+        planRepository
+            .findByIdAndUserId(planId, userId)
+            .orElseThrow(() -> new BusinessException(NOT_FOUND_PLAN));
     return new PlanDetailResult(
         entity.getId(),
         entity.getName(),

@@ -18,5 +18,5 @@ public interface PlanRepository {
 
   void verifyExistsById(Long userId, Long planId);
 
-  PlanDetailResult findById(Long planId);
+  PlanDetailResult findByIdAndUserId(Long planId, Long userId);
 }

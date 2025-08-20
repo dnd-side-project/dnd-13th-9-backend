@@ -48,7 +48,7 @@ public class PlanService {
 
   @Transactional
   public void deletePlan(Long userId, Long planId) {
-    PlanDetailResult plan = planRepository.findById(planId);
+    PlanDetailResult plan = planRepository.findByIdAndUserId(planId, userId);
     if (plan.isDefault()) {
       throw new BusinessException(DEFAULT_PLAN_CANNOT_BE_DELETE);
     }
