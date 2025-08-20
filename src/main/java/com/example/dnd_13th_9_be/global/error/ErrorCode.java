@@ -53,8 +53,7 @@ public enum ErrorCode implements ResponseCode {
 
   //s3 manager 에러 80000
   INVALID_FILE_URL(HttpStatus.BAD_REQUEST, "80000", "유효하지 않은 파일 URL입니다"),
-  FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "80001", "파일을 찾을 수 없습니다")
-;
+  FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "80001", "파일을 찾을 수 없습니다"),
 
   // checklist 73xxx
   NOT_FOUND_CHECKLIST_ITEM(HttpStatus.NOT_FOUND, "73000", "존재하지 않는 체크리스트 입니다"),
