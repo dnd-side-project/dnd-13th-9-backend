@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
 import com.example.dnd_13th_9_be.plan.application.PlanService;
+import com.example.dnd_13th_9_be.plan.presentation.docs.PlanDocs;
 import com.example.dnd_13th_9_be.plan.presentation.dto.request.CreatePlanRequest;
 import com.example.dnd_13th_9_be.plan.presentation.dto.request.RenamePlanRequest;
 import com.example.dnd_13th_9_be.plan.presentation.dto.response.PlanDetailResponse;
@@ -28,9 +29,10 @@ import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/plan")
-public class PlanController {
+public class PlanController implements PlanDocs {
   private final PlanService planService;
 
+  @Override
   @GetMapping
   public ResponseEntity<ApiResponse<List<PlanSummaryResponse>>> getPlanList(
       @AuthenticationPrincipal UserPrincipalDto userDetails) {
@@ -45,6 +47,7 @@ public class PlanController {
     return ApiResponse.successEntity(data);
   }
 
+  @Override
   @PostMapping
   public ResponseEntity<ApiResponse<PlanDetailResponse>> create(
       @AuthenticationPrincipal UserPrincipalDto userDetails,
@@ -56,6 +59,7 @@ public class PlanController {
     return ApiResponse.successEntity(response);
   }
 
+  @Override
   @PatchMapping("/{planId}")
   public ResponseEntity<ApiResponse<Map<String, Object>>> rename(
       @AuthenticationPrincipal UserPrincipalDto userDetails,
@@ -65,6 +69,7 @@ public class PlanController {
     return ApiResponse.okEntity();
   }
 
+  @Override
   @DeleteMapping("/{planId}")
   public ResponseEntity<ApiResponse<Map<String, Object>>> delete(
       @AuthenticationPrincipal UserPrincipalDto userDetails, @PathVariable("planId") Long planId) {
