@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,6 @@ import com.example.dnd_13th_9_be.user.application.dto.OAuth2Attribute;
 import com.example.dnd_13th_9_be.user.application.dto.RoleAttribute;
 import com.example.dnd_13th_9_be.user.application.model.UserModel;
 import com.example.dnd_13th_9_be.user.application.repository.UserRepository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
