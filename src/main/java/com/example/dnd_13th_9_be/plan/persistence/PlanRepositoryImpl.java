@@ -47,7 +47,11 @@ public class PlanRepositoryImpl implements PlanRepository {
         .map(
             r ->
                 new PlanSummaryResult(
-                    r.id(), r.name(), r.createdAt(), r.folderCount(), r.isDefault()))
+                    r.id(),
+                    r.name(),
+                    r.createdAt().toLocalDateTime(),
+                    r.folderCount(),
+                    r.isDefault()))
         .toList();
   }
 
@@ -57,8 +61,8 @@ public class PlanRepositoryImpl implements PlanRepository {
   }
 
   @Override
-  public void existsById(Long planId) {
-    var isNotExist = !planRepository.existsById(planId);
+  public void verifyExistsById(Long userId, Long planId) {
+    var isNotExist = !planRepository.verifyExistsById(userId, planId);
     if (isNotExist) {
       throw new BusinessException(NOT_FOUND_PLAN);
     }

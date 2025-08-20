@@ -34,7 +34,7 @@ public class QueryDslPlanRepositoryImpl implements QueryDslPlanRepository {
         .from(plan)
         .leftJoin(plan.folders, folder)
         .where(plan.user.id.eq(userId))
-        .groupBy(plan.id, plan.name, plan.createdAt)
+        .groupBy(plan.id, plan.name, plan.createdAt, plan.isDefault)
         .orderBy(plan.createdAt.desc())
         .fetch();
   }
@@ -68,5 +68,16 @@ public class QueryDslPlanRepositoryImpl implements QueryDslPlanRepository {
   public Long countByUserId(Long userId) {
     var plan = QPlan.plan;
     return query.select(plan.id.count()).from(plan).where(plan.user.id.eq(userId)).fetchOne();
+  }
+
+  @Override
+  public boolean verifyExistsById(Long userId, Long planId) {
+    var plan = QPlan.plan;
+    return query
+            .selectOne()
+            .from(plan)
+            .where(plan.user.id.eq(userId).and(plan.id.eq(planId)))
+            .fetchFirst()
+        != null;
   }
 }

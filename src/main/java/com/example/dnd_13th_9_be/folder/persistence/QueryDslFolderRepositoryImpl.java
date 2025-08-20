@@ -17,7 +17,7 @@ public class QueryDslFolderRepositoryImpl implements QueryDslFolderRepository {
   private final JPAQueryFactory query;
 
   @Override
-  public List<FolderSummary> findSummariesByPlanId(Long planId) {
+  public List<FolderSummary> findSummariesByPlanId(Long userId, Long planId) {
     var folder = QFolder.folder;
     var location = QLocationRecordEntity.locationRecordEntity;
     var property = QPropertyRecordEntity.propertyRecordEntity;
@@ -43,7 +43,7 @@ public class QueryDslFolderRepositoryImpl implements QueryDslFolderRepository {
                 propertyCnt,
                 folder.isDefault))
         .from(folder)
-        .where(folder.plan.id.eq(planId))
+        .where(folder.plan.id.eq(planId).and(folder.user.id.eq(userId)))
         .orderBy(folder.createdAt.desc())
         .fetch();
   }

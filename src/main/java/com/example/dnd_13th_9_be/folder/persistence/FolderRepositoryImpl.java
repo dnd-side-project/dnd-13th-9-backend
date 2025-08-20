@@ -47,14 +47,14 @@ public class FolderRepositoryImpl implements FolderRepository {
   }
 
   @Override
-  public List<FolderSummaryResult> findSummariesByPlanId(Long planId) {
-    return jpaFolderRepository.findSummariesByPlanId(planId).stream()
+  public List<FolderSummaryResult> findSummariesByPlanId(Long userId, Long planId) {
+    return jpaFolderRepository.findSummariesByPlanId(userId, planId).stream()
         .map(
             r ->
                 new FolderSummaryResult(
                     r.id(),
                     r.name(),
-                    r.createdAt(),
+                    r.createdAt().toLocalDateTime(),
                     r.locationRecordCount() + r.propertyRecordCount(),
                     r.isDefault()))
         .toList();
@@ -74,10 +74,10 @@ public class FolderRepositoryImpl implements FolderRepository {
   }
 
   @Override
-  public FolderDetailResult findById(Long folderId) {
+  public FolderDetailResult findByIdAndUserId(Long folderId, Long userId) {
     Folder entity =
         jpaFolderRepository
-            .findById(folderId)
+            .findByIdAndUserId(folderId, userId)
             .orElseThrow(() -> new BusinessException(NOT_FOUND_FOLDER));
     return new FolderDetailResult(
         entity.getId(),

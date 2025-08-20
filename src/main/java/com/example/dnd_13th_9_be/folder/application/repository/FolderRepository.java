@@ -12,11 +12,11 @@ public interface FolderRepository {
 
   boolean delete(Long userId, Long folderId);
 
-  List<FolderSummaryResult> findSummariesByPlanId(Long planId);
+  List<FolderSummaryResult> findSummariesByPlanId(Long userId, Long planId);
 
   long countByPlanId(Long planId);
 
   void verifyById(Long folderId);
 
-  FolderDetailResult findById(Long folderId);
+  FolderDetailResult findByIdAndUserId(Long folderId, Long userId);
 }

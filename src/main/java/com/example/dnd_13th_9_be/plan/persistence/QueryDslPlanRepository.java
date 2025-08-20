@@ -12,4 +12,6 @@ public interface QueryDslPlanRepository {
   boolean deleteByIdIfExists(Long userId, Long planId);
 
   Long countByUserId(Long userId);
+
+  boolean verifyExistsById(Long userId, Long planId);
 }

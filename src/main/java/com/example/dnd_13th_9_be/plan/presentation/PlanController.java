@@ -37,13 +37,7 @@ public class PlanController implements PlanDocs {
   public ResponseEntity<ApiResponse<List<PlanSummaryResponse>>> getPlanList(
       @AuthenticationPrincipal UserPrincipalDto userDetails) {
     var results = planService.getPlanList(userDetails.getUserId());
-    var data =
-        results.stream()
-            .map(
-                r ->
-                    new PlanSummaryResponse(
-                        r.planId(), r.name(), r.createdAt(), r.folderCount(), r.isDefault()))
-            .toList();
+    var data = results.stream().map(PlanSummaryResponse::from).toList();
     return ApiResponse.successEntity(data);
   }
 
@@ -53,9 +47,7 @@ public class PlanController implements PlanDocs {
       @AuthenticationPrincipal UserPrincipalDto userDetails,
       @Valid @RequestBody CreatePlanRequest request) {
     var planDetail = planService.createPlan(userDetails.getUserId(), request.name());
-    var response =
-        new PlanDetailResponse(
-            planDetail.planId(), planDetail.name(), planDetail.createdAt(), planDetail.isDefault());
+    var response = PlanDetailResponse.from(planDetail);
     return ApiResponse.successEntity(response);
   }
 

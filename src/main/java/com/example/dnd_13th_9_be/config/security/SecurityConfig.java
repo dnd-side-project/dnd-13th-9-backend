@@ -72,10 +72,13 @@ public class SecurityConfig {
                 authorize
                     .requestMatchers("/oauth2/**", "/login/oauth2/**", "/api/auth/refresh")
                     .permitAll()
-                    .requestMatchers("/api/auth/my", "/api/auth/logout")
-                    .hasAuthority(ROLE_USER.name())
                     .requestMatchers(
-                        "/api/plan/**", "/api/folder/**", "/api/required-item/**", "/api/checklist")
+                        "/api/auth/my",
+                        "/api/auth/logout",
+                        "/api/plan/**",
+                        "/api/folder/**",
+                        "/api/required-item/**",
+                        "/api/checklist")
                     .hasAuthority(ROLE_USER.name())
                     .anyRequest()
                     .authenticated());

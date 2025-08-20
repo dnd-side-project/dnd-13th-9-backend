@@ -39,7 +39,7 @@ public class PlanService {
 
   @Transactional
   public void renamePlan(Long userId, Long planId, String name) {
-    planRepository.existsById(planId);
+    planRepository.verifyExistsById(userId, planId);
     boolean isFailRename = !planRepository.rename(userId, planId, name);
     if (isFailRename) {
       throw new BusinessException(PLAN_RENAME_FAILED);

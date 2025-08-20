@@ -37,7 +37,7 @@ public interface PlanDocs {
         content =
             @Content(
                 mediaType = "application/json",
-                schema = @Schema(implementation = PlanSummaryResponse.class),
+                schema = @Schema(implementation = ApiResponse.class),
                 examples =
                     @ExampleObject(
                         name = "성공 예시",
@@ -87,10 +87,7 @@ public interface PlanDocs {
   ResponseEntity<ApiResponse<List<PlanSummaryResponse>>> getPlanList(
       @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userDetails);
 
-  @Operation(
-      summary = "계획 생성",
-      description = "로그인한 사용자의 새 계획을 생성한다."
-      )
+  @Operation(summary = "계획 생성", description = "로그인한 사용자의 새 계획을 생성한다.")
   @ApiResponses({
     @io.swagger.v3.oas.annotations.responses.ApiResponse(
         responseCode = "200",
@@ -190,7 +187,7 @@ public interface PlanDocs {
                     "code": "42200",
                     "message": "검증 오류가 발생했습니다",
                     "data": {
-                      "name": "크기가 0에서 10 사이여야 합니다"
+                      "name": "크기가 1에서 10 사이여야 합니다"
                     }
                   }
                   """)))
@@ -254,7 +251,7 @@ public interface PlanDocs {
                     "code": "42200",
                     "message": "검증 오류가 발생했습니다",
                     "data": {
-                      "name": "크기가 0에서 10 사이여야 합니다"
+                      "name": "크기가 1에서 10 사이여야 합니다"
                     }
                   }
                   """)))

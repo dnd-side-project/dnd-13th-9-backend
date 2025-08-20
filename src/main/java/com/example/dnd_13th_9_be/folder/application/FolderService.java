@@ -25,14 +25,14 @@ public class FolderService {
   private final PlanRepository planRepository;
 
   @Transactional(readOnly = true)
-  public List<FolderSummaryResult> getFolderList(Long planId) {
-    planRepository.existsById(planId);
-    return folderRepository.findSummariesByPlanId(planId);
+  public List<FolderSummaryResult> getFolderList(Long userId, Long planId) {
+    planRepository.verifyExistsById(userId, planId);
+    return folderRepository.findSummariesByPlanId(userId, planId);
   }
 
   @Transactional
   public FolderDetailResult createFolder(Long userId, Long planId, String name) {
-    planRepository.existsById(planId);
+    planRepository.verifyExistsById(userId, planId);
 
     boolean isFolderLimitExceed = folderRepository.countByPlanId(planId) >= 10;
     if (isFolderLimitExceed) {
@@ -53,7 +53,7 @@ public class FolderService {
 
   @Transactional
   public void deleteFolder(Long userId, Long folderId) {
-    FolderDetailResult folder = folderRepository.findById(folderId);
+    FolderDetailResult folder = folderRepository.findByIdAndUserId(folderId, userId);
     if (folder.isDefault()) {
       throw new BusinessException(DEFAULT_FOLDER_CANNOT_BE_DELETE);
     }
