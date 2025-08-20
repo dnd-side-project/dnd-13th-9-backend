@@ -100,6 +100,7 @@ public class SecurityConfig {
             .allowedOriginPatterns("http://localhost:3000", "https://zipzip-home.vercel.app")
             .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
             .allowCredentials(true)
+            .allowedHeaders("*")
             .exposedHeaders("Set-Cookie")
             .maxAge(3600);
       }
