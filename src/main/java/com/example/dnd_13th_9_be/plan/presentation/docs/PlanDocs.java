@@ -90,7 +90,6 @@ public interface PlanDocs {
   @Operation(
       summary = "계획 생성",
       description = "로그인한 사용자의 새 계획을 생성한다."
-      // 필요 시: @SecurityRequirement(name = "cookieAuth")
       )
   @ApiResponses({
     @io.swagger.v3.oas.annotations.responses.ApiResponse(
