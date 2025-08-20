@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.example.dnd_13th_9_be.common.event.UserCreatedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.example.dnd_13th_9_be.common.event.UserCreatedEvent;
 import com.example.dnd_13th_9_be.user.application.dto.KakaoAttribute;
 import com.example.dnd_13th_9_be.user.application.dto.OAuth2Attribute;
 import com.example.dnd_13th_9_be.user.application.dto.RoleAttribute;
