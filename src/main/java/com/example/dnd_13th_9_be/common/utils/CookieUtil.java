@@ -17,9 +17,10 @@ public class CookieUtil {
     Cookie cookie = new Cookie(key, value);
     cookie.setMaxAge((int) (expirationMs / 1000)); // 초 단위로 변환
     cookie.setPath("/");
-    cookie.setHttpOnly(true);
+    cookie.setHttpOnly(false);
     cookie.setSecure(true); // TODO: https 적용후 true
     cookie.setAttribute("SameSite", "None");
+    cookie.setDomain(".zipzip.cloud");
     return cookie;
   }
 
@@ -27,9 +28,10 @@ public class CookieUtil {
     Cookie cookie = new Cookie(key, null);
     cookie.setMaxAge(0);
     cookie.setPath("/");
-    cookie.setHttpOnly(true);
+    cookie.setHttpOnly(false);
     cookie.setSecure(true); // TODO: https 적용후 true
     cookie.setAttribute("SameSite", "None");
+    cookie.setDomain(".zipzip.cloud");
     return cookie;
   }
 
