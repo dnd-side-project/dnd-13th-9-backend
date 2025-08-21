@@ -1,6 +1,6 @@
 package com.example.dnd_13th_9_be.folder.persistence;
 
-import com.example.dnd_13th_9_be.property.persistence.entity.QPropertyRecord;
+import com.example.dnd_13th_9_be.property.persistence.entity.QProperty;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class QueryDslFolderRepositoryImpl implements QueryDslFolderRepository {
   public List<FolderSummary> findSummariesByPlanId(Long userId, Long planId) {
     var folder = QFolder.folder;
     var location = QLocationRecordEntity.locationRecordEntity;
-    var property = QPropertyRecord.propertyRecord;
+    var property = QProperty.property;
 
     var locationCnt =
         JPAExpressions.select(location.id.count())
