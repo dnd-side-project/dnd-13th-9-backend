@@ -83,7 +83,7 @@ public class SecurityConfig {
                         "/api/plan/**",
                         "/api/folder/**",
                         "/api/required-item/**",
-                        "/api/checklist")
+                        "/api/checklist", "/api/property-record")
                     .hasAuthority(ROLE_USER.name())
                     .anyRequest()
                     .authenticated());

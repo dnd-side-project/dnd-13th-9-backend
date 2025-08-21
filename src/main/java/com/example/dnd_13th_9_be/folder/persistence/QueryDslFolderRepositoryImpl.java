@@ -1,5 +1,6 @@
 package com.example.dnd_13th_9_be.folder.persistence;
 
+import com.example.dnd_13th_9_be.property.persistence.entity.QPropertyRecord;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -7,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import com.example.dnd_13th_9_be.folder.persistence.dto.FolderSummary;
 import com.example.dnd_13th_9_be.folder.persistence.entity.QFolder;
 import com.example.dnd_13th_9_be.location.persistence.QLocationRecordEntity;
-import com.example.dnd_13th_9_be.property.persistence.QPropertyRecordEntity;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -20,7 +20,7 @@ public class QueryDslFolderRepositoryImpl implements QueryDslFolderRepository {
   public List<FolderSummary> findSummariesByPlanId(Long userId, Long planId) {
     var folder = QFolder.folder;
     var location = QLocationRecordEntity.locationRecordEntity;
-    var property = QPropertyRecordEntity.propertyRecordEntity;
+    var property = QPropertyRecord.propertyRecord;
 
     var locationCnt =
         JPAExpressions.select(location.id.count())

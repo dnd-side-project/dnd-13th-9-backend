@@ -1,5 +1,6 @@
 package com.example.dnd_13th_9_be.global.error;
 
+import jakarta.validation.ConstraintDefinitionException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -59,7 +61,7 @@ public class GlobalExceptionHandler {
       if (mie.getTargetType() != null) {
         body.put("expectedType", mie.getTargetType().getTypeName());
       }
-      body.put("hint", "요청 스키마와 타입을 확인하세요");
+      body.put("hint", mie.getOriginalMessage());
       return ApiResponse.entity(ErrorCode.VALIDATION_ERROR, body);
     }
 

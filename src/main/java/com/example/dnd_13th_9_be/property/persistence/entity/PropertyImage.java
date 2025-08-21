@@ -1,5 +1,7 @@
-package com.example.dnd_13th_9_be.property.persistence;
+package com.example.dnd_13th_9_be.property.persistence.entity;
 
+import com.example.dnd_13th_9_be.common.persistence.BaseEntity;
+import com.example.dnd_13th_9_be.property.application.model.PropertyImageModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,32 +13,31 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-@Table(name = "property_transport")
+@Table(name = "property_image")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PropertyTransportEntity {
+public class PropertyImage extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "property_id", nullable = false)
-  @OnDelete(action = OnDeleteAction.CASCADE)
-  private PropertyRecordEntity propertyRecord;
+  @Column(name = "image_url", nullable = false)
+  private String imageUrl;
 
-  @Comment("목적지")
-  @Column(name = "destination_name", nullable = false)
-  private String destinationName;
+  @Column(name = "image_order", nullable = false)
+  private Integer imageOrder;
 
-  @Comment("이동시간")
-  @Column(name = "transit_time", nullable = false)
-  private int transitTime;
+  @Builder
+  public PropertyImage(String imageUrl, Integer imageOrder) {
+    this.imageUrl = imageUrl;
+    this.imageOrder = imageOrder;
+  }
 }

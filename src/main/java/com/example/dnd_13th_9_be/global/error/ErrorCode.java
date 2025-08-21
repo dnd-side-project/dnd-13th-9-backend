@@ -59,6 +59,9 @@ public enum ErrorCode implements ResponseCode {
   ALREADY_DELETED_USER_REQUIRED_ITEM(HttpStatus.CONFLICT, "73002", "이미 필수 확인에서 삭제된 체크리스트입니다"),
 
   DEFAULT_FOLDER_PLAN_NOT_CREATED(HttpStatus.CONFLICT, "61000", "기본 폴더, 플랙 생성 실패"),
+
+  // property record 74xxx
+  PROPERTY_RECORD_IMAGE_LIMIT(HttpStatus.BAD_REQUEST, "74000", "매물 메모는 최대 5개의 이미지를 첨부할 수 있습니다"),
   ;
 
   private final HttpStatus status;
