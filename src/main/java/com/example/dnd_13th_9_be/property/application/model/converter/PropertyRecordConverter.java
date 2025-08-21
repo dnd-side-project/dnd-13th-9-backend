@@ -1,59 +1,57 @@
 package com.example.dnd_13th_9_be.property.application.model.converter;
 
-import com.example.dnd_13th_9_be.checklist.persistence.entity.ChecklistCategory;
 import com.example.dnd_13th_9_be.checklist.persistence.entity.ChecklistItem;
 import com.example.dnd_13th_9_be.common.support.converter.AbstractEntityConverter;
 import com.example.dnd_13th_9_be.folder.persistence.entity.Folder;
 import com.example.dnd_13th_9_be.plan.persistence.entity.Plan;
 import com.example.dnd_13th_9_be.property.application.model.PropertyRecordModel;
-import com.example.dnd_13th_9_be.property.persistence.entity.ContractType;
-import com.example.dnd_13th_9_be.property.persistence.entity.FeelingType;
+import com.example.dnd_13th_9_be.property.persistence.entity.Property;
 import com.example.dnd_13th_9_be.property.persistence.entity.PropertyCategoryMemo;
-import com.example.dnd_13th_9_be.property.persistence.entity.PropertyRecord;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class PropertyRecordConverter implements AbstractEntityConverter<PropertyRecord, PropertyRecordModel> {
+public class PropertyRecordConverter implements AbstractEntityConverter<Property, PropertyRecordModel> {
     private final PropertyImageConverter imageConverter;
     private final PropertyImageConverter propertyImageConverter;
     private final PropertyRequiredCheckConverter requiredCheckConverter;
     private final ChecklistMemoConverter checklistMemoConverter;
 
     @Override
-    public PropertyRecordModel from(PropertyRecord propertyRecord) {
+    public PropertyRecordModel from(Property property) {
         return PropertyRecordModel.builder()
-            .propertyRecordId(propertyRecord.getId())
-            .images(propertyRecord.getImages().stream().map(imageConverter::from).toList())
-            .feeling(propertyRecord.getFeeling())
-            .propertyName(propertyRecord.getTitle())
-            .memo(propertyRecord.getMemo())
-            .referenceUrl(propertyRecord.getReferenceUrl())
-            .address(propertyRecord.getAddress())
-            .detailAddress(propertyRecord.getDetailAddress())
-            .longitude(propertyRecord.getLongitude())
-            .latitude(propertyRecord.getLatitude())
-            .contractType(propertyRecord.getContractType())
-            .houseType(propertyRecord.getHouseType())
-            .depositBig(propertyRecord.getDepositBig())
-            .depositSmall(propertyRecord.getDepositSmall())
-            .managementFee(propertyRecord.getManagementFee())
-            .moveInInfo(propertyRecord.getMoveInInfo())
-            .requiredChecklist(propertyRecord.getRequiredChecklist().stream().map(requiredCheckConverter::from).toList())
-            .requiredCheckMemo(propertyRecord.getRequiredCheckMemo())
-            .categoryMemo(propertyRecord.getCategoryMemoList().stream().map(checklistMemoConverter::from).toList())
+            .propertyRecordId(property.getId())
+            .images(property.getImages().stream().map(imageConverter::from).toList())
+            .feeling(property.getFeeling())
+            .propertyName(property.getTitle())
+            .memo(property.getMemo())
+            .referenceUrl(property.getReferenceUrl())
+            .address(property.getAddress())
+            .detailAddress(property.getDetailAddress())
+            .longitude(property.getLongitude())
+            .latitude(property.getLatitude())
+            .contractType(property.getContractType())
+            .houseType(property.getHouseType())
+            .depositBig(property.getDepositBig())
+            .depositSmall(property.getDepositSmall())
+            .managementFee(property.getManagementFee())
+            .moveInInfo(property.getMoveInInfo())
+            .requiredChecklist(
+                property.getRequiredChecklist().stream().map(requiredCheckConverter::from).toList())
+            .requiredCheckMemo(property.getRequiredCheckMemo())
+            .categoryMemo(property.getCategoryMemoList().stream().map(checklistMemoConverter::from).toList())
             .build();
     }
 
     @Override
-    public PropertyRecord toEntity(PropertyRecordModel propertyRecordModel) {
+    public Property toEntity(PropertyRecordModel propertyRecordModel) {
         return null;
     }
 
-    public PropertyRecord toEntity(Plan plan, Folder folder, PropertyRecordModel model, List<ChecklistItem> requiredCheckList, List<PropertyCategoryMemo> propertyCategoryMemoList) {
-        return PropertyRecord.builder()
+    public Property toEntity(Plan plan, Folder folder, PropertyRecordModel model, List<ChecklistItem> requiredCheckList, List<PropertyCategoryMemo> propertyCategoryMemoList) {
+        return Property.builder()
             .folder(folder)
             .plan(plan)
             .title(model.propertyName())

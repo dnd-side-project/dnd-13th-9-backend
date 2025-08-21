@@ -2,7 +2,6 @@ package com.example.dnd_13th_9_be.property.persistence.entity;
 
 import com.example.dnd_13th_9_be.common.persistence.BaseEntity;
 import com.example.dnd_13th_9_be.plan.persistence.entity.Plan;
-import com.example.dnd_13th_9_be.property.application.model.PropertyRecordModel;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.CascadeType;
@@ -31,10 +30,10 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-@Table(name = "property_record")
+@Table(name = "property")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PropertyRecord extends BaseEntity {
+public class Property extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -126,7 +125,7 @@ public class PropertyRecord extends BaseEntity {
 
 
   @Builder
-  public PropertyRecord(
+  public Property(
       Folder folder,
       Plan plan,
       String title,

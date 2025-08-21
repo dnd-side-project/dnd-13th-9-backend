@@ -28,7 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/property-record")
+@RequestMapping("/api/property")
 public class PropertyRecordController {
     private final PropertyRecordService propertyRecordService;
 
@@ -53,7 +53,6 @@ public class PropertyRecordController {
         @PathVariable("propertyId") Long propertyId
     ) {
         propertyRecordService.deleteProperty(userDetails.getUserId(), propertyId);
-        // todo: s3 이미지 삭제 하기
         return ApiResponse.okEntity();
     }
 }

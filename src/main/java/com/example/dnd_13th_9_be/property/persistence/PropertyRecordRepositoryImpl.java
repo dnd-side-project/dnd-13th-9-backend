@@ -8,7 +8,7 @@ import com.example.dnd_13th_9_be.property.application.model.PropertyRecordModel;
 import com.example.dnd_13th_9_be.property.application.model.converter.PropertyRecordConverter;
 import com.example.dnd_13th_9_be.property.application.repository.PropertyRecordRepository;
 import com.example.dnd_13th_9_be.property.persistence.entity.PropertyCategoryMemo;
-import com.example.dnd_13th_9_be.property.persistence.entity.PropertyRecord;
+import com.example.dnd_13th_9_be.property.persistence.entity.Property;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +34,9 @@ public class PropertyRecordRepositoryImpl implements PropertyRecordRepository {
                 .memo(m.memo())
                 .build()
         ).toList();
-        PropertyRecord propertyRecord = propertyRecordConverter.toEntity(plan, folder, model, requiredCheckList, categoryMemoList);
-        PropertyRecord savedPropertyRecord = jpaPropertyRecordRepository.save(propertyRecord);
-        return propertyRecordConverter.from(savedPropertyRecord);
+        Property property = propertyRecordConverter.toEntity(plan, folder, model, requiredCheckList, categoryMemoList);
+        Property savedProperty = jpaPropertyRecordRepository.save(property);
+        return propertyRecordConverter.from(savedProperty);
     }
 
     @Override
