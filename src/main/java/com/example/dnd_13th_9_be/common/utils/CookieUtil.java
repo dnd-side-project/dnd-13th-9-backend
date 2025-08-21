@@ -20,7 +20,7 @@ public class CookieUtil {
     cookie.setHttpOnly(false);
     cookie.setSecure(true); // TODO: https 적용후 true
     cookie.setAttribute("SameSite", "None");
-    cookie.setDomain(".zipzip.cloud");
+    cookie.setDomain("zipzip.cloud");
     return cookie;
   }
 
@@ -31,7 +31,7 @@ public class CookieUtil {
     cookie.setHttpOnly(false);
     cookie.setSecure(true); // TODO: https 적용후 true
     cookie.setAttribute("SameSite", "None");
-    cookie.setDomain(".zipzip.cloud");
+    cookie.setDomain("zipzip.cloud");
     return cookie;
   }
 
