@@ -10,11 +10,14 @@ import com.example.dnd_13th_9_be.property.presentation.dto.request.PropertyRecor
 import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -42,5 +45,15 @@ public class PropertyRecordController {
 
         var result = propertyRecordService.createPropertyRecord(userDetails.getUserId(), files, request);
         return ApiResponse.successEntity(result);
+    }
+
+    @DeleteMapping("/{propertyId}")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> delete(
+        @AuthenticationPrincipal UserPrincipalDto userDetails,
+        @PathVariable("propertyId") Long propertyId
+    ) {
+        propertyRecordService.deleteProperty(userDetails.getUserId(), propertyId);
+        // todo: s3 이미지 삭제 하기
+        return ApiResponse.okEntity();
     }
 }

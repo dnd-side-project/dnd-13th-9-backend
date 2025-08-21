@@ -38,4 +38,9 @@ public class PropertyRecordRepositoryImpl implements PropertyRecordRepository {
         PropertyRecord savedPropertyRecord = jpaPropertyRecordRepository.save(propertyRecord);
         return propertyRecordConverter.from(savedPropertyRecord);
     }
+
+    @Override
+    public void delete(Long userId, Long propertyId) {
+        jpaPropertyRecordRepository.deleteById(propertyId);
+    }
 }

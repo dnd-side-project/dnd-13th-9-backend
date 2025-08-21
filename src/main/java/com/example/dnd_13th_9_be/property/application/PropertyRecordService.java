@@ -47,4 +47,9 @@ public class PropertyRecordService {
 
         return propertyRecordRepository.save(PropertyRecordModel.from(images, request, requiredCheckModelList));
     }
+
+    @Transactional
+    public void deleteProperty(Long userId, Long propertyId) {
+        propertyRecordRepository.delete(userId, propertyId);
+    }
 }
