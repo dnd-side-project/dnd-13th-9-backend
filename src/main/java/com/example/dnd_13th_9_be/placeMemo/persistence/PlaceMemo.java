@@ -58,17 +58,8 @@ public class PlaceMemo extends BaseEntity {
     @Column(name = "longitude", nullable = false)
     private String longitude;
 
-    @OneToMany(mappedBy = "placeMemo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "place_memo_id") // FK를 PlaceMemoImage 테이블에 생성
     @OrderBy("orderIndex ASC")
     private List<PlaceMemoImage> images = new ArrayList<>();
-
-    public void addImage(PlaceMemoImage image){
-        images.add(image);
-        image.setPlaceMemo(this);
-    }
-
-    public void removeImage(PlaceMemoImage image){
-        images.remove(image);
-        image.setPlaceMemo(null);
-    }
 }

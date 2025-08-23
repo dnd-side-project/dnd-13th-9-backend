@@ -17,11 +17,6 @@ public class PlaceMemoImage extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "place_memo_id", nullable = false)
-    PlaceMemo placeMemo;
-
     @Column(nullable = false)
     private String imageUrl;
 
