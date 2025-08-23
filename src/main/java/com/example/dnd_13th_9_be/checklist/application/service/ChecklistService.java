@@ -1,8 +1,6 @@
 package com.example.dnd_13th_9_be.checklist.application.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,10 +13,7 @@ import com.example.dnd_13th_9_be.checklist.application.model.ChecklistCategoryMo
 import com.example.dnd_13th_9_be.checklist.application.model.UserRequiredItemModel;
 import com.example.dnd_13th_9_be.checklist.application.repository.ChecklistCategoryRepository;
 import com.example.dnd_13th_9_be.checklist.application.repository.UserRequiredItemRepository;
-import com.example.dnd_13th_9_be.checklist.presentation.dto.CategorySummary;
 import com.example.dnd_13th_9_be.checklist.presentation.dto.ChecklistResponse;
-import com.example.dnd_13th_9_be.checklist.presentation.dto.Section;
-import com.example.dnd_13th_9_be.checklist.presentation.dto.SectionItem;
 
 @Service
 @RequiredArgsConstructor
@@ -35,22 +30,6 @@ public class ChecklistService {
             .map(UserRequiredItemModel::getItemId)
             .collect(Collectors.toSet());
 
-    List<CategorySummary> categorySummaries = new ArrayList<>();
-    categorySummaries.add(new CategorySummary(0, "필수 확인"));
-
-    List<SectionItem> requiredSectionItems = new ArrayList<>();
-    List<Section> sections = new ArrayList<>();
-
-    for (ChecklistCategoryModel category : categories) {
-      categorySummaries.add(new CategorySummary(category.getSortOrder(), category.getName()));
-      Map<Boolean, List<SectionItem>> partitionedItems =
-          category.getItems().stream()
-              .map(item -> new SectionItem(item.getId(), item.getQuestion(), item.getDescription()))
-              .collect(Collectors.partitioningBy(item -> requiredIds.contains(item.id())));
-      requiredSectionItems.addAll(partitionedItems.get(true));
-      sections.add(new Section(category.getName(), partitionedItems.get(false)));
-    }
-    sections.addFirst(new Section("필수 확인", requiredSectionItems));
-    return new ChecklistResponse(categorySummaries, sections);
+    return ChecklistResponse.of(categories, requiredIds);
   }
 }

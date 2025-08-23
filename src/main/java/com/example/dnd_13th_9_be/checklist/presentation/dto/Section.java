@@ -1,5 +1,8 @@
 package com.example.dnd_13th_9_be.checklist.presentation.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.util.List;
 
-public record Section(String categoryName, List<SectionItem> items) {}
+@JsonInclude(Include.NON_NULL)
+public record Section(Long categoryId, String categoryName, String memo, List<SectionItem> items) {}

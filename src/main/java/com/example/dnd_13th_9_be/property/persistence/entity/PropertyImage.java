@@ -1,7 +1,5 @@
 package com.example.dnd_13th_9_be.property.persistence.entity;
 
-import com.example.dnd_13th_9_be.common.persistence.BaseEntity;
-import com.example.dnd_13th_9_be.property.application.model.PropertyImageModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,8 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import com.example.dnd_13th_9_be.common.persistence.BaseEntity;
 
 @Entity
 @Table(name = "property_image")
@@ -28,6 +25,10 @@ public class PropertyImage extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "property_id", nullable = false)
+  private Property property;
 
   @Column(name = "image_url", nullable = false)
   private String imageUrl;
@@ -39,5 +40,13 @@ public class PropertyImage extends BaseEntity {
   public PropertyImage(String imageUrl, Integer imageOrder) {
     this.imageUrl = imageUrl;
     this.imageOrder = imageOrder;
+  }
+
+  void setProperty(Property property) {
+    this.property = property;
+  }
+
+  public void updateOrder(Integer newOrder) {
+    this.imageOrder = newOrder;
   }
 }

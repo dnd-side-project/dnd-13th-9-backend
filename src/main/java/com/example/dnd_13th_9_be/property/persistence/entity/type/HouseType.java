@@ -1,4 +1,4 @@
-package com.example.dnd_13th_9_be.property.persistence.entity;
+package com.example.dnd_13th_9_be.property.persistence.entity.type;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -62,6 +62,7 @@ public enum ErrorCode implements ResponseCode {
 
   // property record 74xxx
   PROPERTY_RECORD_IMAGE_LIMIT(HttpStatus.BAD_REQUEST, "74000", "매물 메모는 최대 5개의 이미지를 첨부할 수 있습니다"),
+  NOT_FOUND_PROPERTY(HttpStatus.NOT_FOUND, "74100", "존재하지 않는 매물입니다"),
   ;
 
   private final HttpStatus status;

@@ -1,6 +1,5 @@
 package com.example.dnd_13th_9_be.folder.persistence;
 
-import com.example.dnd_13th_9_be.property.persistence.entity.QProperty;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -8,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import com.example.dnd_13th_9_be.folder.persistence.dto.FolderSummary;
 import com.example.dnd_13th_9_be.folder.persistence.entity.QFolder;
 import com.example.dnd_13th_9_be.location.persistence.QLocationRecordEntity;
+import com.example.dnd_13th_9_be.property.persistence.entity.QProperty;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
