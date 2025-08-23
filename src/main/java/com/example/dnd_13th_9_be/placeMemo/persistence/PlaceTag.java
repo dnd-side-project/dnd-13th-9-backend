@@ -2,8 +2,8 @@ package com.example.dnd_13th_9_be.placeMemo.persistence;
 
 public enum PlaceTag {
 
-    ADVENTAGE("장점"),
-    DISADVENTAGE("단점"),
+    ADVANTAGE("장점"),
+    DISADVANTAGE("단점"),
     CONVENIENCE("편의 시설"),
     TRANSPORTATION("교통"),
     SECURITY("치안"),

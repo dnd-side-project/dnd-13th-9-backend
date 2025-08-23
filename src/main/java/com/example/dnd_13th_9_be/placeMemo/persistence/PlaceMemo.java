@@ -34,13 +34,15 @@ public class PlaceMemo extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Folder folder;
 
+
     @Comment("장소 이름")
     @Column(name = "place_memo_title", nullable = false, length = 20)
     private String title;
 
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "place_tag", nullable = false)
     private PlaceTag placeTag;
-
 
     @Comment("장소 메모")
     @Column(name = "place_memo_description", nullable = true, length = 100)
