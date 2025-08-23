@@ -15,4 +15,14 @@ public interface JpaPropertyRepository extends JpaRepository<Property, Long> {
   @EntityGraph(value = "Property.detail", type = EntityGraph.EntityGraphType.LOAD)
   @Query("select p from Property p where p.id = :id")
   Optional<Property> findDetailById(@Param("id") Long id);
+
+
+  @Query("""
+    select p
+    from Property p
+    join fetch p.folder f
+    join fetch f.plan pl
+    where p.id = :id
+  """)
+  Optional<Property> findByIdWithFolder(@Param("id") Long id);
 }

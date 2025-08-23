@@ -1,8 +1,8 @@
 package com.example.dnd_13th_9_be.property.presentation.dto.request;
 
-import jakarta.validation.constraints.Null;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.DecimalMax;
@@ -10,22 +10,20 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 
 import com.example.dnd_13th_9_be.common.validator.EnumValid;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.ContractType;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.FeelingType;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.HouseType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.Optional;
 import org.hibernate.validator.constraints.Length;
 
 public record UpsertPropertyRequest(
     @Null(groups = CreatePropertyGroup.class, message = "새로운 매물 메모 작성시 id값은 null 이어야 합니다")
-    @NotNull(groups = UpdatePropertyGroup.class, message = "매물 메모 생성시 propertyId는 필수 값입니다")
-    Long propertyId,
+        @NotNull(groups = UpdatePropertyGroup.class, message = "매물 메모 생성시 propertyId는 필수 값입니다") Long propertyId,
     @Null(groups = CreatePropertyGroup.class, message = "새로운 매물 메모 작성시 id값은 null 이어야 합니다")
-    @NotNull(groups = UpdatePropertyGroup.class, message = "매물 메모 생성시 propertyId는 필수 값입니다")
-    List<Long> deletedImageIdList,
+        @NotNull(groups = UpdatePropertyGroup.class, message = "매물 메모 생성시 propertyId는 필수 값입니다") List<Long> deletedImageIdList,
     @EnumValid(enumClass = FeelingType.class, message = "feeling 값은 GOOD, SOSO, BAD 중 하나여야 합니다")
         FeelingType feeling,
     @NotNull(message = "매물명은 필수입니다") @Length(min = 1, max = 10, message = "매물명은 1~10자 이하여야 합니다") String propertyName,
@@ -77,17 +75,18 @@ public record UpsertPropertyRequest(
   }
 
   public List<PropertyCategoryMemoRequest> getCategoryMemo() {
-      if (this.categoryMemoList == null) return new ArrayList<>();
-      return this.categoryMemoList.stream().filter(m -> m.categoryId() != 0L).toList();
+    if (this.categoryMemoList == null) return new ArrayList<>();
+    return this.categoryMemoList.stream().filter(m -> m.categoryId() != 0L).toList();
   }
 
   public String getRequiredCheckMemo() {
-      return Optional.ofNullable(this.categoryMemoList())
-          .flatMap(list -> list.stream()
-              .filter(v -> v.categoryId() == 0L)
-              .map(PropertyCategoryMemoRequest::memo)
-              .findFirst()
-          )
-          .orElse(null);
+    return Optional.ofNullable(this.categoryMemoList())
+        .flatMap(
+            list ->
+                list.stream()
+                    .filter(v -> v.categoryId() == 0L)
+                    .map(PropertyCategoryMemoRequest::memo)
+                    .findFirst())
+        .orElse(null);
   }
 }

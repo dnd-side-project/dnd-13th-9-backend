@@ -1,17 +1,21 @@
 package com.example.dnd_13th_9_be.property.presentation.dto.response;
 
+import com.example.dnd_13th_9_be.property.persistence.dto.PropertyCategoryMemoResult;
+import com.example.dnd_13th_9_be.property.persistence.dto.PropertyImageResult;
+import com.example.dnd_13th_9_be.property.persistence.dto.PropertyResult;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import lombok.Builder;
+
+import com.example.dnd_13th_9_be.checklist.presentation.dto.ChecklistResponse;
 import com.example.dnd_13th_9_be.checklist.presentation.dto.Section;
 import com.example.dnd_13th_9_be.property.application.model.PropertyCategoryMemoModel;
 import com.example.dnd_13th_9_be.property.application.model.PropertyModel;
-import java.util.List;
-
-import com.example.dnd_13th_9_be.checklist.presentation.dto.ChecklistResponse;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.ContractType;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.FeelingType;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.HouseType;
-import java.util.Map;
-import java.util.stream.Collectors;
-import lombok.Builder;
 
 @Builder
 public record PropertyDetailResponse(
@@ -36,50 +40,55 @@ public record PropertyDetailResponse(
     Integer managementFee,
     String moveInInfo,
     ChecklistResponse checklist) {
-    public static PropertyDetailResponse of(PropertyModel m, ChecklistResponse checklist) {
-        Map<Long, String> memoMap = m.categoryMemo().stream()
-            .collect(Collectors.toMap(
-                PropertyCategoryMemoModel::categoryId,
-                PropertyCategoryMemoModel::memo
-            ));
-        memoMap.put(0L, m.requiredCheckMemo());
 
-        List<Section> updatedSections = checklist.sections().stream()
-            .map(section -> new Section(
-                section.categoryId(),
-                section.categoryName(),
-                memoMap.get(section.categoryId()),
-                section.items()
-            ))
+  public static PropertyDetailResponse of(
+      PropertyResult property,
+      List<PropertyCategoryMemoResult> categoryMemoList,
+      List<PropertyImageResult> imageList,
+      ChecklistResponse checklist
+  ) {
+        Map<Long, String> memoMap =
+            categoryMemoList.stream()
+            .collect(
+                Collectors.toMap(
+                    PropertyCategoryMemoResult::categoryId, PropertyCategoryMemoResult::memo));
+    memoMap.put(0L, property.requiredCheckMemo());
+
+    List<Section> updatedSections =
+        checklist.sections().stream()
+            .map(
+                section ->
+                    new Section(
+                        section.categoryId(),
+                        section.categoryName(),
+                        memoMap.get(section.categoryId()),
+                        section.items()))
             .toList();
 
-        ChecklistResponse updatedChecklist = new ChecklistResponse(
-            checklist.categories(),
-            updatedSections
-        );
-
-        return PropertyDetailResponse.builder()
-            .images(m.images().stream().map(PropertyImageResponse::of).toList())
-            .propertyId(m.propertyId())
-            .planId(m.planId())
-            .planName(m.planName())
-            .folderId(m.folderId())
-            .folderName(m.folderName())
-            .feeling(m.feeling())
-            .propertyName(m.propertyName())
-            .memo(m.memo())
-            .referenceUrl(m.referenceUrl())
-            .address(m.address())
-            .detailAddress(m.detailAddress())
-            .longitude(m.longitude())
-            .latitude(m.latitude())
-            .contractType(m.contractType())
-            .houseType(m.houseType())
-            .depositBig(m.depositBig())
-            .depositSmall(m.depositSmall())
-            .managementFee(m.managementFee())
-            .moveInInfo(m.moveInInfo())
-            .checklist(updatedChecklist)
-            .build();
-    }
+    ChecklistResponse updatedChecklist =
+        new ChecklistResponse(checklist.categories(), updatedSections);
+    return PropertyDetailResponse.builder()
+        .images(imageList.stream().map(PropertyImageResponse::from).toList())
+        .propertyId(property.propertyId())
+        .planId(property.planId())
+        .planName(property.planName())
+        .folderId(property.folderId())
+        .folderName(property.folderName())
+        .feeling(property.feeling())
+        .propertyName(property.title())
+        .memo(property.memo())
+        .referenceUrl(property.referenceUrl())
+        .address(property.address())
+        .detailAddress(property.detailAddress())
+        .longitude(property.longitude())
+        .latitude(property.latitude())
+        .contractType(property.contractType())
+        .houseType(property.houseType())
+        .depositBig(property.depositBig())
+        .depositSmall(property.depositSmall())
+        .managementFee(property.managementFee())
+        .moveInInfo(property.moveInInfo())
+        .checklist(updatedChecklist)
+        .build();
+  }
 }

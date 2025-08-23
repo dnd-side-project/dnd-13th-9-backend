@@ -8,10 +8,9 @@ import java.util.stream.Collectors;
 
 import com.example.dnd_13th_9_be.checklist.application.model.ChecklistCategoryModel;
 
-public record ChecklistResponse(
-    List<CategorySummary> categories, List<Section> sections
-) {
+public record ChecklistResponse(List<CategorySummary> categories, List<Section> sections) {
   static final String REQUIRED_CHECK = "필수 확인";
+
   public static ChecklistResponse of(
       List<ChecklistCategoryModel> categories, Set<Long> requiredIds) {
     List<CategorySummary> categorySummaries = new ArrayList<>();
@@ -27,7 +26,8 @@ public record ChecklistResponse(
               .map(item -> new SectionItem(item.getId(), item.getQuestion(), item.getDescription()))
               .collect(Collectors.partitioningBy(item -> requiredIds.contains(item.id())));
       requiredSectionItems.addAll(partitionedItems.get(true));
-      sections.add(new Section(category.getId(), category.getName(), null, partitionedItems.get(false)));
+      sections.add(
+          new Section(category.getId(), category.getName(), null, partitionedItems.get(false)));
     }
     sections.addFirst(new Section(0L, REQUIRED_CHECK, null, requiredSectionItems));
 

@@ -29,9 +29,6 @@ public class PropertyRequiredCheck extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "checklist_id", insertable = false, updatable = false)
-  private Long checklistItemId;
-
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "property_id", nullable = false)
   @OnDelete(action = OnDeleteAction.CASCADE)

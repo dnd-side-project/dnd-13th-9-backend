@@ -50,5 +50,4 @@ public class PropertyCategoryMemo extends BaseEntity {
     this.category = category;
     this.memo = memo;
   }
-
 }

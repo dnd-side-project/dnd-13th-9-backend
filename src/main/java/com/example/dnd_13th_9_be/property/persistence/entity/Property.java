@@ -1,13 +1,6 @@
 package com.example.dnd_13th_9_be.property.persistence.entity;
 
-import com.example.dnd_13th_9_be.property.application.dto.PropertyDto;
-import com.example.dnd_13th_9_be.property.persistence.entity.type.ContractType;
-import com.example.dnd_13th_9_be.property.persistence.entity.type.FeelingType;
-import com.example.dnd_13th_9_be.property.persistence.entity.type.HouseType;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -18,11 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedAttributeNode;
-import jakarta.persistence.NamedEntityGraph;
-import jakarta.persistence.NamedSubgraph;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 
 import lombok.AccessLevel;
@@ -32,27 +20,13 @@ import lombok.NoArgsConstructor;
 
 import com.example.dnd_13th_9_be.common.persistence.BaseEntity;
 import com.example.dnd_13th_9_be.folder.persistence.entity.Folder;
+import com.example.dnd_13th_9_be.property.persistence.entity.type.ContractType;
+import com.example.dnd_13th_9_be.property.persistence.entity.type.FeelingType;
+import com.example.dnd_13th_9_be.property.persistence.entity.type.HouseType;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-@NamedEntityGraph(
-    name = "Property.detail",
-    attributeNodes = {
-      @NamedAttributeNode(value = "folder", subgraph = "folder.plan"),
-      @NamedAttributeNode("images"),
-//      @NamedAttributeNode("requiredChecklist"),
-//      @NamedAttributeNode(value = "categoryMemoList", subgraph = "categoryMemoList.category")
-    },
-    subgraphs = {
-      @NamedSubgraph(
-          name = "folder.plan",
-          attributeNodes = {@NamedAttributeNode("plan")})}
-//      @NamedSubgraph(
-//          name = "categoryMemoList.category",
-//          attributeNodes = {@NamedAttributeNode("category")})
-//    }
-    )
 @Entity
 @Table(name = "property")
 @Getter
@@ -129,23 +103,8 @@ public class Property extends BaseEntity {
   @Column(name = "required_check_memo", length = 200)
   private String requiredCheckMemo;
 
-  @OrderBy("imageOrder ASC")
-  @OneToMany(
-      mappedBy = "property",
-      cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-      orphanRemoval = true)
-  private Set<PropertyImage> images = new HashSet<>();
-
-//  @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-//  @JoinColumn(name = "property_id", nullable = false)
-//  private Set<PropertyRequiredCheck> requiredChecklist = new HashSet<>();
-
-//  @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-//  @JoinColumn(name = "property_id", nullable = false)
-//  private Set<PropertyCategoryMemo> categoryMemoList = new HashSet<>();
-
   @Builder
-  public Property(
+  private Property(
       Folder folder,
       String title,
       FeelingType feeling,
@@ -163,9 +122,7 @@ public class Property extends BaseEntity {
       String moveInInfo,
       String requiredCheckMemo,
       List<PropertyImage> images
-//      List<PropertyRequiredCheck> requiredChecklist
-//      List<PropertyCategoryMemo> categoryMemoList
-  ) {
+      ) {
     this.folder = folder;
     this.title = title;
     this.feeling = feeling;
@@ -182,18 +139,5 @@ public class Property extends BaseEntity {
     this.managementFee = managementFee;
     this.moveInInfo = moveInInfo;
     this.requiredCheckMemo = requiredCheckMemo;
-//    addImages(images);
-//    this.requiredChecklist = new HashSet<>(requiredChecklist);
-//    this.categoryMemoList = new HashSet<>(categoryMemoList);
   }
-
-  public void addImage(PropertyImage image) {
-    this.images.add(image);
-    image.setProperty(this);
-  }
-
-//  public void addImages(List<PropertyImage> images) {
-//    this.images.addAll(images);
-//    images.forEach(m -> m.setProperty(this));
-//  }
 }

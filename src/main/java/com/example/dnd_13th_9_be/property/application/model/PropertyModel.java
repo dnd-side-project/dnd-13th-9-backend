@@ -1,6 +1,5 @@
 package com.example.dnd_13th_9_be.property.application.model;
 
-import com.example.dnd_13th_9_be.property.presentation.dto.request.PropertyCategoryMemoRequest;
 import java.util.List;
 
 import lombok.Builder;
@@ -9,6 +8,7 @@ import com.example.dnd_13th_9_be.common.support.AbstractModel;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.ContractType;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.FeelingType;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.HouseType;
+import com.example.dnd_13th_9_be.property.presentation.dto.request.PropertyCategoryMemoRequest;
 import com.example.dnd_13th_9_be.property.presentation.dto.request.UpsertPropertyRequest;
 
 @Builder
@@ -43,8 +43,12 @@ public record PropertyModel(
       UpsertPropertyRequest r,
       List<PropertyRequiredCheckModel> c) {
 
-    String requiredCheckMemo = r.categoryMemoList().stream().filter(m -> m.categoryId() == 0L).findFirst().map(
-        PropertyCategoryMemoRequest::memo).orElse(null);
+    String requiredCheckMemo =
+        r.categoryMemoList().stream()
+            .filter(m -> m.categoryId() == 0L)
+            .findFirst()
+            .map(PropertyCategoryMemoRequest::memo)
+            .orElse(null);
     r.categoryMemoList().removeIf(m -> m.categoryId() == 0L);
 
     return PropertyModel.builder()

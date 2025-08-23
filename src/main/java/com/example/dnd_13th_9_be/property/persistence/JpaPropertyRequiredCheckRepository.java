@@ -1,8 +1,12 @@
 package com.example.dnd_13th_9_be.property.persistence;
 
-import com.example.dnd_13th_9_be.property.persistence.entity.PropertyRequiredCheck;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface JpaPropertyRequiredCheckRepository extends JpaRepository<PropertyRequiredCheck, Long> {
+import com.example.dnd_13th_9_be.property.persistence.entity.PropertyRequiredCheck;
 
+public interface JpaPropertyRequiredCheckRepository
+    extends JpaRepository<PropertyRequiredCheck, Long> {
+
+    List<PropertyRequiredCheck> findAllByPropertyId(Long propertyId);
 }

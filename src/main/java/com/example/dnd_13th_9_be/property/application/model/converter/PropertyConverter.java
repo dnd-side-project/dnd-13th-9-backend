@@ -17,14 +17,12 @@ import com.example.dnd_13th_9_be.property.persistence.entity.PropertyCategoryMem
 @RequiredArgsConstructor
 public class PropertyConverter implements AbstractEntityConverter<Property, PropertyModel> {
   private final PropertyImageConverter imageConverter;
-  private final PropertyRequiredCheckConverter requiredCheckConverter;
-  private final PropertyCategoryMemoConverter categoryMemoConverter;
 
   @Override
   public PropertyModel from(Property property) {
     return PropertyModel.builder()
         .propertyId(property.getId())
-        .images(property.getImages().stream().map(imageConverter::from).toList())
+//        .images(property.getImages().stream().map(imageConverter::from).toList())
         .feeling(property.getFeeling())
         .propertyName(property.getTitle())
         .memo(property.getMemo())
@@ -39,12 +37,14 @@ public class PropertyConverter implements AbstractEntityConverter<Property, Prop
         .depositSmall(property.getDepositSmall())
         .managementFee(property.getManagementFee())
         .moveInInfo(property.getMoveInInfo())
-//        .requiredChecklist(
-//            property.getRequiredChecklist().stream().map(requiredCheckConverter::from).toList())
+        //        .requiredChecklist(
+        //
+        // property.getRequiredChecklist().stream().map(requiredCheckConverter::from).toList())
         .requiredCheckMemo(property.getRequiredCheckMemo())
-//        .categoryMemo(
-//            property.getCategoryMemoList().stream().map(categoryMemoConverter::from).toList()
-//        )
+        //        .categoryMemo(
+        //
+        // property.getCategoryMemoList().stream().map(categoryMemoConverter::from).toList()
+        //        )
         .folderId(property.getFolder().getId())
         .folderName(property.getFolder().getName())
         .planId(property.getFolder().getPlan().getId())
@@ -79,10 +79,10 @@ public class PropertyConverter implements AbstractEntityConverter<Property, Prop
         .managementFee(model.managementFee())
         .moveInInfo(model.moveInInfo())
         .requiredCheckMemo(model.requiredCheckMemo())
-//        .images(model.images().stream().map(imageConverter::toEntity).toList())
-//        .requiredChecklist(
-//            requiredCheckList.stream().map(requiredCheckConverter::toEntity).toList())
-//        .categoryMemoList(propertyCategoryMemoList)
+        //        .images(model.images().stream().map(imageConverter::toEntity).toList())
+        //        .requiredChecklist(
+        //            requiredCheckList.stream().map(requiredCheckConverter::toEntity).toList())
+        //        .categoryMemoList(propertyCategoryMemoList)
         .build();
   }
 }
