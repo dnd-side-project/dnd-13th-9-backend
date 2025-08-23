@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import com.example.dnd_13th_9_be.folder.persistence.entity.Folder;
 import com.example.dnd_13th_9_be.global.error.BusinessException;
 import com.example.dnd_13th_9_be.property.application.dto.PropertyDto;
-import com.example.dnd_13th_9_be.property.application.model.PropertyModel;
-import com.example.dnd_13th_9_be.property.application.model.converter.PropertyConverter;
 import com.example.dnd_13th_9_be.property.application.repository.PropertyRepository;
 import com.example.dnd_13th_9_be.property.persistence.dto.PropertyResult;
 import com.example.dnd_13th_9_be.property.persistence.entity.Property;
@@ -23,7 +21,6 @@ import static com.example.dnd_13th_9_be.global.error.ErrorCode.NOT_FOUND_PROPERT
 public class PropertyRepositoryImpl implements PropertyRepository {
   private final EntityManager em;
   private final JpaPropertyRepository jpaPropertyRepository;
-  private final PropertyConverter propertyConverter;
 
   @Override
   public void delete(Long userId, Long propertyId) {

@@ -4,7 +4,6 @@ import com.example.dnd_13th_9_be.property.persistence.dto.PropertyImageResult;
 import java.util.List;
 
 import com.example.dnd_13th_9_be.property.application.dto.PropertyImageDto;
-import com.example.dnd_13th_9_be.property.application.model.PropertyImageModel;
 
 public interface PropertyImageRepository {
   void save(PropertyImageDto model);

@@ -9,7 +9,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,9 +21,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
 import com.example.dnd_13th_9_be.property.application.PropertyService;
-import com.example.dnd_13th_9_be.property.application.model.PropertyModel;
 import com.example.dnd_13th_9_be.property.presentation.dto.request.CreatePropertyGroup;
-import com.example.dnd_13th_9_be.property.presentation.dto.request.UpdatePropertyGroup;
 import com.example.dnd_13th_9_be.property.presentation.dto.request.UpsertPropertyRequest;
 import com.example.dnd_13th_9_be.property.presentation.dto.response.PropertyDetailResponse;
 import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
@@ -62,13 +59,13 @@ public class PropertyController {
     return ApiResponse.successEntity(response);
   }
 
-  @PatchMapping
-  public ResponseEntity<ApiResponse<PropertyModel>> update(
-      @AuthenticationPrincipal UserPrincipalDto userDetails,
-      @RequestPart(value = "image", required = false) List<MultipartFile> files,
-      @Validated(UpdatePropertyGroup.class) @RequestPart(value = "data")
-          UpsertPropertyRequest request) {
-//    var result = propertyService.updateProperty(userDetails.getUserId(), files, request);
-    return ApiResponse.successEntity(null);
-  }
+//  @PatchMapping
+//  public ResponseEntity<ApiResponse<PropertyModel>> update(
+//      @AuthenticationPrincipal UserPrincipalDto userDetails,
+//      @RequestPart(value = "image", required = false) List<MultipartFile> files,
+//      @Validated(UpdatePropertyGroup.class) @RequestPart(value = "data")
+//          UpsertPropertyRequest request) {
+////    var result = propertyService.updateProperty(userDetails.getUserId(), files, request);
+//    return ApiResponse.successEntity(null);
+//  }
 }

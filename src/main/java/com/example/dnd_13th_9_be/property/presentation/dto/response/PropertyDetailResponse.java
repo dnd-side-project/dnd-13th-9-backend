@@ -11,8 +11,6 @@ import lombok.Builder;
 
 import com.example.dnd_13th_9_be.checklist.presentation.dto.ChecklistResponse;
 import com.example.dnd_13th_9_be.checklist.presentation.dto.Section;
-import com.example.dnd_13th_9_be.property.application.model.PropertyCategoryMemoModel;
-import com.example.dnd_13th_9_be.property.application.model.PropertyModel;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.ContractType;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.FeelingType;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.HouseType;

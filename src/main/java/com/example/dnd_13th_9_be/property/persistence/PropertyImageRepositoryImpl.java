@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.example.dnd_13th_9_be.property.application.dto.PropertyImageDto;
-import com.example.dnd_13th_9_be.property.application.model.PropertyImageModel;
-import com.example.dnd_13th_9_be.property.application.model.converter.PropertyImageConverter;
 import com.example.dnd_13th_9_be.property.application.repository.PropertyImageRepository;
 import com.example.dnd_13th_9_be.property.persistence.entity.Property;
 import com.example.dnd_13th_9_be.property.persistence.entity.PropertyImage;
