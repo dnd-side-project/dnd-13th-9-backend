@@ -5,7 +5,6 @@ import com.example.dnd_13th_9_be.property.presentation.dto.request.UpdatePropert
 import com.example.dnd_13th_9_be.property.presentation.dto.response.PropertyDetailResponse;
 import java.util.List;
 import java.util.Map;
-import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,14 +23,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 
-import com.example.dnd_13th_9_be.global.error.BusinessException;
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
 import com.example.dnd_13th_9_be.property.application.PropertyService;
 import com.example.dnd_13th_9_be.property.application.model.PropertyModel;
 import com.example.dnd_13th_9_be.property.presentation.dto.request.UpsertPropertyRequest;
 import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
-
-import static com.example.dnd_13th_9_be.global.error.ErrorCode.PROPERTY_RECORD_IMAGE_LIMIT;
 
 @Validated
 @RestController
@@ -40,21 +36,14 @@ import static com.example.dnd_13th_9_be.global.error.ErrorCode.PROPERTY_RECORD_I
 public class PropertyController {
   private final PropertyService propertyService;
 
-  @GetMapping("/{propertyId}")
-  public ResponseEntity<ApiResponse<PropertyDetailResponse>> getProperty(
-      @PathVariable("propertyId") Long propertyId) {
-    PropertyDetailResponse response = propertyService.getProperty(propertyId);
-    return ApiResponse.successEntity(response);
-  }
-
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<ApiResponse<PropertyModel>> create(
+  public ResponseEntity<ApiResponse<Map<String, Object>>> create(
       @AuthenticationPrincipal UserPrincipalDto userDetails,
       @RequestPart(value = "image", required = false) List<MultipartFile> files,
       @Validated(CreatePropertyGroup.class) @RequestPart(value = "data") UpsertPropertyRequest request) {
-    var result = propertyService.createPropertyRecord(userDetails.getUserId(), files, request);
-    return ApiResponse.successEntity(result);
+    propertyService.createPropertyRecord(userDetails.getUserId(), files, request);
+    return ApiResponse.okEntity();
   }
 
   @DeleteMapping("/{propertyId}")
@@ -63,6 +52,13 @@ public class PropertyController {
       @PathVariable("propertyId") Long propertyId) {
     propertyService.deleteProperty(userDetails.getUserId(), propertyId);
     return ApiResponse.okEntity();
+  }
+
+  @GetMapping("/{propertyId}")
+  public ResponseEntity<ApiResponse<PropertyDetailResponse>> getProperty(
+      @PathVariable("propertyId") Long propertyId) {
+    PropertyDetailResponse response = propertyService.getProperty(propertyId);
+    return ApiResponse.successEntity(response);
   }
 
   @PatchMapping

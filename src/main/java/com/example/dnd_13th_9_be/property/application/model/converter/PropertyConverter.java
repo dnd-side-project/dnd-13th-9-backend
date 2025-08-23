@@ -39,12 +39,12 @@ public class PropertyConverter implements AbstractEntityConverter<Property, Prop
         .depositSmall(property.getDepositSmall())
         .managementFee(property.getManagementFee())
         .moveInInfo(property.getMoveInInfo())
-        .requiredChecklist(
-            property.getRequiredChecklist().stream().map(requiredCheckConverter::from).toList())
+//        .requiredChecklist(
+//            property.getRequiredChecklist().stream().map(requiredCheckConverter::from).toList())
         .requiredCheckMemo(property.getRequiredCheckMemo())
-        .categoryMemo(
-            property.getCategoryMemoList().stream().map(categoryMemoConverter::from).toList()
-        )
+//        .categoryMemo(
+//            property.getCategoryMemoList().stream().map(categoryMemoConverter::from).toList()
+//        )
         .folderId(property.getFolder().getId())
         .folderName(property.getFolder().getName())
         .planId(property.getFolder().getPlan().getId())
@@ -79,10 +79,10 @@ public class PropertyConverter implements AbstractEntityConverter<Property, Prop
         .managementFee(model.managementFee())
         .moveInInfo(model.moveInInfo())
         .requiredCheckMemo(model.requiredCheckMemo())
-        .images(model.images().stream().map(imageConverter::toEntity).toList())
-        .requiredChecklist(
-            requiredCheckList.stream().map(requiredCheckConverter::toEntity).toList())
-        .categoryMemoList(propertyCategoryMemoList)
+//        .images(model.images().stream().map(imageConverter::toEntity).toList())
+//        .requiredChecklist(
+//            requiredCheckList.stream().map(requiredCheckConverter::toEntity).toList())
+//        .categoryMemoList(propertyCategoryMemoList)
         .build();
   }
 }

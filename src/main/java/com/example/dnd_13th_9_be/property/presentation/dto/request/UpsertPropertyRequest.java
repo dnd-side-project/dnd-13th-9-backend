@@ -1,6 +1,7 @@
 package com.example.dnd_13th_9_be.property.presentation.dto.request;
 
 import jakarta.validation.constraints.Null;
+import java.util.ArrayList;
 import java.util.List;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
@@ -15,6 +16,7 @@ import com.example.dnd_13th_9_be.property.persistence.entity.type.ContractType;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.FeelingType;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.HouseType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Optional;
 import org.hibernate.validator.constraints.Length;
 
 public record UpsertPropertyRequest(
@@ -72,5 +74,20 @@ public record UpsertPropertyRequest(
     }
 
     return managementFee == null;
+  }
+
+  public List<PropertyCategoryMemoRequest> getCategoryMemo() {
+      if (this.categoryMemoList == null) return new ArrayList<>();
+      return this.categoryMemoList.stream().filter(m -> m.categoryId() != 0L).toList();
+  }
+
+  public String getRequiredCheckMemo() {
+      return Optional.ofNullable(this.categoryMemoList())
+          .flatMap(list -> list.stream()
+              .filter(v -> v.categoryId() == 0L)
+              .map(PropertyCategoryMemoRequest::memo)
+              .findFirst()
+          )
+          .orElse(null);
   }
 }

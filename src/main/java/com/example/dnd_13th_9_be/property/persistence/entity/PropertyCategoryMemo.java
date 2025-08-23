@@ -35,13 +35,20 @@ public class PropertyCategoryMemo extends BaseEntity {
   @OnDelete(action = OnDeleteAction.CASCADE)
   private ChecklistCategory category;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "property_id", nullable = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Property property;
+
   @Comment("카테고리별 메모")
   @Column(name = "required_check_memo", length = 200)
   private String memo;
 
   @Builder
-  public PropertyCategoryMemo(ChecklistCategory category, String memo) {
+  public PropertyCategoryMemo(ChecklistCategory category, Property property, String memo) {
+    this.property = property;
     this.category = category;
     this.memo = memo;
   }
+
 }

@@ -37,7 +37,8 @@ public class PropertyImage extends BaseEntity {
   private Integer imageOrder;
 
   @Builder
-  public PropertyImage(String imageUrl, Integer imageOrder) {
+  public PropertyImage(Property property, String imageUrl, Integer imageOrder) {
+    this.property = property;
     this.imageUrl = imageUrl;
     this.imageOrder = imageOrder;
   }

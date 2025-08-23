@@ -41,17 +41,18 @@ import org.hibernate.annotations.OnDeleteAction;
     attributeNodes = {
       @NamedAttributeNode(value = "folder", subgraph = "folder.plan"),
       @NamedAttributeNode("images"),
-      @NamedAttributeNode("requiredChecklist"),
-      @NamedAttributeNode(value = "categoryMemoList", subgraph = "categoryMemoList.category")
+//      @NamedAttributeNode("requiredChecklist"),
+//      @NamedAttributeNode(value = "categoryMemoList", subgraph = "categoryMemoList.category")
     },
     subgraphs = {
       @NamedSubgraph(
           name = "folder.plan",
-          attributeNodes = {@NamedAttributeNode("plan")}),
-      @NamedSubgraph(
-          name = "categoryMemoList.category",
-          attributeNodes = {@NamedAttributeNode("category")})
-    })
+          attributeNodes = {@NamedAttributeNode("plan")})}
+//      @NamedSubgraph(
+//          name = "categoryMemoList.category",
+//          attributeNodes = {@NamedAttributeNode("category")})
+//    }
+    )
 @Entity
 @Table(name = "property")
 @Getter
@@ -135,13 +136,13 @@ public class Property extends BaseEntity {
       orphanRemoval = true)
   private Set<PropertyImage> images = new HashSet<>();
 
-  @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  @JoinColumn(name = "property_id", nullable = false)
-  private Set<PropertyRequiredCheck> requiredChecklist = new HashSet<>();
+//  @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//  @JoinColumn(name = "property_id", nullable = false)
+//  private Set<PropertyRequiredCheck> requiredChecklist = new HashSet<>();
 
-  @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  @JoinColumn(name = "property_id", nullable = false)
-  private Set<PropertyCategoryMemo> categoryMemoList = new HashSet<>();
+//  @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//  @JoinColumn(name = "property_id", nullable = false)
+//  private Set<PropertyCategoryMemo> categoryMemoList = new HashSet<>();
 
   @Builder
   public Property(
@@ -161,9 +162,10 @@ public class Property extends BaseEntity {
       Integer managementFee,
       String moveInInfo,
       String requiredCheckMemo,
-      List<PropertyImage> images,
-      List<PropertyRequiredCheck> requiredChecklist,
-      List<PropertyCategoryMemo> categoryMemoList) {
+      List<PropertyImage> images
+//      List<PropertyRequiredCheck> requiredChecklist
+//      List<PropertyCategoryMemo> categoryMemoList
+  ) {
     this.folder = folder;
     this.title = title;
     this.feeling = feeling;
@@ -180,9 +182,9 @@ public class Property extends BaseEntity {
     this.managementFee = managementFee;
     this.moveInInfo = moveInInfo;
     this.requiredCheckMemo = requiredCheckMemo;
-    addImages(images);
-    this.requiredChecklist = new HashSet<>(requiredChecklist);
-    this.categoryMemoList = new HashSet<>(categoryMemoList);
+//    addImages(images);
+//    this.requiredChecklist = new HashSet<>(requiredChecklist);
+//    this.categoryMemoList = new HashSet<>(categoryMemoList);
   }
 
   public void addImage(PropertyImage image) {
@@ -190,8 +192,8 @@ public class Property extends BaseEntity {
     image.setProperty(this);
   }
 
-  public void addImages(List<PropertyImage> images) {
-    this.images.addAll(images);
-    images.forEach(m -> m.setProperty(this));
-  }
+//  public void addImages(List<PropertyImage> images) {
+//    this.images.addAll(images);
+//    images.forEach(m -> m.setProperty(this));
+//  }
 }

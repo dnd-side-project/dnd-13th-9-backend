@@ -1,6 +1,7 @@
 package com.example.dnd_13th_9_be.property.application.repository;
 
 import com.example.dnd_13th_9_be.property.application.dto.PropertyDto;
+import com.example.dnd_13th_9_be.property.persistence.dto.PropertyResult;
 import java.util.List;
 
 import com.example.dnd_13th_9_be.property.application.model.PropertyImageModel;
@@ -13,5 +14,5 @@ public interface PropertyRepository {
 
   PropertyModel findDetailById(Long propertyId);
 
-  void save(PropertyDto dto);
+  PropertyResult save(PropertyDto dto);
 }

@@ -3,10 +3,19 @@ package com.example.dnd_13th_9_be.property.application;
 import static com.example.dnd_13th_9_be.global.error.ErrorCode.PROPERTY_RECORD_IMAGE_LIMIT;
 
 import com.example.dnd_13th_9_be.checklist.application.model.ChecklistCategoryModel;
+import com.example.dnd_13th_9_be.checklist.application.model.UserRequiredItemModel;
 import com.example.dnd_13th_9_be.checklist.application.repository.ChecklistCategoryRepository;
 import com.example.dnd_13th_9_be.checklist.presentation.dto.ChecklistResponse;
+import com.example.dnd_13th_9_be.folder.application.repository.FolderRepository;
 import com.example.dnd_13th_9_be.global.error.BusinessException;
+import com.example.dnd_13th_9_be.property.application.dto.PropertyCategoryMemoDto;
+import com.example.dnd_13th_9_be.property.application.dto.PropertyDto;
+import com.example.dnd_13th_9_be.property.application.dto.PropertyImageDto;
+import com.example.dnd_13th_9_be.property.application.repository.PropertyCategoryMemoRepository;
 import com.example.dnd_13th_9_be.property.application.repository.PropertyImageRepository;
+import com.example.dnd_13th_9_be.property.application.repository.PropertyRequiredCheckRepository;
+import com.example.dnd_13th_9_be.property.persistence.dto.PropertyResult;
+import com.example.dnd_13th_9_be.property.presentation.dto.request.PropertyCategoryMemoRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -38,10 +47,67 @@ import com.example.dnd_13th_9_be.property.presentation.dto.response.PropertyDeta
 public class PropertyService {
 
   private final S3Manager s3Manager;
+  private final FolderRepository folderRepository;
   private final PropertyRepository propertyRepository;
   private final PropertyImageRepository propertyImageRepository;
+  private final PropertyRequiredCheckRepository propertyRequiredCheckRepository;
   private final ChecklistCategoryRepository checklistCategoryRepository;
   private final UserRequiredItemRepository userRequiredItemRepository;
+  private final PropertyCategoryMemoRepository propertyCategoryMemoRepository;
+
+  @Transactional(rollbackFor = {S3ImageException.class})
+  public void createPropertyRecord(
+      Long userId, List<MultipartFile> files, UpsertPropertyRequest request
+  ) {
+
+    // 이미지 갯수 확인
+    if (files != null && files.size() > 5) {
+      throw new BusinessException(PROPERTY_RECORD_IMAGE_LIMIT);
+    }
+
+    // 유효한 folder 인지 확인
+    folderRepository.verifyById(request.folderId());
+
+    // property entity 저장
+    PropertyDto propertyDto = PropertyDto.from(request);
+    PropertyResult savedProperty = propertyRepository.save(propertyDto);
+
+    // category memo 저장
+    List<PropertyCategoryMemoRequest> filteredMemoList = request.getCategoryMemo();
+    filteredMemoList.forEach( memo -> {
+      checklistCategoryRepository.verifyById(memo.categoryId());
+      propertyCategoryMemoRepository.save(PropertyCategoryMemoDto.from(savedProperty.propertyId(), memo));
+    });
+
+    // property_required_check 항목 저장
+    List<UserRequiredItemModel> requiredItemModelList = userRequiredItemRepository.findAllByUserId(userId);
+    requiredItemModelList.forEach(item -> {
+      propertyRequiredCheckRepository.save(item.getItemId(), savedProperty.propertyId());
+    });
+
+    // property_image 항목 저장
+    AtomicInteger imageOrder = new AtomicInteger(1);
+    List<PropertyImageDto> images =
+        Optional.ofNullable(files)
+            .orElseGet(Collections::emptyList)
+            .stream()
+            .map(
+                file ->
+                    PropertyImageDto.builder()
+                        .propertyId(savedProperty.propertyId())
+                        .imageUrl(s3Manager.upload(file))
+                        .order(imageOrder.getAndIncrement())
+                        .build())
+            .toList();
+    images.forEach(propertyImageRepository::save);
+  }
+
+  @Transactional
+  public void deleteProperty(Long userId, Long propertyId) {
+    List<PropertyImageModel> images = propertyImageRepository.findAllByPropertyId(propertyId);
+    images.forEach(i -> s3Manager.delete(i.imageUrl()));
+    propertyRepository.delete(userId, propertyId);
+  }
 
   public PropertyDetailResponse getProperty(Long propertyId) {
     PropertyModel property = propertyRepository.findDetailById(propertyId);
@@ -51,41 +117,6 @@ public class PropertyService {
     ).collect(Collectors.toSet());
     ChecklistResponse checklist = ChecklistResponse.of(categories, requiredIds);
     return PropertyDetailResponse.of(property, checklist);
-  }
-
-  @Transactional(rollbackFor = {S3ImageException.class})
-  public PropertyModel createPropertyRecord(
-      Long userId, List<MultipartFile> files, UpsertPropertyRequest request
-  ) {
-
-    if (files != null && files.size() > 5) {
-      throw new BusinessException(PROPERTY_RECORD_IMAGE_LIMIT);
-    }
-
-    AtomicInteger imageOrder = new AtomicInteger(1);
-    List<PropertyImageModel> images =
-        Optional.ofNullable(files).orElseGet(Collections::emptyList).stream()
-            .map(
-                file ->
-                    PropertyImageModel.builder()
-                        .imageUrl(s3Manager.upload(file))
-                        .order(imageOrder.getAndIncrement())
-                        .build())
-            .toList();
-
-    List<PropertyRequiredCheckModel> requiredCheckModelList =
-        userRequiredItemRepository.findAllByUserId(userId).stream()
-            .map(m -> PropertyRequiredCheckModel.builder().checklistId(m.getItemId()).build())
-            .toList();
-
-    return propertyRepository.save(PropertyModel.from(images, request, requiredCheckModelList));
-  }
-
-  @Transactional
-  public void deleteProperty(Long userId, Long propertyId) {
-    List<PropertyImageModel> images = propertyImageRepository.findAllByPropertyId(propertyId);
-    images.forEach(i -> s3Manager.delete(i.imageUrl()));
-    propertyRepository.delete(userId, propertyId);
   }
 
   @Transactional

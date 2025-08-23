@@ -1,6 +1,7 @@
 package com.example.dnd_13th_9_be.property.persistence;
 
 import com.example.dnd_13th_9_be.property.application.dto.PropertyDto;
+import com.example.dnd_13th_9_be.property.persistence.dto.PropertyResult;
 import java.util.List;
 import jakarta.persistence.EntityManager;
 
@@ -69,7 +70,27 @@ public class PropertyRepositoryImpl implements PropertyRepository {
   }
 
   @Override
-  public void save(PropertyDto dto) {
+  public PropertyResult save(PropertyDto dto) {
     Folder folder = em.getReference(Folder.class, dto.folderId());
+    Property property = Property.builder()
+        .folder(folder)
+        .title(dto.title())
+        .feeling(dto.feeling())
+        .memo(dto.memo())
+        .referenceUrl(dto.referenceUrl())
+        .address(dto.address())
+        .detailAddress(dto.detailAddress())
+        .latitude(dto.latitude())
+        .longitude(dto.longitude())
+        .contractType(dto.contractType())
+        .houseType(dto.houseType())
+        .depositBig(dto.depositBig())
+        .depositSmall(dto.depositSmall())
+        .managementFee(dto.managementFee())
+        .moveInInfo(dto.moveInInfo())
+        .requiredCheckMemo(dto.requiredCheckMemo())
+        .build();
+    Property savedProperty = jpaPropertyRepository.save(property);
+    return PropertyResult.from(savedProperty);
   }
 }

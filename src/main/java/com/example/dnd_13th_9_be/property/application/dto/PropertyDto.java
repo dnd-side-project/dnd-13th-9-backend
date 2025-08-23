@@ -44,15 +44,7 @@ public record PropertyDto(
             .depositSmall(request.depositSmall())
             .managementFee(request.managementFee())
             .moveInInfo(request.moveInInfo())
-            .requiredCheckMemo(
-                Optional.ofNullable(request.categoryMemoList())
-                    .flatMap(list -> list.stream()
-                        .filter(v -> v.categoryId() == 0L)
-                        .map(PropertyCategoryMemoRequest::memo)
-                        .findFirst()
-                    )
-                    .orElse(null)
-            )
+            .requiredCheckMemo(request.getRequiredCheckMemo())
             .build();
     }
 }

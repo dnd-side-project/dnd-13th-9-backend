@@ -33,12 +33,18 @@ public class PropertyRequiredCheck extends BaseEntity {
   private Long checklistItemId;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "checklist_id", nullable = false)
+  @JoinColumn(name = "property_id", nullable = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Property property;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "item_id", nullable = false)
   @OnDelete(action = OnDeleteAction.CASCADE)
   private ChecklistItem checklistItem;
 
   @Builder
-  public PropertyRequiredCheck(ChecklistItem checklistItem) {
+  public PropertyRequiredCheck(Property property, ChecklistItem checklistItem) {
+    this.property = property;
     this.checklistItem = checklistItem;
   }
 }
