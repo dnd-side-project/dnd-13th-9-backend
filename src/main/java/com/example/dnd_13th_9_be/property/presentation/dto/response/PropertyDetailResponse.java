@@ -1,8 +1,5 @@
 package com.example.dnd_13th_9_be.property.presentation.dto.response;
 
-import com.example.dnd_13th_9_be.property.persistence.dto.PropertyCategoryMemoResult;
-import com.example.dnd_13th_9_be.property.persistence.dto.PropertyImageResult;
-import com.example.dnd_13th_9_be.property.persistence.dto.PropertyResult;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -11,6 +8,9 @@ import lombok.Builder;
 
 import com.example.dnd_13th_9_be.checklist.presentation.dto.ChecklistResponse;
 import com.example.dnd_13th_9_be.checklist.presentation.dto.Section;
+import com.example.dnd_13th_9_be.property.persistence.dto.PropertyCategoryMemoResult;
+import com.example.dnd_13th_9_be.property.persistence.dto.PropertyImageResult;
+import com.example.dnd_13th_9_be.property.persistence.dto.PropertyResult;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.ContractType;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.FeelingType;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.HouseType;
@@ -43,10 +43,9 @@ public record PropertyDetailResponse(
       PropertyResult property,
       List<PropertyCategoryMemoResult> categoryMemoList,
       List<PropertyImageResult> imageList,
-      ChecklistResponse checklist
-  ) {
-        Map<Long, String> memoMap =
-            categoryMemoList.stream()
+      ChecklistResponse checklist) {
+    Map<Long, String> memoMap =
+        categoryMemoList.stream()
             .collect(
                 Collectors.toMap(
                     PropertyCategoryMemoResult::categoryId, PropertyCategoryMemoResult::memo));

@@ -10,7 +10,6 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 
 import com.example.dnd_13th_9_be.common.validator.EnumValid;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.ContractType;

@@ -1,6 +1,5 @@
 package com.example.dnd_13th_9_be.property.persistence.entity;
 
-import com.example.dnd_13th_9_be.property.application.dto.PropertyDto;
 import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,6 +20,7 @@ import lombok.NoArgsConstructor;
 
 import com.example.dnd_13th_9_be.common.persistence.BaseEntity;
 import com.example.dnd_13th_9_be.folder.persistence.entity.Folder;
+import com.example.dnd_13th_9_be.property.application.dto.PropertyDto;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.ContractType;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.FeelingType;
 import com.example.dnd_13th_9_be.property.persistence.entity.type.HouseType;
@@ -122,8 +122,7 @@ public class Property extends BaseEntity {
       Integer managementFee,
       String moveInInfo,
       String requiredCheckMemo,
-      List<PropertyImage> images
-      ) {
+      List<PropertyImage> images) {
     this.folder = folder;
     this.title = title;
     this.feeling = feeling;

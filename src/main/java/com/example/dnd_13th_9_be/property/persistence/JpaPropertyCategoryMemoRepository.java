@@ -1,6 +1,5 @@
 package com.example.dnd_13th_9_be.property.persistence;
 
-import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.dnd_13th_9_be.property.persistence.entity.PropertyCategoryMemo;
@@ -8,5 +7,5 @@ import com.example.dnd_13th_9_be.property.persistence.entity.PropertyCategoryMem
 public interface JpaPropertyCategoryMemoRepository
     extends JpaRepository<PropertyCategoryMemo, Long> {
 
-    void deleteAllByPropertyId(Long propertyId);
+  void deleteAllByPropertyId(Long propertyId);
 }

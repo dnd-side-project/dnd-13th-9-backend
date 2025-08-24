@@ -1,9 +1,5 @@
 package com.example.dnd_13th_9_be.property.persistence;
 
-import static com.example.dnd_13th_9_be.global.error.ErrorCode.NOT_FOUND_PROPERTY_IMAGE;
-
-import com.example.dnd_13th_9_be.global.error.BusinessException;
-import com.example.dnd_13th_9_be.property.persistence.dto.PropertyImageResult;
 import java.util.List;
 import jakarta.persistence.EntityManager;
 
@@ -12,10 +8,14 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.example.dnd_13th_9_be.global.error.BusinessException;
 import com.example.dnd_13th_9_be.property.application.dto.PropertyImageDto;
 import com.example.dnd_13th_9_be.property.application.repository.PropertyImageRepository;
+import com.example.dnd_13th_9_be.property.persistence.dto.PropertyImageResult;
 import com.example.dnd_13th_9_be.property.persistence.entity.Property;
 import com.example.dnd_13th_9_be.property.persistence.entity.PropertyImage;
+
+import static com.example.dnd_13th_9_be.global.error.ErrorCode.NOT_FOUND_PROPERTY_IMAGE;
 
 @Component
 @Slf4j
@@ -38,13 +38,15 @@ public class PropertyImageRepositoryImpl implements PropertyImageRepository {
 
   @Override
   public void verifyByIdAndPropertyId(Long imageId, Long propertyId) {
-    jpaPropertyImageRepository.findByIdAndPropertyId(imageId, propertyId)
+    jpaPropertyImageRepository
+        .findByIdAndPropertyId(imageId, propertyId)
         .orElseThrow(() -> new BusinessException(NOT_FOUND_PROPERTY_IMAGE));
   }
 
   @Override
   public List<PropertyImageResult> findAllByPropertyId(Long propertyId) {
-    List<PropertyImage> images = jpaPropertyImageRepository.findAllByPropertyIdOrderByImageOrderAsc(propertyId);
+    List<PropertyImage> images =
+        jpaPropertyImageRepository.findAllByPropertyIdOrderByImageOrderAsc(propertyId);
     return images.stream().map(PropertyImageResult::from).toList();
   }
 

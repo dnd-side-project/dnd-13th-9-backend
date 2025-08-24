@@ -1,7 +1,8 @@
 package com.example.dnd_13th_9_be.property.presentation.dto.response;
 
-import com.example.dnd_13th_9_be.property.persistence.dto.PropertyImageResult;
 import lombok.Builder;
+
+import com.example.dnd_13th_9_be.property.persistence.dto.PropertyImageResult;
 
 @Builder
 public record PropertyImageResponse(Long imageId, String url, Integer order) {

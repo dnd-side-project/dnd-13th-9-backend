@@ -1,21 +1,21 @@
 package com.example.dnd_13th_9_be.property.persistence;
 
-import com.example.dnd_13th_9_be.checklist.persistence.entity.QChecklistItem;
-import com.example.dnd_13th_9_be.property.persistence.entity.QPropertyRequiredCheck;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
-
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import jakarta.persistence.EntityManager;
+
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.checklist.persistence.entity.ChecklistItem;
+import com.example.dnd_13th_9_be.checklist.persistence.entity.QChecklistItem;
 import com.example.dnd_13th_9_be.property.application.repository.PropertyRequiredCheckRepository;
 import com.example.dnd_13th_9_be.property.persistence.entity.Property;
 import com.example.dnd_13th_9_be.property.persistence.entity.PropertyRequiredCheck;
+import com.example.dnd_13th_9_be.property.persistence.entity.QPropertyRequiredCheck;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Component
 @RequiredArgsConstructor
@@ -37,14 +37,13 @@ public class PropertyRequiredCheckRepositoryImpl implements PropertyRequiredChec
   public Set<Long> findAllIdsByPropertyId(Long propertyId) {
     QPropertyRequiredCheck requiredCheck = QPropertyRequiredCheck.propertyRequiredCheck;
     QChecklistItem checklistItem = QChecklistItem.checklistItem;
-    List<Long> idList = query
-        .select(checklistItem.id)
-        .from(requiredCheck)
-        .join(requiredCheck.checklistItem, checklistItem)
-        .where(requiredCheck.property.id.eq(propertyId))
-        .fetch();
+    List<Long> idList =
+        query
+            .select(checklistItem.id)
+            .from(requiredCheck)
+            .join(requiredCheck.checklistItem, checklistItem)
+            .where(requiredCheck.property.id.eq(propertyId))
+            .fetch();
     return new LinkedHashSet<>(idList);
   }
-
-
 }

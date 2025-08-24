@@ -1,6 +1,5 @@
 package com.example.dnd_13th_9_be.property.persistence.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

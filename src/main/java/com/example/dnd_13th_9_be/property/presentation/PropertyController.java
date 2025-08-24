@@ -1,7 +1,5 @@
 package com.example.dnd_13th_9_be.property.presentation;
 
-import ch.qos.logback.core.model.PropertyModel;
-import com.example.dnd_13th_9_be.property.presentation.dto.request.UpdatePropertyGroup;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
 import com.example.dnd_13th_9_be.property.application.PropertyService;
-import com.example.dnd_13th_9_be.property.presentation.dto.request.CreatePropertyGroup;
 import com.example.dnd_13th_9_be.property.presentation.dto.request.UpsertPropertyRequest;
 import com.example.dnd_13th_9_be.property.presentation.dto.response.PropertyDetailResponse;
 import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
@@ -41,8 +38,7 @@ public class PropertyController {
   public ResponseEntity<ApiResponse<Map<String, Object>>> create(
       @AuthenticationPrincipal UserPrincipalDto userDetails,
       @RequestPart(value = "image", required = false) List<MultipartFile> files,
-      @RequestPart(value = "data")
-          UpsertPropertyRequest request) {
+      @RequestPart(value = "data") UpsertPropertyRequest request) {
     propertyService.createPropertyRecord(userDetails.getUserId(), files, request);
     return ApiResponse.okEntity();
   }
@@ -63,14 +59,13 @@ public class PropertyController {
   }
 
   @PatchMapping("/{propertyId}")
-  public ResponseEntity<ApiResponse<PropertyModel>> update(
+  public ResponseEntity<ApiResponse<Map<String, Object>>> update(
       @AuthenticationPrincipal UserPrincipalDto userDetails,
       @PathVariable("propertyId") Long propertyId,
       @RequestPart(value = "image", required = false) List<MultipartFile> files,
-      @Validated @RequestPart(value = "data")
-          UpsertPropertyRequest request) {
+      @Validated @RequestPart(value = "data") UpsertPropertyRequest request) {
     propertyService.updateProperty(userDetails.getUserId(), propertyId, files, request);
 
-    return ApiResponse.successEntity(null);
+    return ApiResponse.okEntity();
   }
 }

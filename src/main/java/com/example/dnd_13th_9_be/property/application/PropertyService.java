@@ -1,13 +1,7 @@
 package com.example.dnd_13th_9_be.property.application;
 
-import com.example.dnd_13th_9_be.checklist.application.model.ChecklistCategoryModel;
-import com.example.dnd_13th_9_be.checklist.presentation.dto.ChecklistResponse;
-import com.example.dnd_13th_9_be.property.persistence.dto.PropertyCategoryMemoResult;
-import com.example.dnd_13th_9_be.property.persistence.dto.PropertyImageResult;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -18,9 +12,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 
+import com.example.dnd_13th_9_be.checklist.application.model.ChecklistCategoryModel;
 import com.example.dnd_13th_9_be.checklist.application.model.UserRequiredItemModel;
 import com.example.dnd_13th_9_be.checklist.application.repository.ChecklistCategoryRepository;
 import com.example.dnd_13th_9_be.checklist.application.repository.UserRequiredItemRepository;
+import com.example.dnd_13th_9_be.checklist.presentation.dto.ChecklistResponse;
 import com.example.dnd_13th_9_be.common.utils.S3Manager;
 import com.example.dnd_13th_9_be.folder.application.repository.FolderRepository;
 import com.example.dnd_13th_9_be.global.error.BusinessException;
@@ -32,6 +28,8 @@ import com.example.dnd_13th_9_be.property.application.repository.PropertyCategor
 import com.example.dnd_13th_9_be.property.application.repository.PropertyImageRepository;
 import com.example.dnd_13th_9_be.property.application.repository.PropertyRepository;
 import com.example.dnd_13th_9_be.property.application.repository.PropertyRequiredCheckRepository;
+import com.example.dnd_13th_9_be.property.persistence.dto.PropertyCategoryMemoResult;
+import com.example.dnd_13th_9_be.property.persistence.dto.PropertyImageResult;
 import com.example.dnd_13th_9_be.property.persistence.dto.PropertyResult;
 import com.example.dnd_13th_9_be.property.presentation.dto.request.PropertyCategoryMemoRequest;
 import com.example.dnd_13th_9_be.property.presentation.dto.request.UpsertPropertyRequest;
@@ -115,7 +113,8 @@ public class PropertyService {
     PropertyResult property = propertyRepository.findById(propertyId);
 
     // 카테고리 메모 조회
-    List<PropertyCategoryMemoResult> memoList = propertyCategoryMemoRepository.findAllByPropertyId(propertyId);
+    List<PropertyCategoryMemoResult> memoList =
+        propertyCategoryMemoRepository.findAllByPropertyId(propertyId);
 
     // 매물 이미지 조회
     List<PropertyImageResult> imageList = propertyImageRepository.findAllByPropertyId(propertyId);
@@ -139,13 +138,17 @@ public class PropertyService {
 
     // 카테고리 메모 업데이트
     propertyCategoryMemoRepository.deleteAllByPropertyId(propertyId);
-    request.getCategoryMemo().forEach(memo -> {
-      checklistCategoryRepository.verifyById(memo.categoryId());
-      propertyCategoryMemoRepository.update(PropertyCategoryMemoDto.from(propertyId, memo));
-    });
+    request
+        .getCategoryMemo()
+        .forEach(
+            memo -> {
+              checklistCategoryRepository.verifyById(memo.categoryId());
+              propertyCategoryMemoRepository.update(PropertyCategoryMemoDto.from(propertyId, memo));
+            });
 
     // 기존 이미지 조회
-    List<Long> deletedImageIdList = Optional.ofNullable(request.deletedImageIdList()).orElseGet(Collections::emptyList);
+    List<Long> deletedImageIdList =
+        Optional.ofNullable(request.deletedImageIdList()).orElseGet(Collections::emptyList);
     List<PropertyImageResult> imageList = propertyImageRepository.findAllByPropertyId(propertyId);
 
     // 이미지 저장 갯수 초과 확인
@@ -154,22 +157,25 @@ public class PropertyService {
     }
 
     // 삭제된 이미지 id 확인 후 기존 이미지에서 제거
-    deletedImageIdList.forEach(imageId -> {
-      propertyImageRepository.verifyByIdAndPropertyId(imageId, propertyId);
-      propertyImageRepository.delete(imageId, propertyId);
-    });
+    deletedImageIdList.forEach(
+        imageId -> {
+          propertyImageRepository.verifyByIdAndPropertyId(imageId, propertyId);
+          propertyImageRepository.delete(imageId, propertyId);
+        });
 
     imageList = propertyImageRepository.findAllByPropertyId(propertyId);
 
     // 기존 이미지 재정렬
     AtomicInteger imageOrder = new AtomicInteger(1);
-    imageList.forEach(image -> {
-      propertyImageRepository.updateOrder(image.imageId(), imageOrder.getAndIncrement());
-    });
+    imageList.forEach(
+        image -> {
+          propertyImageRepository.updateOrder(image.imageId(), imageOrder.getAndIncrement());
+        });
 
     // 새로 추가된 이미지 추가
     List<PropertyImageDto> images =
-        files.stream().map(
+        files.stream()
+            .map(
                 file ->
                     PropertyImageDto.builder()
                         .propertyId(propertyId)
@@ -178,6 +184,5 @@ public class PropertyService {
                         .build())
             .toList();
     images.forEach(propertyImageRepository::save);
-
   }
 }

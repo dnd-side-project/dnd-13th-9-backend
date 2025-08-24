@@ -16,8 +16,8 @@ public interface JpaPropertyRepository extends JpaRepository<Property, Long> {
   @Query("select p from Property p where p.id = :id")
   Optional<Property> findDetailById(@Param("id") Long id);
 
-
-  @Query("""
+  @Query(
+      """
     select p
     from Property p
     join fetch p.folder f

@@ -9,8 +9,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-
 import jakarta.persistence.UniqueConstraint;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,11 +25,10 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Table(
     name = "property_category_memo",
-    uniqueConstraints = @UniqueConstraint(
-        name = "uk_pcm_property_category",
-        columnNames = {"property_id", "category_id"}
-    )
-)
+    uniqueConstraints =
+        @UniqueConstraint(
+            name = "uk_pcm_property_category",
+            columnNames = {"property_id", "category_id"}))
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PropertyCategoryMemo extends BaseEntity {

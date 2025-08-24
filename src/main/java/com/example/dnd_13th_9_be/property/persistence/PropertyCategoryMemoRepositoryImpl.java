@@ -1,25 +1,24 @@
 package com.example.dnd_13th_9_be.property.persistence;
 
-import com.example.dnd_13th_9_be.checklist.persistence.entity.QChecklistCategory;
-import com.example.dnd_13th_9_be.property.persistence.dto.PropertyCategoryMemoResult;
-import com.example.dnd_13th_9_be.property.persistence.entity.QProperty;
-import com.example.dnd_13th_9_be.property.persistence.entity.QPropertyCategoryMemo;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import jakarta.persistence.EntityManager;
+
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.checklist.persistence.entity.ChecklistCategory;
+import com.example.dnd_13th_9_be.checklist.persistence.entity.QChecklistCategory;
 import com.example.dnd_13th_9_be.property.application.dto.PropertyCategoryMemoDto;
 import com.example.dnd_13th_9_be.property.application.repository.PropertyCategoryMemoRepository;
+import com.example.dnd_13th_9_be.property.persistence.dto.PropertyCategoryMemoResult;
 import com.example.dnd_13th_9_be.property.persistence.entity.Property;
 import com.example.dnd_13th_9_be.property.persistence.entity.PropertyCategoryMemo;
-import org.springframework.transaction.annotation.Transactional;
+import com.example.dnd_13th_9_be.property.persistence.entity.QPropertyCategoryMemo;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Component
 @RequiredArgsConstructor
@@ -46,11 +45,13 @@ public class PropertyCategoryMemoRepositoryImpl implements PropertyCategoryMemoR
     var categoryMemo = QPropertyCategoryMemo.propertyCategoryMemo;
     var category = QChecklistCategory.checklistCategory;
 
-    List<PropertyCategoryMemo> propertyCategoryMemo = query
-        .selectFrom(categoryMemo)
-        .join(categoryMemo.category, category).fetchJoin()
-        .where(categoryMemo.property.id.eq(propertyId))
-        .fetch();
+    List<PropertyCategoryMemo> propertyCategoryMemo =
+        query
+            .selectFrom(categoryMemo)
+            .join(categoryMemo.category, category)
+            .fetchJoin()
+            .where(categoryMemo.property.id.eq(propertyId))
+            .fetch();
 
     return propertyCategoryMemo.stream().map(PropertyCategoryMemoResult::from).toList();
   }
@@ -60,22 +61,27 @@ public class PropertyCategoryMemoRepositoryImpl implements PropertyCategoryMemoR
     var categoryMemo = QPropertyCategoryMemo.propertyCategoryMemo;
 
     return new HashSet<>(
-        query.select(categoryMemo.id)
+        query
+            .select(categoryMemo.id)
             .from(categoryMemo)
             .where(categoryMemo.property.id.eq(propertyId))
-            .fetch()
-    );
+            .fetch());
   }
 
   @Override
   public void update(PropertyCategoryMemoDto dto) {
     var categoryMemo = QPropertyCategoryMemo.propertyCategoryMemo;
 
-    PropertyCategoryMemo memo = query
-        .selectFrom(categoryMemo)
-        .where(categoryMemo.category.id.eq(dto.categoryId())
-            .and(categoryMemo.property.id.eq(dto.propertyId())))
-        .fetchOne();
+    PropertyCategoryMemo memo =
+        query
+            .selectFrom(categoryMemo)
+            .where(
+                categoryMemo
+                    .category
+                    .id
+                    .eq(dto.categoryId())
+                    .and(categoryMemo.property.id.eq(dto.propertyId())))
+            .fetchOne();
 
     if (memo == null) {
       save(dto);
@@ -92,6 +98,4 @@ public class PropertyCategoryMemoRepositoryImpl implements PropertyCategoryMemoR
   public void deleteAllByPropertyId(Long propertyId) {
     jpaPropertyCategoryMemoRepository.deleteAllByPropertyId(propertyId);
   }
-
-
 }

@@ -1,6 +1,5 @@
 package com.example.dnd_13th_9_be.property.persistence;
 
-import java.util.List;
 import jakarta.persistence.EntityManager;
 
 import org.springframework.stereotype.Component;
@@ -29,7 +28,10 @@ public class PropertyRepositoryImpl implements PropertyRepository {
 
   @Override
   public PropertyResult findById(Long propertyId) {
-    Property property = jpaPropertyRepository.findByIdWithFolder(propertyId).orElseThrow(() -> new BusinessException(NOT_FOUND_PROPERTY));
+    Property property =
+        jpaPropertyRepository
+            .findByIdWithFolder(propertyId)
+            .orElseThrow(() -> new BusinessException(NOT_FOUND_PROPERTY));
     return PropertyResult.from(property);
   }
 
@@ -61,8 +63,10 @@ public class PropertyRepositoryImpl implements PropertyRepository {
 
   @Override
   public void update(Long propertyId, PropertyDto dto) {
-    Property property = jpaPropertyRepository.findById(propertyId)
-        .orElseThrow(() -> new BusinessException(NOT_FOUND_PROPERTY));
+    Property property =
+        jpaPropertyRepository
+            .findById(propertyId)
+            .orElseThrow(() -> new BusinessException(NOT_FOUND_PROPERTY));
     property.update(dto);
     jpaPropertyRepository.save(property);
   }
