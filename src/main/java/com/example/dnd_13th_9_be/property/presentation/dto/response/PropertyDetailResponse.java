@@ -48,7 +48,9 @@ public record PropertyDetailResponse(
         categoryMemoList.stream()
             .collect(
                 Collectors.toMap(
-                    PropertyCategoryMemoResult::categoryId, PropertyCategoryMemoResult::memo));
+                    PropertyCategoryMemoResult::categoryId,
+                    r -> r.memo() == null ? "" : r.memo(),
+                    (prev, next) -> next));
     memoMap.put(0L, property.requiredCheckMemo());
 
     List<Section> updatedSections =

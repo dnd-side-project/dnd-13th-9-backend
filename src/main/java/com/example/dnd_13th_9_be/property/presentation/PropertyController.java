@@ -34,11 +34,10 @@ public class PropertyController {
   private final PropertyService propertyService;
 
   @PostMapping
-  @ResponseStatus(HttpStatus.CREATED)
   public ResponseEntity<ApiResponse<Map<String, Object>>> create(
       @AuthenticationPrincipal UserPrincipalDto userDetails,
       @RequestPart(value = "image", required = false) List<MultipartFile> files,
-      @RequestPart(value = "data") UpsertPropertyRequest request) {
+      @Validated @RequestPart(value = "data") UpsertPropertyRequest request) {
     propertyService.createPropertyRecord(userDetails.getUserId(), files, request);
     return ApiResponse.okEntity();
   }
@@ -55,7 +54,8 @@ public class PropertyController {
   public ResponseEntity<ApiResponse<PropertyDetailResponse>> getProperty(
       @AuthenticationPrincipal UserPrincipalDto userDetails,
       @PathVariable("propertyId") Long propertyId) {
-    PropertyDetailResponse response = propertyService.getProperty(userDetails.getUserId(), propertyId);
+    PropertyDetailResponse response =
+        propertyService.getProperty(userDetails.getUserId(), propertyId);
     return ApiResponse.successEntity(response);
   }
 

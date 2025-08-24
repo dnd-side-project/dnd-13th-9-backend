@@ -27,14 +27,21 @@ public class PropertyRequiredCheckRepositoryImpl implements PropertyRequiredChec
   @Override
   public void save(Long itemId, Long propertyId) {
     var requiredCheck = QPropertyRequiredCheck.propertyRequiredCheck;
-    Long id = query.select(requiredCheck.id)
-        .from(requiredCheck)
-        .where(requiredCheck.checklistItem.id.eq(itemId).and(requiredCheck.property.id.eq(propertyId)))
-        .fetchOne();
+    Long id =
+        query
+            .select(requiredCheck.id)
+            .from(requiredCheck)
+            .where(
+                requiredCheck
+                    .checklistItem
+                    .id
+                    .eq(itemId)
+                    .and(requiredCheck.property.id.eq(propertyId)))
+            .fetchOne();
 
     if (id == null) {
-    ChecklistItem checklistItem = em.getReference(ChecklistItem.class, itemId);
-    Property property = em.getReference(Property.class, propertyId);
+      ChecklistItem checklistItem = em.getReference(ChecklistItem.class, itemId);
+      Property property = em.getReference(Property.class, propertyId);
 
       PropertyRequiredCheck propertyRequiredCheck =
           PropertyRequiredCheck.builder().checklistItem(checklistItem).property(property).build();

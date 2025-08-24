@@ -2,6 +2,7 @@ package com.example.dnd_13th_9_be.property.presentation.dto.request;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
@@ -68,17 +69,22 @@ public record UpsertPropertyRequest(
     return managementFee == null;
   }
 
+  @JsonIgnore
   public List<PropertyCategoryMemoRequest> getCategoryMemo() {
     if (this.categoryMemoList == null) return new ArrayList<>();
-    return this.categoryMemoList.stream().filter(m -> m.categoryId() != 0L).toList();
+    return this.categoryMemoList.stream()
+        .filter(Objects::nonNull)
+        .filter(m -> m.categoryId() != 0L)
+        .toList();
   }
 
+  @JsonIgnore
   public String getRequiredCheckMemo() {
     return Optional.ofNullable(this.categoryMemoList())
         .flatMap(
             list ->
                 list.stream()
-                    .filter(v -> v.categoryId() == 0L)
+                    .filter(v -> Objects.equals(v.categoryId(), 0L))
                     .map(PropertyCategoryMemoRequest::memo)
                     .findFirst())
         .orElse(null);

@@ -8,5 +8,6 @@ public interface JpaPropertyCategoryMemoRepository
     extends JpaRepository<PropertyCategoryMemo, Long> {
 
   void deleteAllByPropertyId(Long propertyId);
+
   void deleteByCategoryIdAndPropertyId(Long categoryId, Long propertyId);
 }

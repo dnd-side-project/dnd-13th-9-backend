@@ -13,5 +13,6 @@ public interface PropertyCategoryMemoRepository {
   void update(PropertyCategoryMemoDto dto);
 
   void deleteAllByPropertyId(Long propertyId);
+
   void deleteByCategoryIdAndPropertyId(Long categoryId, Long propertyId);
 }

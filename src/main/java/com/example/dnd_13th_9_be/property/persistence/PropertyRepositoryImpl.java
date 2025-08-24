@@ -1,7 +1,5 @@
 package com.example.dnd_13th_9_be.property.persistence;
 
-import com.example.dnd_13th_9_be.property.persistence.entity.QProperty;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 
 import org.springframework.stereotype.Component;
@@ -14,6 +12,8 @@ import com.example.dnd_13th_9_be.property.application.dto.PropertyDto;
 import com.example.dnd_13th_9_be.property.application.repository.PropertyRepository;
 import com.example.dnd_13th_9_be.property.persistence.dto.PropertyResult;
 import com.example.dnd_13th_9_be.property.persistence.entity.Property;
+import com.example.dnd_13th_9_be.property.persistence.entity.QProperty;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import static com.example.dnd_13th_9_be.global.error.ErrorCode.NOT_FOUND_PROPERTY;
 
@@ -27,13 +27,12 @@ public class PropertyRepositoryImpl implements PropertyRepository {
   @Override
   public void verifyExistsById(Long userId, Long propertyId) {
     var property = QProperty.property;
-    Long result = query.select(property.id)
-        .from(property)
-        .where(
-            property.id.eq(propertyId)
-            .and(property.folder.user.id.eq(userId))
-        )
-        .fetchFirst();
+    Long result =
+        query
+            .select(property.id)
+            .from(property)
+            .where(property.id.eq(propertyId).and(property.folder.user.id.eq(userId)))
+            .fetchFirst();
     if (result == null) {
       throw new BusinessException(NOT_FOUND_PROPERTY);
     }
@@ -43,10 +42,11 @@ public class PropertyRepositoryImpl implements PropertyRepository {
   public void delete(Long userId, Long propertyId) {
     var property = QProperty.property;
 
-    long affected = query.delete(property)
-            .where(property.id.eq(propertyId)
-                .and(property.folder.user.id.eq(userId)))
-                .execute();
+    long affected =
+        query
+            .delete(property)
+            .where(property.id.eq(propertyId).and(property.folder.user.id.eq(userId)))
+            .execute();
     if (affected == 0) {
       throw new BusinessException(NOT_FOUND_PROPERTY);
     }
@@ -91,10 +91,10 @@ public class PropertyRepositoryImpl implements PropertyRepository {
   public void update(Long userId, Long propertyId, PropertyDto dto) {
     var property = QProperty.property;
     Property savedProperty =
-        query.selectFrom(property)
-                .where(property.id.eq(propertyId)
-                    .and(property.folder.user.id.eq(userId)))
-                    .fetchFirst();
+        query
+            .selectFrom(property)
+            .where(property.id.eq(propertyId).and(property.folder.user.id.eq(userId)))
+            .fetchFirst();
     if (savedProperty == null) {
       throw new BusinessException(NOT_FOUND_PROPERTY);
     }

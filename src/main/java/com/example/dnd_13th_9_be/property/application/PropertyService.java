@@ -1,15 +1,14 @@
 package com.example.dnd_13th_9_be.property.application;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -77,7 +76,8 @@ public class PropertyService {
     PropertyResult savedProperty = propertyRepository.save(propertyDto);
 
     // category memo 저장
-    List<PropertyCategoryMemoRequest> memoList = Optional.ofNullable(request.getCategoryMemo()).orElseGet(Collections::emptyList);
+    List<PropertyCategoryMemoRequest> memoList =
+        Optional.ofNullable(request.getCategoryMemo()).orElseGet(Collections::emptyList);
     memoList.forEach(
         memo -> {
           checklistCategoryRepository.verifyById(memo.categoryId());
@@ -191,36 +191,46 @@ public class PropertyService {
     images.forEach(propertyImageRepository::save);
   }
 
-  private void mergeCategoryMemoList(Long propertyId, List<PropertyCategoryMemoRequest> newMemoList) {
+  private void mergeCategoryMemoList(
+      Long propertyId, List<PropertyCategoryMemoRequest> newMemoList) {
     // 기존 메모
     List<PropertyCategoryMemoResult> existingMemoList =
         propertyCategoryMemoRepository.findAllByPropertyId(propertyId);
-    Map<Long, PropertyCategoryMemoResult> existingMemoMap = existingMemoList.stream()
-        .collect(Collectors.toMap(PropertyCategoryMemoResult::categoryId, Function.identity()));
+    Map<Long, PropertyCategoryMemoResult> existingMemoMap =
+        existingMemoList.stream()
+            .collect(Collectors.toMap(PropertyCategoryMemoResult::categoryId, Function.identity()));
 
     // 새로운 메모
-    Map<Long, PropertyCategoryMemoRequest> newMemoMap = newMemoList.stream()
-        .collect(Collectors.toMap(PropertyCategoryMemoRequest::categoryId, Function.identity()));
+    Map<Long, PropertyCategoryMemoRequest> newMemoMap =
+        newMemoList.stream()
+            .collect(
+                Collectors.toMap(PropertyCategoryMemoRequest::categoryId, Function.identity()));
 
     // 업데이트 & 새로운 메모 저장
-    newMemoMap.forEach((categoryId, newMemo) -> {
-      checklistCategoryRepository.verifyById(categoryId);
-      if (existingMemoMap.containsKey(categoryId)) {
-        // 메모 내용이 다른 경우에만 업데이트
-        PropertyCategoryMemoResult existing = existingMemoMap.get(categoryId);
-        if (!existing.memo().equals(newMemo.memo())) {
-          propertyCategoryMemoRepository.update(PropertyCategoryMemoDto.from(propertyId, newMemo));
-        }
-      } else {
-        propertyCategoryMemoRepository.save(PropertyCategoryMemoDto.from(propertyId, newMemo));
-      }
-    });
+    newMemoMap.forEach(
+        (categoryId, newMemo) -> {
+          checklistCategoryRepository.verifyById(categoryId);
+          if (existingMemoMap.containsKey(categoryId)) {
+            // 메모 내용이 다른 경우에만 업데이트
+            PropertyCategoryMemoResult existing = existingMemoMap.get(categoryId);
+            if (!existing.memo().equals(newMemo.memo())) {
+              propertyCategoryMemoRepository.update(
+                  PropertyCategoryMemoDto.from(propertyId, newMemo));
+            }
+          } else {
+            propertyCategoryMemoRepository.save(PropertyCategoryMemoDto.from(propertyId, newMemo));
+          }
+        });
 
     // 삭제된 메모
-    existingMemoMap.keySet().forEach(categoryId -> {
-      if (!newMemoMap.containsKey(categoryId)) {
-        propertyCategoryMemoRepository.deleteByCategoryIdAndPropertyId(categoryId, propertyId);
-      }
-    });
+    existingMemoMap
+        .keySet()
+        .forEach(
+            categoryId -> {
+              if (!newMemoMap.containsKey(categoryId)) {
+                propertyCategoryMemoRepository.deleteByCategoryIdAndPropertyId(
+                    categoryId, propertyId);
+              }
+            });
   }
 }

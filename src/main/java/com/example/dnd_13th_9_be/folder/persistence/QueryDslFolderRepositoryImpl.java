@@ -1,8 +1,8 @@
 package com.example.dnd_13th_9_be.folder.persistence;
 
 import java.util.List;
-
 import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.folder.persistence.dto.FolderSummary;
@@ -79,21 +79,23 @@ public class QueryDslFolderRepositoryImpl implements QueryDslFolderRepository {
   public Long countFolderRecord(Long folderId) {
     var property = QProperty.property;
     var location = QLocationRecordEntity.locationRecordEntity;
-    long propertyCnt = Optional.ofNullable(
-        query
-            .select(property.id.count())
-            .from(property)
-            .where(property.folder.id.eq(folderId))
-            .fetchOne()
-    ).orElse(0L);
+    long propertyCnt =
+        Optional.ofNullable(
+                query
+                    .select(property.id.count())
+                    .from(property)
+                    .where(property.folder.id.eq(folderId))
+                    .fetchOne())
+            .orElse(0L);
 
-    long locationCnt = Optional.ofNullable(
-        query
-            .select(location.id.count())
-            .from(location)
-            .where(location.folder.id.eq(folderId))
-            .fetchOne()
-    ).orElse(0L);
+    long locationCnt =
+        Optional.ofNullable(
+                query
+                    .select(location.id.count())
+                    .from(location)
+                    .where(location.folder.id.eq(folderId))
+                    .fetchOne())
+            .orElse(0L);
 
     return propertyCnt + locationCnt;
   }

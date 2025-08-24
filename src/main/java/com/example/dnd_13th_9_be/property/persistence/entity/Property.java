@@ -64,7 +64,7 @@ public class Property extends BaseEntity {
   private String address;
 
   @Comment("상세 주소")
-  @Column(nullable = false, length = 50)
+  @Column(length = 50)
   private String detailAddress;
 
   @Comment("위도")
