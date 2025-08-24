@@ -24,9 +24,9 @@ import com.example.dnd_13th_9_be.common.utils.S3Manager;
 import com.example.dnd_13th_9_be.folder.application.repository.FolderRepository;
 import com.example.dnd_13th_9_be.global.error.BusinessException;
 import com.example.dnd_13th_9_be.global.error.S3ImageException;
-import com.example.dnd_13th_9_be.property.application.dto.PropertyCategoryMemoDto;
-import com.example.dnd_13th_9_be.property.application.dto.PropertyDto;
-import com.example.dnd_13th_9_be.property.application.dto.PropertyImageDto;
+import com.example.dnd_13th_9_be.property.application.model.PropertyCategoryMemoModel;
+import com.example.dnd_13th_9_be.property.application.model.PropertyImageModel;
+import com.example.dnd_13th_9_be.property.application.model.PropertyModel;
 import com.example.dnd_13th_9_be.property.application.repository.PropertyCategoryMemoRepository;
 import com.example.dnd_13th_9_be.property.application.repository.PropertyImageRepository;
 import com.example.dnd_13th_9_be.property.application.repository.PropertyRepository;
@@ -72,8 +72,8 @@ public class PropertyService {
     }
 
     // property entity 저장
-    PropertyDto propertyDto = PropertyDto.from(request);
-    PropertyResult savedProperty = propertyRepository.save(propertyDto);
+    PropertyModel propertyModel = PropertyModel.from(request);
+    PropertyResult savedProperty = propertyRepository.save(propertyModel);
 
     // category memo 저장
     List<PropertyCategoryMemoRequest> memoList =
@@ -82,7 +82,7 @@ public class PropertyService {
         memo -> {
           checklistCategoryRepository.verifyById(memo.categoryId());
           propertyCategoryMemoRepository.save(
-              PropertyCategoryMemoDto.from(savedProperty.propertyId(), memo));
+              PropertyCategoryMemoModel.from(savedProperty.propertyId(), memo));
         });
 
     // property_required_check 항목 저장
@@ -95,11 +95,11 @@ public class PropertyService {
 
     // property_image 항목 저장
     AtomicInteger imageOrder = new AtomicInteger(1);
-    List<PropertyImageDto> images =
+    List<PropertyImageModel> images =
         Optional.ofNullable(files).orElseGet(Collections::emptyList).stream()
             .map(
                 file ->
-                    PropertyImageDto.builder()
+                    PropertyImageModel.builder()
                         .propertyId(savedProperty.propertyId())
                         .imageUrl(s3Manager.upload(file))
                         .order(imageOrder.getAndIncrement())
@@ -144,8 +144,8 @@ public class PropertyService {
     propertyRepository.verifyExistsById(userId, propertyId);
 
     // 매물 메모 업데이트
-    PropertyDto propertyDto = PropertyDto.from(request);
-    propertyRepository.update(userId, propertyId, propertyDto);
+    PropertyModel propertyModel = PropertyModel.from(request);
+    propertyRepository.update(userId, propertyId, propertyModel);
 
     // 카테고리 메모 업데이트
     mergeCategoryMemoList(propertyId, request.getCategoryMemo());
@@ -178,11 +178,11 @@ public class PropertyService {
         });
 
     // 새로 추가된 이미지 추가
-    List<PropertyImageDto> images =
+    List<PropertyImageModel> images =
         Optional.ofNullable(files).orElseGet(Collections::emptyList).stream()
             .map(
                 file ->
-                    PropertyImageDto.builder()
+                    PropertyImageModel.builder()
                         .propertyId(propertyId)
                         .imageUrl(s3Manager.upload(file))
                         .order(imageOrder.getAndIncrement())
@@ -215,10 +215,11 @@ public class PropertyService {
             PropertyCategoryMemoResult existing = existingMemoMap.get(categoryId);
             if (!existing.memo().equals(newMemo.memo())) {
               propertyCategoryMemoRepository.update(
-                  PropertyCategoryMemoDto.from(propertyId, newMemo));
+                  PropertyCategoryMemoModel.from(propertyId, newMemo));
             }
           } else {
-            propertyCategoryMemoRepository.save(PropertyCategoryMemoDto.from(propertyId, newMemo));
+            propertyCategoryMemoRepository.save(
+                PropertyCategoryMemoModel.from(propertyId, newMemo));
           }
         });
 

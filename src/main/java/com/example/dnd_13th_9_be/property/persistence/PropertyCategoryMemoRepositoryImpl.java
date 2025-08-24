@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.checklist.persistence.entity.ChecklistCategory;
 import com.example.dnd_13th_9_be.checklist.persistence.entity.QChecklistCategory;
-import com.example.dnd_13th_9_be.property.application.dto.PropertyCategoryMemoDto;
+import com.example.dnd_13th_9_be.property.application.model.PropertyCategoryMemoModel;
 import com.example.dnd_13th_9_be.property.application.repository.PropertyCategoryMemoRepository;
 import com.example.dnd_13th_9_be.property.persistence.dto.PropertyCategoryMemoResult;
 import com.example.dnd_13th_9_be.property.persistence.entity.Property;
@@ -26,7 +26,7 @@ public class PropertyCategoryMemoRepositoryImpl implements PropertyCategoryMemoR
   private final JpaPropertyCategoryMemoRepository jpaPropertyCategoryMemoRepository;
 
   @Override
-  public void save(PropertyCategoryMemoDto dto) {
+  public void save(PropertyCategoryMemoModel dto) {
     ChecklistCategory category = em.getReference(ChecklistCategory.class, dto.categoryId());
     Property property = em.getReference(Property.class, dto.propertyId());
     PropertyCategoryMemo propertyCategoryMemo =
@@ -55,7 +55,7 @@ public class PropertyCategoryMemoRepositoryImpl implements PropertyCategoryMemoR
   }
 
   @Override
-  public void update(PropertyCategoryMemoDto dto) {
+  public void update(PropertyCategoryMemoModel dto) {
     var categoryMemo = QPropertyCategoryMemo.propertyCategoryMemo;
 
     PropertyCategoryMemo memo =

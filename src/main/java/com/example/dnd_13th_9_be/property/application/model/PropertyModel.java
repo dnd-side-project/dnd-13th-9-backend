@@ -1,4 +1,4 @@
-package com.example.dnd_13th_9_be.property.application.dto;
+package com.example.dnd_13th_9_be.property.application.model;
 
 import lombok.Builder;
 
@@ -8,7 +8,7 @@ import com.example.dnd_13th_9_be.property.persistence.entity.type.HouseType;
 import com.example.dnd_13th_9_be.property.presentation.dto.request.UpsertPropertyRequest;
 
 @Builder
-public record PropertyDto(
+public record PropertyModel(
     Long folderId,
     String title,
     FeelingType feeling,
@@ -25,8 +25,8 @@ public record PropertyDto(
     Integer managementFee,
     String moveInInfo,
     String requiredCheckMemo) {
-  public static PropertyDto from(UpsertPropertyRequest request) {
-    return PropertyDto.builder()
+  public static PropertyModel from(UpsertPropertyRequest request) {
+    return PropertyModel.builder()
         .folderId(request.folderId())
         .title(request.propertyName())
         .feeling(request.feeling())

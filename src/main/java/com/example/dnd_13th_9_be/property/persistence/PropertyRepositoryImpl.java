@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.folder.persistence.entity.Folder;
 import com.example.dnd_13th_9_be.global.error.BusinessException;
-import com.example.dnd_13th_9_be.property.application.dto.PropertyDto;
+import com.example.dnd_13th_9_be.property.application.model.PropertyModel;
 import com.example.dnd_13th_9_be.property.application.repository.PropertyRepository;
 import com.example.dnd_13th_9_be.property.persistence.dto.PropertyResult;
 import com.example.dnd_13th_9_be.property.persistence.entity.Property;
@@ -62,7 +62,7 @@ public class PropertyRepositoryImpl implements PropertyRepository {
   }
 
   @Override
-  public PropertyResult save(PropertyDto dto) {
+  public PropertyResult save(PropertyModel dto) {
     Folder folder = em.getReference(Folder.class, dto.folderId());
     Property property =
         Property.builder()
@@ -88,7 +88,7 @@ public class PropertyRepositoryImpl implements PropertyRepository {
   }
 
   @Override
-  public void update(Long userId, Long propertyId, PropertyDto dto) {
+  public void update(Long userId, Long propertyId, PropertyModel dto) {
     var property = QProperty.property;
     Property savedProperty =
         query

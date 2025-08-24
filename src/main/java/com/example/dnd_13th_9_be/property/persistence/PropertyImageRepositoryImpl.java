@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.example.dnd_13th_9_be.global.error.BusinessException;
-import com.example.dnd_13th_9_be.property.application.dto.PropertyImageDto;
+import com.example.dnd_13th_9_be.property.application.model.PropertyImageModel;
 import com.example.dnd_13th_9_be.property.application.repository.PropertyImageRepository;
 import com.example.dnd_13th_9_be.property.persistence.dto.PropertyImageResult;
 import com.example.dnd_13th_9_be.property.persistence.entity.Property;
@@ -25,7 +25,7 @@ public class PropertyImageRepositoryImpl implements PropertyImageRepository {
   private final JpaPropertyImageRepository jpaPropertyImageRepository;
 
   @Override
-  public void save(PropertyImageDto model) {
+  public void save(PropertyImageModel model) {
     Property property = em.getReference(Property.class, model.propertyId());
     PropertyImage image =
         PropertyImage.builder()
