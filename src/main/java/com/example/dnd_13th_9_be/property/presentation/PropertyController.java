@@ -1,5 +1,6 @@
 package com.example.dnd_13th_9_be.property.presentation;
 
+import com.example.dnd_13th_9_be.property.presentation.docs.PropertyDocs;
 import java.util.List;
 import java.util.Map;
 
@@ -28,9 +29,10 @@ import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/property")
-public class PropertyController {
+public class PropertyController implements PropertyDocs {
   private final PropertyService propertyService;
 
+  @Override
   @PostMapping
   public ResponseEntity<ApiResponse<Map<String, Object>>> create(
       @AuthenticationPrincipal UserPrincipalDto userDetails,
@@ -40,6 +42,7 @@ public class PropertyController {
     return ApiResponse.okEntity();
   }
 
+  @Override
   @DeleteMapping("/{propertyId}")
   public ResponseEntity<ApiResponse<Map<String, Object>>> delete(
       @AuthenticationPrincipal UserPrincipalDto userDetails,
@@ -48,6 +51,7 @@ public class PropertyController {
     return ApiResponse.okEntity();
   }
 
+  @Override
   @GetMapping("/{propertyId}")
   public ResponseEntity<ApiResponse<PropertyDetailResponse>> getProperty(
       @AuthenticationPrincipal UserPrincipalDto userDetails,
@@ -57,6 +61,7 @@ public class PropertyController {
     return ApiResponse.successEntity(response);
   }
 
+  @Override
   @PatchMapping("/{propertyId}")
   public ResponseEntity<ApiResponse<Map<String, Object>>> update(
       @AuthenticationPrincipal UserPrincipalDto userDetails,
