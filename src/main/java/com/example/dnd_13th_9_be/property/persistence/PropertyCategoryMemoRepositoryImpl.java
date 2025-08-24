@@ -2,11 +2,14 @@ package com.example.dnd_13th_9_be.property.persistence;
 
 import com.example.dnd_13th_9_be.checklist.persistence.entity.QChecklistCategory;
 import com.example.dnd_13th_9_be.property.persistence.dto.PropertyCategoryMemoResult;
+import com.example.dnd_13th_9_be.property.persistence.entity.QProperty;
 import com.example.dnd_13th_9_be.property.persistence.entity.QPropertyCategoryMemo;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -16,6 +19,7 @@ import com.example.dnd_13th_9_be.property.application.dto.PropertyCategoryMemoDt
 import com.example.dnd_13th_9_be.property.application.repository.PropertyCategoryMemoRepository;
 import com.example.dnd_13th_9_be.property.persistence.entity.Property;
 import com.example.dnd_13th_9_be.property.persistence.entity.PropertyCategoryMemo;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -38,7 +42,7 @@ public class PropertyCategoryMemoRepositoryImpl implements PropertyCategoryMemoR
   }
 
   @Override
-  public List<PropertyCategoryMemoResult> findAllById(Long propertyId) {
+  public List<PropertyCategoryMemoResult> findAllByPropertyId(Long propertyId) {
     var categoryMemo = QPropertyCategoryMemo.propertyCategoryMemo;
     var category = QChecklistCategory.checklistCategory;
 
@@ -49,6 +53,44 @@ public class PropertyCategoryMemoRepositoryImpl implements PropertyCategoryMemoR
         .fetch();
 
     return propertyCategoryMemo.stream().map(PropertyCategoryMemoResult::from).toList();
+  }
+
+  @Override
+  public Set<Long> findAllIdByPropertyId(Long propertyId) {
+    var categoryMemo = QPropertyCategoryMemo.propertyCategoryMemo;
+
+    return new HashSet<>(
+        query.select(categoryMemo.id)
+            .from(categoryMemo)
+            .where(categoryMemo.property.id.eq(propertyId))
+            .fetch()
+    );
+  }
+
+  @Override
+  public void update(PropertyCategoryMemoDto dto) {
+    var categoryMemo = QPropertyCategoryMemo.propertyCategoryMemo;
+
+    PropertyCategoryMemo memo = query
+        .selectFrom(categoryMemo)
+        .where(categoryMemo.category.id.eq(dto.categoryId())
+            .and(categoryMemo.property.id.eq(dto.propertyId())))
+        .fetchOne();
+
+    if (memo == null) {
+      save(dto);
+    } else {
+      if (dto.memo().equals(memo.getMemo())) {
+        memo.updateMemo(dto.memo());
+        jpaPropertyCategoryMemoRepository.save(memo);
+      }
+    }
+  }
+
+  @Override
+  @Transactional
+  public void deleteAllByPropertyId(Long propertyId) {
+    jpaPropertyCategoryMemoRepository.deleteAllByPropertyId(propertyId);
   }
 
 

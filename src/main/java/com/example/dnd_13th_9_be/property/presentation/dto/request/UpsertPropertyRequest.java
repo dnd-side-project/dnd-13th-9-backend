@@ -20,10 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
 
 public record UpsertPropertyRequest(
-    @Null(groups = CreatePropertyGroup.class, message = "새로운 매물 메모 작성시 id값은 null 이어야 합니다")
-        @NotNull(groups = UpdatePropertyGroup.class, message = "매물 메모 생성시 propertyId는 필수 값입니다") Long propertyId,
-    @Null(groups = CreatePropertyGroup.class, message = "새로운 매물 메모 작성시 id값은 null 이어야 합니다")
-        @NotNull(groups = UpdatePropertyGroup.class, message = "매물 메모 생성시 propertyId는 필수 값입니다") List<Long> deletedImageIdList,
+    List<Long> deletedImageIdList,
     @EnumValid(enumClass = FeelingType.class, message = "feeling 값은 GOOD, SOSO, BAD 중 하나여야 합니다")
         FeelingType feeling,
     @NotNull(message = "매물명은 필수입니다") @Length(min = 1, max = 10, message = "매물명은 1~10자 이하여야 합니다") String propertyName,
@@ -65,8 +62,6 @@ public record UpsertPropertyRequest(
   @JsonIgnore
   @AssertTrue(message = "계약 형태가 월세일 때만 managementFee 값이 허용됩니다")
   public boolean isValidManagementFee() {
-    if (contractType == null) return true;
-
     if (contractType == ContractType.MONTHLY_RENT) {
       return true;
     }

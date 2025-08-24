@@ -1,5 +1,7 @@
 package com.example.dnd_13th_9_be.property.presentation;
 
+import ch.qos.logback.core.model.PropertyModel;
+import com.example.dnd_13th_9_be.property.presentation.dto.request.UpdatePropertyGroup;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +41,7 @@ public class PropertyController {
   public ResponseEntity<ApiResponse<Map<String, Object>>> create(
       @AuthenticationPrincipal UserPrincipalDto userDetails,
       @RequestPart(value = "image", required = false) List<MultipartFile> files,
-      @Validated(CreatePropertyGroup.class) @RequestPart(value = "data")
+      @RequestPart(value = "data")
           UpsertPropertyRequest request) {
     propertyService.createPropertyRecord(userDetails.getUserId(), files, request);
     return ApiResponse.okEntity();
@@ -59,13 +62,15 @@ public class PropertyController {
     return ApiResponse.successEntity(response);
   }
 
-//  @PatchMapping
-//  public ResponseEntity<ApiResponse<PropertyModel>> update(
-//      @AuthenticationPrincipal UserPrincipalDto userDetails,
-//      @RequestPart(value = "image", required = false) List<MultipartFile> files,
-//      @Validated(UpdatePropertyGroup.class) @RequestPart(value = "data")
-//          UpsertPropertyRequest request) {
-////    var result = propertyService.updateProperty(userDetails.getUserId(), files, request);
-//    return ApiResponse.successEntity(null);
-//  }
+  @PatchMapping("/{propertyId}")
+  public ResponseEntity<ApiResponse<PropertyModel>> update(
+      @AuthenticationPrincipal UserPrincipalDto userDetails,
+      @PathVariable("propertyId") Long propertyId,
+      @RequestPart(value = "image", required = false) List<MultipartFile> files,
+      @Validated @RequestPart(value = "data")
+          UpsertPropertyRequest request) {
+    propertyService.updateProperty(userDetails.getUserId(), propertyId, files, request);
+
+    return ApiResponse.successEntity(null);
+  }
 }

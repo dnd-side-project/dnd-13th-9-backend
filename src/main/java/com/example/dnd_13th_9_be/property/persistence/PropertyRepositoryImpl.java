@@ -58,4 +58,12 @@ public class PropertyRepositoryImpl implements PropertyRepository {
     Property savedProperty = jpaPropertyRepository.save(property);
     return PropertyResult.from(savedProperty);
   }
+
+  @Override
+  public void update(Long propertyId, PropertyDto dto) {
+    Property property = jpaPropertyRepository.findById(propertyId)
+        .orElseThrow(() -> new BusinessException(NOT_FOUND_PROPERTY));
+    property.update(dto);
+    jpaPropertyRepository.save(property);
+  }
 }

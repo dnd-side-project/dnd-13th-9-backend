@@ -1,5 +1,6 @@
 package com.example.dnd_13th_9_be.property.persistence.entity;
 
+import com.example.dnd_13th_9_be.property.application.dto.PropertyDto;
 import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -92,7 +93,7 @@ public class Property extends BaseEntity {
   private Integer depositSmall;
 
   @Comment("관리비")
-  @Column(name = "management_fee", nullable = false)
+  @Column(name = "management_fee")
   private Integer managementFee;
 
   @Comment("입주 가능 시기 (예: 9월 초, 즉시입주, 협의 가능)")
@@ -139,5 +140,23 @@ public class Property extends BaseEntity {
     this.managementFee = managementFee;
     this.moveInInfo = moveInInfo;
     this.requiredCheckMemo = requiredCheckMemo;
+  }
+
+  public void update(PropertyDto dto) {
+    this.title = dto.title();
+    this.feeling = dto.feeling();
+    this.memo = dto.memo();
+    this.referenceUrl = dto.referenceUrl();
+    this.address = dto.address();
+    this.detailAddress = dto.detailAddress();
+    this.latitude = dto.latitude();
+    this.longitude = dto.longitude();
+    this.contractType = dto.contractType();
+    this.houseType = dto.houseType();
+    this.depositBig = dto.depositBig();
+    this.depositSmall = dto.depositSmall();
+    this.managementFee = dto.managementFee();
+    this.moveInInfo = dto.moveInInfo();
+    this.requiredCheckMemo = dto.requiredCheckMemo();
   }
 }

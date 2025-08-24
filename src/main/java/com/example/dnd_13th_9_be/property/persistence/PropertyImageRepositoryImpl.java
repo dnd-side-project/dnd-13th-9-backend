@@ -1,5 +1,8 @@
 package com.example.dnd_13th_9_be.property.persistence;
 
+import static com.example.dnd_13th_9_be.global.error.ErrorCode.NOT_FOUND_PROPERTY_IMAGE;
+
+import com.example.dnd_13th_9_be.global.error.BusinessException;
 import com.example.dnd_13th_9_be.property.persistence.dto.PropertyImageResult;
 import java.util.List;
 import jakarta.persistence.EntityManager;
@@ -34,14 +37,20 @@ public class PropertyImageRepositoryImpl implements PropertyImageRepository {
   }
 
   @Override
+  public void verifyByIdAndPropertyId(Long imageId, Long propertyId) {
+    jpaPropertyImageRepository.findByIdAndPropertyId(imageId, propertyId)
+        .orElseThrow(() -> new BusinessException(NOT_FOUND_PROPERTY_IMAGE));
+  }
+
+  @Override
   public List<PropertyImageResult> findAllByPropertyId(Long propertyId) {
-    List<PropertyImage> images = jpaPropertyImageRepository.findAllByPropertyId(propertyId);
+    List<PropertyImage> images = jpaPropertyImageRepository.findAllByPropertyIdOrderByImageOrderAsc(propertyId);
     return images.stream().map(PropertyImageResult::from).toList();
   }
 
   @Override
-  public void delete(Long imageId) {
-    jpaPropertyImageRepository.deleteById(imageId);
+  public void delete(Long imageId, Long propertyId) {
+    jpaPropertyImageRepository.deleteByIdAndPropertyId(imageId, propertyId);
   }
 
   @Override

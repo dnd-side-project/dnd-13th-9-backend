@@ -4,10 +4,10 @@ import com.example.dnd_13th_9_be.checklist.application.model.ChecklistCategoryMo
 import com.example.dnd_13th_9_be.checklist.presentation.dto.ChecklistResponse;
 import com.example.dnd_13th_9_be.property.persistence.dto.PropertyCategoryMemoResult;
 import com.example.dnd_13th_9_be.property.persistence.dto.PropertyImageResult;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -109,11 +109,13 @@ public class PropertyService {
   }
 
   public PropertyDetailResponse getProperty(Long propertyId) {
+    // 폴더에 메모 갯수 10개 이상인지 체크
+
     // 매물 메모 조회
     PropertyResult property = propertyRepository.findById(propertyId);
 
     // 카테고리 메모 조회
-    List<PropertyCategoryMemoResult> memoList = propertyCategoryMemoRepository.findAllById(propertyId);
+    List<PropertyCategoryMemoResult> memoList = propertyCategoryMemoRepository.findAllByPropertyId(propertyId);
 
     // 매물 이미지 조회
     List<PropertyImageResult> imageList = propertyImageRepository.findAllByPropertyId(propertyId);
@@ -128,56 +130,54 @@ public class PropertyService {
     return PropertyDetailResponse.of(property, memoList, imageList, checklist);
   }
 
-//  @Transactional
-//  public PropertyModel updateProperty(
-//      Long userId, List<MultipartFile> files, UpsertPropertyRequest request) {
-//    // 기존 이미지 조회
-//    List<PropertyImageModel> imageModelList =
-//        propertyImageRepository.findAllByPropertyId(request.propertyId());
-//
-//    Set<Long> deletedImageIdList =
-//        new HashSet<>(
-//            Optional.ofNullable(request.deletedImageIdList()).orElseGet(Collections::emptyList));
-//    if (imageModelList.size() - deletedImageIdList.size() + files.size() > 5) {
-//      throw new BusinessException(PROPERTY_RECORD_IMAGE_LIMIT);
-//    }
-//
-//    List<PropertyImageModel> savedImageModelList = new ArrayList<>();
-//    imageModelList.forEach(
-//        imageModel -> {
-//          if (deletedImageIdList.contains(imageModel.propertyImageId())) {
-//            s3Manager.delete(imageModel.imageUrl());
-//            propertyImageRepository.delete(imageModel.propertyImageId());
-//          } else {
-//            savedImageModelList.add(imageModel);
-//          }
-//        });
-//
-//    AtomicInteger imageOrder = new AtomicInteger(1);
-//    savedImageModelList.forEach(
-//        imageModel -> {
-//          propertyImageRepository.updateOrder(
-//              imageModel.propertyImageId(), imageOrder.getAndIncrement());
-//        });
-//
-//    List<PropertyImageModel> newImageModel =
-//        Optional.of(files).orElseGet(Collections::emptyList).stream()
-//            .map(
-//                file ->
-//                    PropertyImageModel.builder()
-//                        .imageUrl(s3Manager.upload(file))
-//                        .order(imageOrder.getAndIncrement())
-//                        .build())
-//            .toList();
-//
-//    // 저장된 checklist 목록
-//    List<PropertyRequiredCheckModel> requiredCheckModelList =
-//        userRequiredItemRepository.findAllByUserId(userId).stream()
-//            .map(m -> PropertyRequiredCheckModel.builder().checklistId(m.getItemId()).build())
-//            .toList();
-//
-////    return propertyRepository.save(
-////        PropertyModel.from(newImageModel, request, requiredCheckModelList));
-//    return null;
-//  }
+  @Transactional
+  public void updateProperty(
+      Long userId, Long propertyId, List<MultipartFile> files, UpsertPropertyRequest request) {
+    // 매물 메모 업데이트
+    PropertyDto propertyDto = PropertyDto.from(request);
+    propertyRepository.update(propertyId, propertyDto);
+
+    // 카테고리 메모 업데이트
+    propertyCategoryMemoRepository.deleteAllByPropertyId(propertyId);
+    request.getCategoryMemo().forEach(memo -> {
+      checklistCategoryRepository.verifyById(memo.categoryId());
+      propertyCategoryMemoRepository.update(PropertyCategoryMemoDto.from(propertyId, memo));
+    });
+
+    // 기존 이미지 조회
+    List<Long> deletedImageIdList = Optional.ofNullable(request.deletedImageIdList()).orElseGet(Collections::emptyList);
+    List<PropertyImageResult> imageList = propertyImageRepository.findAllByPropertyId(propertyId);
+
+    // 이미지 저장 갯수 초과 확인
+    if (imageList.size() - deletedImageIdList.size() + files.size() > 5) {
+      throw new BusinessException(PROPERTY_RECORD_IMAGE_LIMIT);
+    }
+
+    // 삭제된 이미지 id 확인 후 기존 이미지에서 제거
+    deletedImageIdList.forEach(imageId -> {
+      propertyImageRepository.verifyByIdAndPropertyId(imageId, propertyId);
+      propertyImageRepository.delete(imageId, propertyId);
+    });
+
+    imageList = propertyImageRepository.findAllByPropertyId(propertyId);
+
+    // 기존 이미지 재정렬
+    AtomicInteger imageOrder = new AtomicInteger(1);
+    imageList.forEach(image -> {
+      propertyImageRepository.updateOrder(image.imageId(), imageOrder.getAndIncrement());
+    });
+
+    // 새로 추가된 이미지 추가
+    List<PropertyImageDto> images =
+        files.stream().map(
+                file ->
+                    PropertyImageDto.builder()
+                        .propertyId(propertyId)
+                        .imageUrl(s3Manager.upload(file))
+                        .order(imageOrder.getAndIncrement())
+                        .build())
+            .toList();
+    images.forEach(propertyImageRepository::save);
+
+  }
 }

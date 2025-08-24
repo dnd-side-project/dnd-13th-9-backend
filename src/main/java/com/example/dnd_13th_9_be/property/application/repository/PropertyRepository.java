@@ -10,4 +10,6 @@ public interface PropertyRepository {
   PropertyResult findById(Long propertyId);
 
   PropertyResult save(PropertyDto dto);
+
+  void update(Long propertyId, PropertyDto dto);
 }
