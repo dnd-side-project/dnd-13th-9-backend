@@ -1,0 +1,88 @@
+package com.example.dnd_13th_9_be.property.persistence;
+
+import java.util.List;
+import jakarta.persistence.EntityManager;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
+
+import com.example.dnd_13th_9_be.checklist.persistence.entity.ChecklistCategory;
+import com.example.dnd_13th_9_be.checklist.persistence.entity.QChecklistCategory;
+import com.example.dnd_13th_9_be.property.application.model.PropertyCategoryMemoModel;
+import com.example.dnd_13th_9_be.property.application.repository.PropertyCategoryMemoRepository;
+import com.example.dnd_13th_9_be.property.persistence.dto.PropertyCategoryMemoResult;
+import com.example.dnd_13th_9_be.property.persistence.entity.Property;
+import com.example.dnd_13th_9_be.property.persistence.entity.PropertyCategoryMemo;
+import com.example.dnd_13th_9_be.property.persistence.entity.QPropertyCategoryMemo;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
+@Component
+@RequiredArgsConstructor
+public class PropertyCategoryMemoRepositoryImpl implements PropertyCategoryMemoRepository {
+  private final EntityManager em;
+  private final JPAQueryFactory query;
+  private final JpaPropertyCategoryMemoRepository jpaPropertyCategoryMemoRepository;
+
+  @Override
+  public void save(PropertyCategoryMemoModel dto) {
+    ChecklistCategory category = em.getReference(ChecklistCategory.class, dto.categoryId());
+    Property property = em.getReference(Property.class, dto.propertyId());
+    PropertyCategoryMemo propertyCategoryMemo =
+        PropertyCategoryMemo.builder()
+            .category(category)
+            .property(property)
+            .memo(dto.memo())
+            .build();
+    jpaPropertyCategoryMemoRepository.save(propertyCategoryMemo);
+  }
+
+  @Override
+  public List<PropertyCategoryMemoResult> findAllByPropertyId(Long propertyId) {
+    var categoryMemo = QPropertyCategoryMemo.propertyCategoryMemo;
+    var category = QChecklistCategory.checklistCategory;
+
+    List<PropertyCategoryMemo> propertyCategoryMemo =
+        query
+            .selectFrom(categoryMemo)
+            .join(categoryMemo.category, category)
+            .fetchJoin()
+            .where(categoryMemo.property.id.eq(propertyId))
+            .fetch();
+
+    return propertyCategoryMemo.stream().map(PropertyCategoryMemoResult::from).toList();
+  }
+
+  @Override
+  public void update(PropertyCategoryMemoModel dto) {
+    var categoryMemo = QPropertyCategoryMemo.propertyCategoryMemo;
+
+    PropertyCategoryMemo memo =
+        query
+            .selectFrom(categoryMemo)
+            .where(
+                categoryMemo
+                    .category
+                    .id
+                    .eq(dto.categoryId())
+                    .and(categoryMemo.property.id.eq(dto.propertyId())))
+            .fetchOne();
+
+    if (memo != null) {
+      memo.updateMemo(dto.memo());
+      jpaPropertyCategoryMemoRepository.save(memo);
+    }
+  }
+
+  @Override
+  @Transactional
+  public void deleteAllByPropertyId(Long propertyId) {
+    jpaPropertyCategoryMemoRepository.deleteAllByPropertyId(propertyId);
+  }
+
+  @Override
+  public void deleteByCategoryIdAndPropertyId(Long categoryId, Long propertyId) {
+    jpaPropertyCategoryMemoRepository.deleteByCategoryIdAndPropertyId(categoryId, propertyId);
+  }
+}

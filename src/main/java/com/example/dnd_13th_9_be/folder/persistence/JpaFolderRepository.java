@@ -10,4 +10,6 @@ import com.example.dnd_13th_9_be.folder.persistence.entity.Folder;
 @Repository
 public interface JpaFolderRepository extends JpaRepository<Folder, Long>, QueryDslFolderRepository {
   Optional<Folder> findByIdAndUserId(Long folderId, Long userId);
+
+  boolean existsByIdAndUserId(Long folderId, Long userId);
 }

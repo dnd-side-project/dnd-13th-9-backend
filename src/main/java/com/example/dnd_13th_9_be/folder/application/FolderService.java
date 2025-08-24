@@ -51,7 +51,7 @@ public class FolderService {
 
   @Transactional
   public void renameFolder(Long userId, Long folderId, String name) {
-    folderRepository.verifyById(folderId);
+    folderRepository.verifyById(userId, folderId);
     boolean isFailRename = !folderRepository.rename(userId, folderId, name);
     if (isFailRename) {
       throw new BusinessException(FOLDER_RENAME_FAILED);

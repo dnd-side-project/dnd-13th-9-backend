@@ -1,13 +1,14 @@
 package com.example.dnd_13th_9_be.folder.persistence;
 
 import java.util.List;
+import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.folder.persistence.dto.FolderSummary;
 import com.example.dnd_13th_9_be.folder.persistence.entity.QFolder;
 import com.example.dnd_13th_9_be.location.persistence.QLocationRecordEntity;
-import com.example.dnd_13th_9_be.property.persistence.QPropertyRecordEntity;
+import com.example.dnd_13th_9_be.property.persistence.entity.QProperty;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -20,7 +21,7 @@ public class QueryDslFolderRepositoryImpl implements QueryDslFolderRepository {
   public List<FolderSummary> findSummariesByPlanId(Long userId, Long planId) {
     var folder = QFolder.folder;
     var location = QLocationRecordEntity.locationRecordEntity;
-    var property = QPropertyRecordEntity.propertyRecordEntity;
+    var property = QProperty.property;
 
     var locationCnt =
         JPAExpressions.select(location.id.count())
@@ -72,5 +73,30 @@ public class QueryDslFolderRepositoryImpl implements QueryDslFolderRepository {
   public Long countByPlanId(Long planId) {
     var folder = QFolder.folder;
     return query.select(folder.id.count()).from(folder).where(folder.plan.id.eq(planId)).fetchOne();
+  }
+
+  @Override
+  public Long countFolderRecord(Long folderId) {
+    var property = QProperty.property;
+    var location = QLocationRecordEntity.locationRecordEntity;
+    long propertyCnt =
+        Optional.ofNullable(
+                query
+                    .select(property.id.count())
+                    .from(property)
+                    .where(property.folder.id.eq(folderId))
+                    .fetchOne())
+            .orElse(0L);
+
+    long locationCnt =
+        Optional.ofNullable(
+                query
+                    .select(location.id.count())
+                    .from(location)
+                    .where(location.folder.id.eq(folderId))
+                    .fetchOne())
+            .orElse(0L);
+
+    return propertyCnt + locationCnt;
   }
 }

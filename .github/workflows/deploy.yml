@@ -63,6 +63,6 @@ jobs:
               "docker pull ${{ env.ECR_URI }}:${{ env.IMAGE_TAG }}",
               "docker stop myapp || true",
               "docker rm myapp || true",
-              "docker run -d --name myapp --restart always --env-file /home/ubuntu/app/.env -p 8080:8080 ${{ env.ECR_URI }}:${{ env.IMAGE_TAG }} --spring.profiles.active=prod"
+              "docker run -d --name myapp --restart always --env-file /home/ubuntu/app/.env -p 127.0.0.1:8080:8080 ${{ env.ECR_URI }}:${{ env.IMAGE_TAG }} --spring.profiles.active=prod"
             ]' \
             --output text

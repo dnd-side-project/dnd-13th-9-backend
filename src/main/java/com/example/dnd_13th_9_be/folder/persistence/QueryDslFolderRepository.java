@@ -12,4 +12,6 @@ public interface QueryDslFolderRepository {
   boolean deleteByIdIfExists(Long userId, Long folderId);
 
   Long countByPlanId(Long planId);
+
+  Long countFolderRecord(Long folderId);
 }

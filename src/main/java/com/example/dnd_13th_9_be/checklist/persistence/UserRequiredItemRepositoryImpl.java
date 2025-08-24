@@ -51,7 +51,7 @@ public class UserRequiredItemRepositoryImpl implements UserRequiredItemRepositor
   @Override
   public List<UserRequiredItemModel> findAllByUserId(Long userId) {
     List<UserRequiredItem> requiredItems =
-        jpaUserRequiredItemRepository.findAllByUserIdOrderByCreatedAtAsc(userId);
+        jpaUserRequiredItemRepository.findAllByUserIdOrderByIdAsc(userId);
     return requiredItems.stream().map(userRequiredItemConverter::from).toList();
   }
 }
