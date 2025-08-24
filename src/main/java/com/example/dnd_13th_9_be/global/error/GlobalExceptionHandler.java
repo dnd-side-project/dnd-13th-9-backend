@@ -57,7 +57,7 @@ public class GlobalExceptionHandler {
       body.put("reason", "요청 필드 타입이 맞지 않습니다");
       body.put("path", jacksonPath(mie.getPath())); // 오류난 경로
       if (mie.getTargetType() != null) {
-        body.put("expectedType", mie.getTargetType().getTypeName());
+        body.put("expectedType", "요청 스키마와 타입을 확인하세요");
       }
       body.put("hint", mie.getOriginalMessage());
       return ApiResponse.entity(ErrorCode.VALIDATION_ERROR, body);

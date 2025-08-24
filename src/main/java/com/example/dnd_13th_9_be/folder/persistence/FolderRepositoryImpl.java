@@ -66,8 +66,8 @@ public class FolderRepositoryImpl implements FolderRepository {
   }
 
   @Override
-  public void verifyById(Long folderId) {
-    var isNotExist = !jpaFolderRepository.existsById(folderId);
+  public void verifyById(Long userId, Long folderId) {
+    var isNotExist = !jpaFolderRepository.existsByIdAndUserId(folderId, userId);
     if (isNotExist) {
       throw new BusinessException(NOT_FOUND_FOLDER);
     }
@@ -84,5 +84,10 @@ public class FolderRepositoryImpl implements FolderRepository {
         entity.getName(),
         entity.getCreatedAt().toLocalDateTime(),
         entity.getIsDefault());
+  }
+
+  @Override
+  public long countFolderRecord(Long folderId) {
+    return jpaFolderRepository.countFolderRecord(folderId);
   }
 }

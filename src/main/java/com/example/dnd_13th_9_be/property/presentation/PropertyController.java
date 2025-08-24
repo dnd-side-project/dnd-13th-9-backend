@@ -53,8 +53,9 @@ public class PropertyController {
 
   @GetMapping("/{propertyId}")
   public ResponseEntity<ApiResponse<PropertyDetailResponse>> getProperty(
+      @AuthenticationPrincipal UserPrincipalDto userDetails,
       @PathVariable("propertyId") Long propertyId) {
-    PropertyDetailResponse response = propertyService.getProperty(propertyId);
+    PropertyDetailResponse response = propertyService.getProperty(userDetails.getUserId(), propertyId);
     return ApiResponse.successEntity(response);
   }
 

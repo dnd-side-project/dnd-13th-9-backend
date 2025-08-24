@@ -47,6 +47,7 @@ public class Property extends BaseEntity {
   private String title;
 
   @Comment("전반적인 느낌")
+  @Enumerated(EnumType.STRING)
   @Column(length = 5)
   private FeelingType feeling;
 

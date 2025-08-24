@@ -16,6 +16,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import com.example.dnd_13th_9_be.common.persistence.BaseEntity;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "property_image")
@@ -27,6 +29,7 @@ public class PropertyImage extends BaseEntity {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinColumn(name = "property_id", nullable = false)
   private Property property;
 

@@ -56,8 +56,8 @@ public class PropertyImageRepositoryImpl implements PropertyImageRepository {
   }
 
   @Override
-  public void updateOrder(Long propertyId, Integer newOrder) {
-    PropertyImage image = em.getReference(PropertyImage.class, propertyId);
+  public void updateOrder(Long imageId, Integer newOrder) {
+    PropertyImage image = em.getReference(PropertyImage.class, imageId);
     image.updateOrder(newOrder);
     jpaPropertyImageRepository.save(image);
   }

@@ -16,7 +16,9 @@ public interface FolderRepository {
 
   long countByPlanId(Long planId);
 
-  void verifyById(Long folderId);
+  void verifyById(Long userId, Long folderId);
 
   FolderDetailResult findByIdAndUserId(Long folderId, Long userId);
+
+  long countFolderRecord(Long folderId);
 }

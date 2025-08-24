@@ -4,6 +4,7 @@ import com.example.dnd_13th_9_be.property.application.dto.PropertyDto;
 import com.example.dnd_13th_9_be.property.persistence.dto.PropertyResult;
 
 public interface PropertyRepository {
+  void verifyExistsById(Long userId, Long propertyId);
 
   void delete(Long userId, Long propertyId);
 
@@ -11,5 +12,5 @@ public interface PropertyRepository {
 
   PropertyResult save(PropertyDto dto);
 
-  void update(Long propertyId, PropertyDto dto);
+  void update(Long userId, Long propertyId, PropertyDto dto);
 }

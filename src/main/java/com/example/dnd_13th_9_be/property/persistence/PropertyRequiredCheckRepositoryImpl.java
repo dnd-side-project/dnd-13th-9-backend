@@ -26,23 +26,34 @@ public class PropertyRequiredCheckRepositoryImpl implements PropertyRequiredChec
 
   @Override
   public void save(Long itemId, Long propertyId) {
+    var requiredCheck = QPropertyRequiredCheck.propertyRequiredCheck;
+    Long id = query.select(requiredCheck.id)
+        .from(requiredCheck)
+        .where(requiredCheck.checklistItem.id.eq(itemId).and(requiredCheck.property.id.eq(propertyId)))
+        .fetchOne();
+
+    if (id == null) {
     ChecklistItem checklistItem = em.getReference(ChecklistItem.class, itemId);
     Property property = em.getReference(Property.class, propertyId);
-    PropertyRequiredCheck propertyRequiredCheck =
-        PropertyRequiredCheck.builder().checklistItem(checklistItem).property(property).build();
-    jpaPropertyRequiredCheckRepository.save(propertyRequiredCheck);
+
+      PropertyRequiredCheck propertyRequiredCheck =
+          PropertyRequiredCheck.builder().checklistItem(checklistItem).property(property).build();
+      jpaPropertyRequiredCheckRepository.save(propertyRequiredCheck);
+    }
   }
 
   @Override
   public Set<Long> findAllIdsByPropertyId(Long propertyId) {
-    QPropertyRequiredCheck requiredCheck = QPropertyRequiredCheck.propertyRequiredCheck;
-    QChecklistItem checklistItem = QChecklistItem.checklistItem;
+    var requiredCheck = QPropertyRequiredCheck.propertyRequiredCheck;
+    var checklistItem = QChecklistItem.checklistItem;
     List<Long> idList =
         query
             .select(checklistItem.id)
             .from(requiredCheck)
             .join(requiredCheck.checklistItem, checklistItem)
             .where(requiredCheck.property.id.eq(propertyId))
+            .orderBy(checklistItem.id.asc())
+            .distinct()
             .fetch();
     return new LinkedHashSet<>(idList);
   }

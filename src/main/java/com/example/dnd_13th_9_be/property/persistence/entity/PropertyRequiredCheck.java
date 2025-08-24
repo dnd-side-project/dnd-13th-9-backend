@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +22,12 @@ import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
-@Table(name = "property_required_check")
+@Table(
+    name = "property_required_check",
+    uniqueConstraints =
+    @UniqueConstraint(
+        name = "uk_property_required_check_property_item",
+        columnNames = {"property_id", "item_id"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PropertyRequiredCheck extends BaseEntity {
   @Id

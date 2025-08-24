@@ -14,5 +14,5 @@ public interface PropertyImageRepository {
 
   void delete(Long imageId, Long propertyId);
 
-  void updateOrder(Long propertyId, Integer newOrder);
+  void updateOrder(Long imageId, Integer newOrder);
 }

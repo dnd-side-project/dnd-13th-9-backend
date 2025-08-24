@@ -47,7 +47,7 @@ public class PropertyCategoryMemo extends BaseEntity {
   private Property property;
 
   @Comment("카테고리별 메모")
-  @Column(name = "required_check_memo", length = 200)
+  @Column(name = "memo", length = 200)
   private String memo;
 
   @Builder

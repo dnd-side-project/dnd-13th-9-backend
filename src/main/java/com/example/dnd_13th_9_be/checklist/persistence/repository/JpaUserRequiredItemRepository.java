@@ -19,5 +19,5 @@ public interface JpaUserRequiredItemRepository extends JpaRepository<UserRequire
   long deleteByUserIdAndItemId(Long userId, Long itemId);
 
   @EntityGraph(attributePaths = {"user", "item"})
-  List<UserRequiredItem> findAllByUserIdOrderByCreatedAtAsc(Long userId);
+  List<UserRequiredItem> findAllByUserIdOrderByIdAsc(Long userId);
 }

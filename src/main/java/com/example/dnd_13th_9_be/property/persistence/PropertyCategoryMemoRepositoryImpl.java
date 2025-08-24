@@ -69,13 +69,9 @@ public class PropertyCategoryMemoRepositoryImpl implements PropertyCategoryMemoR
                     .and(categoryMemo.property.id.eq(dto.propertyId())))
             .fetchOne();
 
-    if (memo == null) {
-      save(dto);
-    } else {
-      if (dto.memo().equals(memo.getMemo())) {
-        memo.updateMemo(dto.memo());
-        jpaPropertyCategoryMemoRepository.save(memo);
-      }
+    if (memo != null) {
+      memo.updateMemo(dto.memo());
+      jpaPropertyCategoryMemoRepository.save(memo);
     }
   }
 
@@ -83,5 +79,10 @@ public class PropertyCategoryMemoRepositoryImpl implements PropertyCategoryMemoR
   @Transactional
   public void deleteAllByPropertyId(Long propertyId) {
     jpaPropertyCategoryMemoRepository.deleteAllByPropertyId(propertyId);
+  }
+
+  @Override
+  public void deleteByCategoryIdAndPropertyId(Long categoryId, Long propertyId) {
+    jpaPropertyCategoryMemoRepository.deleteByCategoryIdAndPropertyId(categoryId, propertyId);
   }
 }
