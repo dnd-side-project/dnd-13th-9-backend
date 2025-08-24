@@ -1,8 +1,6 @@
 package com.example.dnd_13th_9_be.property.persistence;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import jakarta.persistence.EntityManager;
 
 import org.springframework.stereotype.Component;
@@ -54,18 +52,6 @@ public class PropertyCategoryMemoRepositoryImpl implements PropertyCategoryMemoR
             .fetch();
 
     return propertyCategoryMemo.stream().map(PropertyCategoryMemoResult::from).toList();
-  }
-
-  @Override
-  public Set<Long> findAllIdByPropertyId(Long propertyId) {
-    var categoryMemo = QPropertyCategoryMemo.propertyCategoryMemo;
-
-    return new HashSet<>(
-        query
-            .select(categoryMemo.id)
-            .from(categoryMemo)
-            .where(categoryMemo.property.id.eq(propertyId))
-            .fetch());
   }
 
   @Override
