@@ -1,5 +1,19 @@
 package com.example.dnd_13th_9_be.property.presentation.docs;
 
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
 import com.example.dnd_13th_9_be.property.presentation.dto.request.UpsertPropertyRequest;
 import com.example.dnd_13th_9_be.property.presentation.dto.response.PropertyDetailResponse;
@@ -12,34 +26,25 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
-import java.util.Map;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "매물", description = "매물(Property) 관련 API")
 public interface PropertyDocs {
 
-    @Operation(
-        summary = "매물 생성",
-        description = "JSON은 `data` 파트(`application/json`), 이미지는 `image` 파트(`multipart/form-data`, 여러 장 가능)로 업로드한다."
-    )
-    @io.swagger.v3.oas.annotations.parameters.RequestBody(
-        required = true,
-        content = @Content(
-            mediaType = "multipart/form-data",
-            schema = @Schema(implementation = UpsertPropertyMultipartDocs.class),
-            examples = @ExampleObject(
-                name = "폼데이터 예시",
-                value = """
+  @Operation(
+      summary = "매물 생성",
+      description =
+          "JSON은 `data` 파트(`application/json`), 이미지는 `image` 파트(`multipart/form-data`, 여러 장 가능)로 업로드한다.")
+  @io.swagger.v3.oas.annotations.parameters.RequestBody(
+      required = true,
+      content =
+          @Content(
+              mediaType = "multipart/form-data",
+              schema = @Schema(implementation = UpsertPropertyMultipartDocs.class),
+              examples =
+                  @ExampleObject(
+                      name = "폼데이터 예시",
+                      value =
+                          """
                   {
                     "data": {
                       "feeling":"GOOD",
@@ -65,160 +70,151 @@ public interface PropertyDocs {
                     },
                     "image": "<<여러 개의 파일 업로드 가능: 같은 키 'image'로 반복 첨부>>"
                   }
-                  """
-            )
-        )
-    )
-    @io.swagger.v3.oas.annotations.responses.ApiResponses({
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "201",
-            description = "성공",
-            content = @Content(
+                  """)))
+  @io.swagger.v3.oas.annotations.responses.ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "201",
+        description = "성공",
+        content =
+            @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = ApiResponse.class),
-                examples = @ExampleObject(
-                    name = "성공 예시",
-                    value = """
+                examples =
+                    @ExampleObject(
+                        name = "성공 예시",
+                        value =
+                            """
                       {
                         "code": "20000",
                         "message": "성공했습니다",
                         "data": {}
                       }
-                      """
-                )
-            )
-        ),
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "400",
-            description = "요청 값 검증 실패",
-            content = @Content(
+                      """))),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "400",
+        description = "요청 값 검증 실패",
+        content =
+            @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = ApiResponse.class),
-                examples = @ExampleObject(
-                    name = "검증 실패 예시",
-                    value = """
+                examples =
+                    @ExampleObject(
+                        name = "검증 실패 예시",
+                        value =
+                            """
                       {
                         "code": "40000",
                         "message": "요청 값이 유효하지 않습니다.",
                         "data": null
                       }
-                      """
-                )
-            )
-        ),
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "401",
-            description = "인증 실패",
-            content = @Content(
+                      """))),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "401",
+        description = "인증 실패",
+        content =
+            @Content(
                 mediaType = "application/json",
-                schema = @Schema(implementation = ApiResponse.class)
-            )
-        ),
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "403",
-            description = "권한 없음",
-            content = @Content(
+                schema = @Schema(implementation = ApiResponse.class))),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "403",
+        description = "권한 없음",
+        content =
+            @Content(
                 mediaType = "application/json",
-                schema = @Schema(implementation = ApiResponse.class)
-            )
-        ),
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "500",
-            description = "서버 오류",
-            content = @Content(
+                schema = @Schema(implementation = ApiResponse.class))),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "500",
+        description = "서버 오류",
+        content =
+            @Content(
                 mediaType = "application/json",
-                schema = @Schema(implementation = ApiResponse.class)
-            )
-        )
-    })
-    @PostMapping
-    ResponseEntity<ApiResponse<Map<String, Object>>> create(
-        @Parameter(hidden = true) UserPrincipalDto userDetails,
-        @Parameter(
-            description = "이미지 파일들 (여러 장 가능, 키는 `image`로 고정)",
-            content = @Content(
-                array = @ArraySchema(schema = @Schema(type = "string", format = "binary"))
-            )
-        )
-        @RequestPart(value = "image", required = false) List<MultipartFile> files,
-        @Parameter(
-            description = "요청 본문(JSON). 표의 제약 조건을 따름",
-            content = @Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = UpsertPropertyRequest.class)
-            )
-        )
-        @Validated @RequestPart(value = "data") UpsertPropertyRequest request);
+                schema = @Schema(implementation = ApiResponse.class)))
+  })
+  @PostMapping
+  ResponseEntity<ApiResponse<Map<String, Object>>> create(
+      @Parameter(hidden = true) UserPrincipalDto userDetails,
+      @Parameter(
+              description = "이미지 파일들 (여러 장 가능, 키는 `image`로 고정)",
+              content =
+                  @Content(
+                      array = @ArraySchema(schema = @Schema(type = "string", format = "binary"))))
+          @RequestPart(value = "image", required = false)
+          List<MultipartFile> files,
+      @Parameter(
+              description = "요청 본문(JSON). 표의 제약 조건을 따름",
+              content =
+                  @Content(
+                      mediaType = "application/json",
+                      schema = @Schema(implementation = UpsertPropertyRequest.class)))
+          @Validated
+          @RequestPart(value = "data")
+          UpsertPropertyRequest request);
 
-    @Operation(
-        summary = "매물 삭제",
-        description = "경로 변수로 전달된 `propertyId` 에 해당하는 매물을 삭제한다."
-    )
-    @io.swagger.v3.oas.annotations.responses.ApiResponses({
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "200",
-            description = "성공",
-            content = @Content(
+  @Operation(summary = "매물 삭제", description = "경로 변수로 전달된 `propertyId` 에 해당하는 매물을 삭제한다.")
+  @io.swagger.v3.oas.annotations.responses.ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "200",
+        description = "성공",
+        content =
+            @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = ApiResponse.class),
-                examples = @ExampleObject(
-                    name = "성공 예시",
-                    value = """
+                examples =
+                    @ExampleObject(
+                        name = "성공 예시",
+                        value =
+                            """
                       {
                         "code": "20000",
                         "message": "성공했습니다",
                         "data": {}
                       }
-                      """
-                )
-            )
-        ),
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "404",
-            description = "존재하지 않거나 권한이 없는 매물",
-            content = @Content(
+                      """))),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "404",
+        description = "존재하지 않거나 권한이 없는 매물",
+        content =
+            @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = ApiResponse.class),
-                examples = @ExampleObject(
-                    name = "Not Found 예시",
-                    value = """
+                examples =
+                    @ExampleObject(
+                        name = "Not Found 예시",
+                        value =
+                            """
                       {
                         "code": "74001",
                         "message": "존재하지 않는 매물입니다",
                         "data": null
                       }
-                      """
-                )
-            )
-        )
-    })
-    @DeleteMapping("/{propertyId}")
-    ResponseEntity<ApiResponse<Map<String, Object>>> delete(
-        @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userDetails,
-        @Parameter(
-            name = "propertyId",
-            description = "매물 고유 인덱스 값",
-            example = "123",
-            required = true,
-            in = ParameterIn.PATH
-        )
-        @PathVariable("propertyId") Long propertyId);
+                      """)))
+  })
+  @DeleteMapping("/{propertyId}")
+  ResponseEntity<ApiResponse<Map<String, Object>>> delete(
+      @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userDetails,
+      @Parameter(
+              name = "propertyId",
+              description = "매물 고유 인덱스 값",
+              example = "123",
+              required = true,
+              in = ParameterIn.PATH)
+          @PathVariable("propertyId")
+          Long propertyId);
 
-
-    @Operation(
-        summary = "매물 상세 조회",
-        description = "경로 변수로 전달된 `propertyId`에 해당하는 매물의 상세 정보를 조회한다."
-    )
-    @io.swagger.v3.oas.annotations.responses.ApiResponses({
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "200",
-            description = "성공",
-            content = @Content(
+  @Operation(summary = "매물 상세 조회", description = "경로 변수로 전달된 `propertyId`에 해당하는 매물의 상세 정보를 조회한다.")
+  @io.swagger.v3.oas.annotations.responses.ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "200",
+        description = "성공",
+        content =
+            @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = ApiResponse.class),
-                examples = @ExampleObject(
-                    name = "성공 예시",
-                    value = """
+                examples =
+                    @ExampleObject(
+                        name = "성공 예시",
+                        value =
+                            """
                       {
                         "code": "20000",
                         "message": "성공했습니다",
@@ -322,59 +318,58 @@ public interface PropertyDocs {
                           }
                         }
                       }
-                      """
-                )
-            )
-        ),
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "404",
-            description = "존재하지 않는 매물 / 권한 없음",
-            content = @Content(
+                      """))),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "404",
+        description = "존재하지 않는 매물 / 권한 없음",
+        content =
+            @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = ApiResponse.class),
-                examples = @ExampleObject(
-                    name = "Not Found 예시",
-                    value = """
+                examples =
+                    @ExampleObject(
+                        name = "Not Found 예시",
+                        value =
+                            """
                       {
                         "code": "74001",
                         "message": "존재하지 않는 매물입니다",
                         "data": null
                       }
-                      """
-                )
-            )
-        )
-    })
-    @GetMapping("/{propertyId}")
-    ResponseEntity<ApiResponse<PropertyDetailResponse>> getProperty(
-        @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userDetails,
-        @Parameter(
-            name = "propertyId",
-            description = "매물 고유 인덱스 값",
-            required = true,
-            example = "15",
-            in = ParameterIn.PATH
-        )
-        @PathVariable("propertyId") Long propertyId);
+                      """)))
+  })
+  @GetMapping("/{propertyId}")
+  ResponseEntity<ApiResponse<PropertyDetailResponse>> getProperty(
+      @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userDetails,
+      @Parameter(
+              name = "propertyId",
+              description = "매물 고유 인덱스 값",
+              required = true,
+              example = "15",
+              in = ParameterIn.PATH)
+          @PathVariable("propertyId")
+          Long propertyId);
 
-
-    @Operation(
-        summary = "매물 수정",
-        description = """
+  @Operation(
+      summary = "매물 수정",
+      description =
+          """
           경로 변수의 `propertyId` 대상 매물을 수정한다.
           - **이미지 추가**: 폼 파트 `image`(여러 장 가능, 같은 키 반복 첨부)
           - **이미지 삭제**: `data.deletedImageIdList`(이미지 ID 리스트)
           - 나머지 필드는 `data` JSON 파트로 전송 (옵션 필드를 `""`로 보내면 검증 수행)
-          """
-    )
-    @io.swagger.v3.oas.annotations.parameters.RequestBody(
-        required = true,
-        content = @Content(
-            mediaType = "multipart/form-data",
-            schema = @Schema(implementation = UpsertPropertyMultipartDocs.class),
-            examples = @ExampleObject(
-                name = "폼데이터 예시",
-                value = """
+          """)
+  @io.swagger.v3.oas.annotations.parameters.RequestBody(
+      required = true,
+      content =
+          @Content(
+              mediaType = "multipart/form-data",
+              schema = @Schema(implementation = UpsertPropertyMultipartDocs.class),
+              examples =
+                  @ExampleObject(
+                      name = "폼데이터 예시",
+                      value =
+                          """
                   {
                     "data": {
                       "deletedImageIdList": [9, 10],
@@ -398,77 +393,74 @@ public interface PropertyDocs {
                     },
                     "image": "<<새로 추가할 이미지 파일들: 같은 키 'image'로 반복 첨부>>"
                   }
-                  """
-            )
-        )
-    )
-    @io.swagger.v3.oas.annotations.responses.ApiResponses({
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "200",
-            description = "성공",
-            content = @Content(
+                  """)))
+  @io.swagger.v3.oas.annotations.responses.ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "200",
+        description = "성공",
+        content =
+            @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = ApiResponse.class),
-                examples = @ExampleObject(
-                    name = "성공 예시",
-                    value = """
+                examples =
+                    @ExampleObject(
+                        name = "성공 예시",
+                        value =
+                            """
                       {
                         "code": "20000",
                         "message": "성공했습니다",
                         "data": {}
                       }
-                      """
-                )
-            )
-        ),
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "404",
-            description = "존재하지 않는 매물 / 권한 없음",
-            content = @Content(
+                      """))),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "404",
+        description = "존재하지 않는 매물 / 권한 없음",
+        content =
+            @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = ApiResponse.class),
-                examples = @ExampleObject(
-                    name = "Not Found 예시",
-                    value = """
+                examples =
+                    @ExampleObject(
+                        name = "Not Found 예시",
+                        value =
+                            """
                       {
                         "code": "74001",
                         "message": "존재하지 않는 매물입니다",
                         "data": null
                       }
-                      """
-                )
-            )
-        ),
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "400",
-            description = "요청 값 검증 실패 / 매물에 속하지 않은 이미지 ID 포함",
-            content = @Content(
+                      """))),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "400",
+        description = "요청 값 검증 실패 / 매물에 속하지 않은 이미지 ID 포함",
+        content =
+            @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = ApiResponse.class),
-                examples = @ExampleObject(
-                    name = "이미지 소유권 불일치 예시",
-                    value = """
+                examples =
+                    @ExampleObject(
+                        name = "이미지 소유권 불일치 예시",
+                        value =
+                            """
                       {
                         "code": "74002",
                         "message": "해당 매물 메모에 속해있지 않은 이미지가 요청되었습니다",
                         "data": null
                       }
-                      """
-                )
-            )
-        )
-    })
-    @PatchMapping("/{propertyId}")
-    ResponseEntity<ApiResponse<Map<String, Object>>> update(
-        @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userDetails,
-        @Parameter(
-            name = "propertyId",
-            description = "매물 고유 인덱스 값",
-            required = true,
-            example = "15",
-            in = ParameterIn.PATH
-        )
-        @PathVariable("propertyId") Long propertyId,
-        @RequestPart(value = "image", required = false) List<MultipartFile> files,
-        @Validated @RequestPart(value = "data") UpsertPropertyRequest request);
+                      """)))
+  })
+  @PatchMapping("/{propertyId}")
+  ResponseEntity<ApiResponse<Map<String, Object>>> update(
+      @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userDetails,
+      @Parameter(
+              name = "propertyId",
+              description = "매물 고유 인덱스 값",
+              required = true,
+              example = "15",
+              in = ParameterIn.PATH)
+          @PathVariable("propertyId")
+          Long propertyId,
+      @RequestPart(value = "image", required = false) List<MultipartFile> files,
+      @Validated @RequestPart(value = "data") UpsertPropertyRequest request);
 }
