@@ -1,5 +1,6 @@
 package com.example.dnd_13th_9_be.config;
 
+import com.querydsl.jpa.JPQLTemplates;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
@@ -15,6 +16,6 @@ public class QuerydslConfig {
 
   @Bean
   public JPAQueryFactory jpaQueryFactory() {
-    return new JPAQueryFactory(em);
+    return new JPAQueryFactory(JPQLTemplates.DEFAULT, em);
   }
 }

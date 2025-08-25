@@ -1,5 +1,7 @@
 package com.example.dnd_13th_9_be.folder.persistence;
 
+import com.example.dnd_13th_9_be.folder.application.dto.RecordSummaryResult;
+import com.example.dnd_13th_9_be.folder.persistence.dto.RecordSummary;
 import java.util.List;
 import jakarta.persistence.EntityManager;
 
@@ -89,5 +91,11 @@ public class FolderRepositoryImpl implements FolderRepository {
   @Override
   public long countFolderRecord(Long folderId) {
     return jpaFolderRepository.countFolderRecord(folderId);
+  }
+
+  @Override
+  public List<RecordSummaryResult> findAllRecordByIdAndUserId(Long userId, Long folderId) {
+    List<RecordSummary> records = jpaFolderRepository.findAllRecordByIdAndUserId(userId, folderId);
+    return records.stream().map(RecordSummaryResult::from).toList();
   }
 }

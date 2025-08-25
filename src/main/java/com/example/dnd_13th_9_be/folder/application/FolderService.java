@@ -1,5 +1,6 @@
 package com.example.dnd_13th_9_be.folder.application;
 
+import com.example.dnd_13th_9_be.folder.application.dto.RecordSummaryResult;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -69,5 +70,10 @@ public class FolderService {
     if (isFailDelete) {
       throw new BusinessException(FOLDER_DELETE_FAILED);
     }
+  }
+
+  public List<RecordSummaryResult> getRecordList(Long userId, Long folderId) {
+    folderRepository.verifyById(userId, folderId);
+    return folderRepository.findAllRecordByIdAndUserId(userId, folderId);
   }
 }

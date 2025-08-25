@@ -1,5 +1,6 @@
 package com.example.dnd_13th_9_be.folder.application.repository;
 
+import com.example.dnd_13th_9_be.folder.application.dto.RecordSummaryResult;
 import java.util.List;
 
 import com.example.dnd_13th_9_be.folder.application.dto.FolderDetailResult;
@@ -21,4 +22,6 @@ public interface FolderRepository {
   FolderDetailResult findByIdAndUserId(Long folderId, Long userId);
 
   long countFolderRecord(Long folderId);
+
+  List<RecordSummaryResult> findAllRecordByIdAndUserId(Long folderId, Long userId);
 }

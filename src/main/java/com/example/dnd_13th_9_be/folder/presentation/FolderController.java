@@ -1,5 +1,6 @@
 package com.example.dnd_13th_9_be.folder.presentation;
 
+import com.example.dnd_13th_9_be.folder.presentation.dto.response.RecordSummaryResponse;
 import java.util.List;
 import java.util.Map;
 import jakarta.validation.Valid;
@@ -69,5 +70,16 @@ public class FolderController implements FolderDocs {
       @PathVariable("folderId") Long folderId) {
     folderService.deleteFolder(userDetails.getUserId(), folderId);
     return ApiResponse.okEntity();
+  }
+
+  @Override
+  @GetMapping("/{folderId}/records")
+  public ResponseEntity<ApiResponse<List<RecordSummaryResponse>>> getRecordList(
+      @AuthenticationPrincipal UserPrincipalDto userDetails,
+      @PathVariable("folderId") Long folderId
+  ) {
+    List<RecordSummaryResponse> result = folderService.getRecordList(userDetails.getUserId(), folderId)
+        .stream().map(RecordSummaryResponse::from).toList();
+    return ApiResponse.successEntity(result);
   }
 }
