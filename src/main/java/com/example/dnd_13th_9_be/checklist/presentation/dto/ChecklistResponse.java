@@ -24,7 +24,7 @@ public record ChecklistResponse(List<CategorySummary> categories, List<Section> 
       Map<Boolean, List<SectionItem>> partitionedItems =
           category.getItems().stream()
               .map(item -> new SectionItem(item.getId(), item.getQuestion(), item.getDescription()))
-              .collect(Collectors.partitioningBy(item -> requiredIds.contains(item.id())));
+              .collect(Collectors.partitioningBy(item -> requiredIds.contains(item.itemId())));
       requiredSectionItems.addAll(partitionedItems.get(true));
       sections.add(
           new Section(category.getId(), category.getName(), null, partitionedItems.get(false)));

@@ -1,5 +1,9 @@
 package com.example.dnd_13th_9_be.checklist.application.service;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,10 +36,7 @@ public class UserRequiredItemService {
       throw new BusinessException(ALREADY_EXISTS_USER_REQUIRED_ITEM);
     }
 
-    boolean isNotExistsItem = !checklistItemRepository.existsById(itemId);
-    if (isNotExistsItem) {
-      throw new BusinessException(NOT_FOUND_CHECKLIST_ITEM);
-    }
+    verifyItemId(itemId);
 
     UserRequiredItemModel userRequiredItemModel =
         UserRequiredItemModel.builder().userId(userId).itemId(itemId).build();
@@ -44,14 +45,43 @@ public class UserRequiredItemService {
 
   @Transactional
   public void delete(Long userId, Long itemId) {
-    boolean isNotExistsItem = !checklistItemRepository.existsById(itemId);
-    if (isNotExistsItem) {
-      throw new BusinessException(NOT_FOUND_CHECKLIST_ITEM);
-    }
+    verifyItemId(itemId);
 
     long result = userRequiredItemRepository.delete(userId, itemId);
     if (result == 0) {
       throw new BusinessException(ALREADY_DELETED_USER_REQUIRED_ITEM);
+    }
+  }
+
+  @Transactional
+  public void replace(Long userId, List<Long> itemIdList) {
+    Set<Long> existingItemIdList =
+        userRequiredItemRepository.findAllByUserId(userId).stream()
+            .map(UserRequiredItemModel::getItemId)
+            .collect(Collectors.toSet());
+    Set<Long> newItemIdSet = new java.util.HashSet<>(itemIdList);
+
+    newItemIdSet.forEach(
+        itemId -> {
+          if (!existingItemIdList.contains(itemId)) {
+            verifyItemId(itemId);
+            userRequiredItemRepository.create(
+                UserRequiredItemModel.builder().userId(userId).itemId(itemId).build());
+          }
+        });
+
+    existingItemIdList.forEach(
+        itemId -> {
+          if (!newItemIdSet.contains(itemId)) {
+            userRequiredItemRepository.delete(userId, itemId);
+          }
+        });
+  }
+
+  private void verifyItemId(Long itemId) {
+    boolean isNotExistsItem = !checklistItemRepository.existsById(itemId);
+    if (isNotExistsItem) {
+      throw new BusinessException(NOT_FOUND_CHECKLIST_ITEM);
     }
   }
 }
