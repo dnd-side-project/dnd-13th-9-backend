@@ -43,7 +43,7 @@ public class UserRequiredItemController implements UserRequiredItemDocs {
     return ApiResponse.okEntity();
   }
 
-  @PostMapping
+  @PutMapping
   public ResponseEntity<ApiResponse<Map<String, Object>>> replace(
       @AuthenticationPrincipal UserPrincipalDto userDetails,
       @RequestBody ReplaceUserRequiredItemRequest request) {

@@ -2,6 +2,8 @@ package com.example.dnd_13th_9_be.checklist.application.service;
 
 import java.util.List;
 
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,12 +55,13 @@ public class UserRequiredItemService {
 
   @Transactional
   public void replace(Long userId, List<Long> itemIdList) {
-    List<Long> existingItemIdList =
+    Set<Long> existingItemIdList =
         userRequiredItemRepository.findAllByUserId(userId).stream()
             .map(UserRequiredItemModel::getItemId)
-            .toList();
+            .collect(Collectors.toSet());
+    Set<Long> newItemIdSet = new java.util.HashSet<>(itemIdList);
 
-    itemIdList.forEach(
+    newItemIdSet.forEach(
         itemId -> {
           if (!existingItemIdList.contains(itemId)) {
             verifyItemId(itemId);
@@ -69,7 +72,7 @@ public class UserRequiredItemService {
 
     existingItemIdList.forEach(
         itemId -> {
-          if (!itemIdList.contains(itemId)) {
+          if (!newItemIdSet.contains(itemId)) {
             userRequiredItemRepository.delete(userId, itemId);
           }
         });
