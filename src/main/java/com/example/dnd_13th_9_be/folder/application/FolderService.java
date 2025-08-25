@@ -1,6 +1,5 @@
 package com.example.dnd_13th_9_be.folder.application;
 
-import com.example.dnd_13th_9_be.folder.application.dto.RecordSummaryResult;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -10,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.folder.application.dto.FolderDetailResult;
 import com.example.dnd_13th_9_be.folder.application.dto.FolderSummaryResult;
+import com.example.dnd_13th_9_be.folder.application.dto.RecordSummaryResult;
 import com.example.dnd_13th_9_be.folder.application.repository.FolderRepository;
 import com.example.dnd_13th_9_be.global.error.BusinessException;
 import com.example.dnd_13th_9_be.plan.application.repository.PlanRepository;

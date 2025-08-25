@@ -1,10 +1,10 @@
 package com.example.dnd_13th_9_be.folder.application.repository;
 
-import com.example.dnd_13th_9_be.folder.application.dto.RecordSummaryResult;
 import java.util.List;
 
 import com.example.dnd_13th_9_be.folder.application.dto.FolderDetailResult;
 import com.example.dnd_13th_9_be.folder.application.dto.FolderSummaryResult;
+import com.example.dnd_13th_9_be.folder.application.dto.RecordSummaryResult;
 
 public interface FolderRepository {
   FolderDetailResult create(Long userId, Long planId, String name, boolean isDefault);

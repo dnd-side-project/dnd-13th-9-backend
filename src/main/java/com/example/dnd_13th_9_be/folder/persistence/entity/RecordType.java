@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum RecordType {
-    PROPERTY("매물 메모"),
-    LOCATION("장소 메모");
+  PROPERTY("매물 메모"),
+  LOCATION("장소 메모");
 
-    private final String name;
+  private final String name;
 }

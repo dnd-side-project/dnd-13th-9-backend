@@ -1,7 +1,5 @@
 package com.example.dnd_13th_9_be.folder.persistence;
 
-import com.example.dnd_13th_9_be.folder.application.dto.RecordSummaryResult;
-import com.example.dnd_13th_9_be.folder.persistence.dto.RecordSummary;
 import java.util.List;
 import jakarta.persistence.EntityManager;
 
@@ -11,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.folder.application.dto.FolderDetailResult;
 import com.example.dnd_13th_9_be.folder.application.dto.FolderSummaryResult;
+import com.example.dnd_13th_9_be.folder.application.dto.RecordSummaryResult;
 import com.example.dnd_13th_9_be.folder.application.repository.FolderRepository;
+import com.example.dnd_13th_9_be.folder.persistence.dto.RecordSummary;
 import com.example.dnd_13th_9_be.folder.persistence.entity.Folder;
 import com.example.dnd_13th_9_be.global.error.BusinessException;
 import com.example.dnd_13th_9_be.plan.persistence.entity.Plan;

@@ -1,24 +1,24 @@
 package com.example.dnd_13th_9_be.folder.persistence;
 
-import static com.querydsl.core.group.GroupBy.groupBy;
-import static com.querydsl.core.group.GroupBy.list;
-
-import com.example.dnd_13th_9_be.folder.persistence.dto.RecordSummary;
-import com.example.dnd_13th_9_be.folder.persistence.entity.RecordType;
-import com.example.dnd_13th_9_be.property.persistence.entity.QPropertyImage;
-import com.querydsl.core.types.dsl.Expressions;
 import java.util.List;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.folder.persistence.dto.FolderSummary;
+import com.example.dnd_13th_9_be.folder.persistence.dto.RecordSummary;
 import com.example.dnd_13th_9_be.folder.persistence.entity.QFolder;
+import com.example.dnd_13th_9_be.folder.persistence.entity.RecordType;
 import com.example.dnd_13th_9_be.location.persistence.QLocationRecordEntity;
 import com.example.dnd_13th_9_be.property.persistence.entity.QProperty;
+import com.example.dnd_13th_9_be.property.persistence.entity.QPropertyImage;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import static com.querydsl.core.group.GroupBy.groupBy;
+import static com.querydsl.core.group.GroupBy.list;
 
 @RequiredArgsConstructor
 public class QueryDslFolderRepositoryImpl implements QueryDslFolderRepository {
@@ -114,29 +114,36 @@ public class QueryDslFolderRepositoryImpl implements QueryDslFolderRepository {
 
     return query
         .from(property)
-        .leftJoin(propertyImage).on(propertyImage.property.eq(property))
+        .leftJoin(propertyImage)
+        .on(propertyImage.property.eq(property))
         .where(property.folder.id.eq(folderId))
-        .orderBy(property.createdAt.desc(), property.id.desc(), propertyImage.imageOrder.asc(), propertyImage.id.asc())
-        .transform(groupBy(property.id).list(
-            Projections.constructor(RecordSummary.class,
-                list(Projections.constructor(RecordSummary.RecordImageSummary.class,
-                    propertyImage.imageUrl,
-                    propertyImage.imageOrder
-                    )),
-                property.id,
-                Expressions.constant(RecordType.PROPERTY),
-                property.feeling,
-                property.title,
-                property.contractType,
-                property.depositBig,
-                property.depositSmall,
-                property.managementFee,
-                property.memo,
-                Expressions.nullExpression(String.class),
-                property.latitude,
-                property.longitude,
-                property.createdAt
-            )
-        ));
+        .orderBy(
+            property.createdAt.desc(),
+            property.id.desc(),
+            propertyImage.imageOrder.asc(),
+            propertyImage.id.asc())
+        .transform(
+            groupBy(property.id)
+                .list(
+                    Projections.constructor(
+                        RecordSummary.class,
+                        list(
+                            Projections.constructor(
+                                RecordSummary.RecordImageSummary.class,
+                                propertyImage.imageUrl,
+                                propertyImage.imageOrder)),
+                        property.id,
+                        Expressions.constant(RecordType.PROPERTY),
+                        property.feeling,
+                        property.title,
+                        property.contractType,
+                        property.depositBig,
+                        property.depositSmall,
+                        property.managementFee,
+                        property.memo,
+                        Expressions.nullExpression(String.class),
+                        property.latitude,
+                        property.longitude,
+                        property.createdAt)));
   }
 }

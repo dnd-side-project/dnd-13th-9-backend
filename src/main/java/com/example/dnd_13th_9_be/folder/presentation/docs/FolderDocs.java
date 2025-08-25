@@ -1,6 +1,5 @@
 package com.example.dnd_13th_9_be.folder.presentation.docs;
 
-import com.example.dnd_13th_9_be.folder.presentation.dto.response.RecordSummaryResponse;
 import java.util.List;
 import java.util.Map;
 import jakarta.validation.Valid;
@@ -18,6 +17,7 @@ import com.example.dnd_13th_9_be.folder.presentation.dto.request.CreateFolderReq
 import com.example.dnd_13th_9_be.folder.presentation.dto.request.RenameFolderRequest;
 import com.example.dnd_13th_9_be.folder.presentation.dto.response.FolderDetailResponse;
 import com.example.dnd_13th_9_be.folder.presentation.dto.response.FolderSummaryResponse;
+import com.example.dnd_13th_9_be.folder.presentation.dto.response.RecordSummaryResponse;
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
 import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -350,20 +350,20 @@ public interface FolderDocs {
           @PathVariable("folderId")
           Long folderId);
 
-    @Operation(summary = "폴더 내 기록 조회", description = "지정된 폴더에 포함된 매물/장소 메모 기록 목록을 조회한다.")
-    @ApiResponses({
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "200",
-            description = "성공",
-            content =
+  @Operation(summary = "폴더 내 기록 조회", description = "지정된 폴더에 포함된 매물/장소 메모 기록 목록을 조회한다.")
+  @ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "200",
+        description = "성공",
+        content =
             @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = ApiResponse.class),
                 examples =
-                @ExampleObject(
-                    name = "성공 예시",
-                    value =
-                        """
+                    @ExampleObject(
+                        name = "성공 예시",
+                        value =
+                            """
               {
                 "code": "20000",
                 "message": "성공했습니다",
@@ -403,28 +403,29 @@ public interface FolderDocs {
                 ]
               }
               """))),
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "404",
-            description = "유효하지 않은 폴더 id",
-            content =
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "404",
+        description = "유효하지 않은 폴더 id",
+        content =
             @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = ApiResponse.class),
                 examples =
-                @ExampleObject(
-                    name = "폴더 없음 예시",
-                    value =
-                        """
+                    @ExampleObject(
+                        name = "폴더 없음 예시",
+                        value =
+                            """
               {
                 "code": "72000",
                 "message": "유효하지 않은 폴더입니다",
                 "data": null
               }
               """)))
-    })
-    @GetMapping("/{folderId}/records")
-    ResponseEntity<ApiResponse<List<RecordSummaryResponse>>> getRecordList(
-        @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userDetails,
-        @Parameter(description = "폴더 고유 인덱스 값", example = "12", required = true) @PathVariable("folderId") Long folderId
-    );
+  })
+  @GetMapping("/{folderId}/records")
+  ResponseEntity<ApiResponse<List<RecordSummaryResponse>>> getRecordList(
+      @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userDetails,
+      @Parameter(description = "폴더 고유 인덱스 값", example = "12", required = true)
+          @PathVariable("folderId")
+          Long folderId);
 }

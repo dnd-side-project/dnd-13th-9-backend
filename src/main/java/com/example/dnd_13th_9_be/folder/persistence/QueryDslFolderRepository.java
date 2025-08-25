@@ -1,10 +1,9 @@
 package com.example.dnd_13th_9_be.folder.persistence;
 
-import com.example.dnd_13th_9_be.folder.application.dto.RecordSummaryResult;
-import com.example.dnd_13th_9_be.folder.persistence.dto.RecordSummary;
 import java.util.List;
 
 import com.example.dnd_13th_9_be.folder.persistence.dto.FolderSummary;
+import com.example.dnd_13th_9_be.folder.persistence.dto.RecordSummary;
 
 public interface QueryDslFolderRepository {
   List<FolderSummary> findSummariesByPlanId(Long userId, Long planId);
