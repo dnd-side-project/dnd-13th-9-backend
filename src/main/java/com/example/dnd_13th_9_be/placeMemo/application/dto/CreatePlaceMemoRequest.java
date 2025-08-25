@@ -7,12 +7,12 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
-public record PlaceMemoCreateRequest(
+public record CreatePlaceMemoRequest(
         @NotBlank(message = "장소명은 필수값입니다.")
         @Size(max = 20, message = "장소명은 20자 이내로 입력해주세요.")
         String title,
         @NotNull(message = "장소 태그는 필수값입니다.") PlaceTag placeTag,
-        @Size(max = 100, message = "메모는 100자 이재로 입력해주세요.") String description,
+        @Size(max = 100, message = "메모는 100자 이내로 입력해주세요.") String description,
         @NotBlank(message = "주소는 필수값입니다.")
         @Size(max = 200, message = "주소는 200자 이내로 입력해주세요.")
         String address,
