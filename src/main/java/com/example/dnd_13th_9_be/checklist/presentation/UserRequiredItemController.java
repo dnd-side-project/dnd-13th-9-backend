@@ -1,12 +1,12 @@
 package com.example.dnd_13th_9_be.checklist.presentation;
 
+import jakarta.validation.Valid;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,7 +46,7 @@ public class UserRequiredItemController implements UserRequiredItemDocs {
   @PutMapping
   public ResponseEntity<ApiResponse<Map<String, Object>>> replace(
       @AuthenticationPrincipal UserPrincipalDto userDetails,
-      @RequestBody ReplaceUserRequiredItemRequest request) {
+      @Valid @RequestBody ReplaceUserRequiredItemRequest request) {
     userRequiredItemService.replace(userDetails.getUserId(), request.itemIdList());
     return ApiResponse.okEntity();
   }

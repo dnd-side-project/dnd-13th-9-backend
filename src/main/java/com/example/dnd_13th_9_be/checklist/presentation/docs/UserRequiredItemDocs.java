@@ -1,11 +1,12 @@
 package com.example.dnd_13th_9_be.checklist.presentation.docs;
 
+import jakarta.validation.Valid;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.dnd_13th_9_be.checklist.presentation.dto.ReplaceUserRequiredItemRequest;
@@ -215,8 +216,8 @@ public interface UserRequiredItemDocs {
                   }
                   """)))
   })
-  @PostMapping
+  @PutMapping
   ResponseEntity<ApiResponse<Map<String, Object>>> replace(
       @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userDetails,
-      @RequestBody ReplaceUserRequiredItemRequest request);
+      @Valid @RequestBody ReplaceUserRequiredItemRequest request);
 }
