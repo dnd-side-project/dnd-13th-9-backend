@@ -6,6 +6,7 @@ import com.example.dnd_13th_9_be.folder.persistence.entity.Folder;
 import com.example.dnd_13th_9_be.user.persistence.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -62,6 +63,21 @@ public class PlaceMemo extends BaseEntity {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "place_memo_id") // FK를 PlaceMemoImage 테이블에 생성
-    @OrderBy("orderIndex ASC")
     private List<PlaceMemoImage> images = new ArrayList<>();
+
+    @Builder
+    public PlaceMemo(User user, Folder folder, String title, PlaceTag placeTag, String description,
+                     String address, String latitude, String longitude, List<PlaceMemoImage> images){
+        this.user = user;
+        this.folder = folder;
+        this.title = title;
+        this.placeTag = placeTag;
+        this.description = description;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        if(images != null){
+            this.images = images;
+        }
+    }
 }
