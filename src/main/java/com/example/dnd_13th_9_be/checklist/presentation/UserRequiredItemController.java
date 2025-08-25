@@ -1,7 +1,7 @@
 package com.example.dnd_13th_9_be.checklist.presentation;
 
-import jakarta.validation.Valid;
 import java.util.Map;
+import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
