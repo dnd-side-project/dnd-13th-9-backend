@@ -27,18 +27,20 @@ public record RecordSummaryResult(
     Double longitude,
     LocalDateTime createdAt) {
   public static RecordSummaryResult from(RecordSummary recordSummary) {
-    RecordImageSummary image =
-        Optional.ofNullable(recordSummary.images()).orElseGet(Collections::emptyList).stream()
-            .filter(i -> Objects.equals(i.order(), 1))
-            .findFirst()
-            .orElse(null);
+
     return RecordSummaryResult.builder()
         .id(recordSummary.id())
-        .imageUrl(image == null ? null : image.url())
-        .recordType(recordSummary.recordType().name())
-        .feeling(recordSummary.feeling().name())
+        .imageUrl(
+            Optional.ofNullable(recordSummary.images()).orElseGet(Collections::emptyList).stream()
+                .filter(i -> Objects.equals(i.order(), 1))
+                .findFirst()
+                .map(RecordImageSummary::url)
+                .orElse(null))
+        .recordType(recordSummary.recordType() != null ? recordSummary.recordType().name() : null)
+        .feeling(recordSummary.feeling() != null ? recordSummary.feeling().name() : null)
         .title(recordSummary.title())
-        .contractType(recordSummary.contractType().name())
+        .contractType(
+            recordSummary.contractType() != null ? recordSummary.contractType().name() : null)
         .depositBig(recordSummary.depositBig())
         .depositSmall(recordSummary.depositSmall())
         .managementFee(recordSummary.managementFee())

@@ -116,7 +116,7 @@ public class QueryDslFolderRepositoryImpl implements QueryDslFolderRepository {
         .from(property)
         .leftJoin(propertyImage)
         .on(propertyImage.property.eq(property))
-        .where(property.folder.id.eq(folderId))
+        .where(property.folder.id.eq(folderId).and(property.folder.user.id.eq(userId)))
         .orderBy(
             property.createdAt.desc(),
             property.id.desc(),

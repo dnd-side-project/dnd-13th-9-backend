@@ -23,5 +23,5 @@ public interface FolderRepository {
 
   long countFolderRecord(Long folderId);
 
-  List<RecordSummaryResult> findAllRecordByIdAndUserId(Long folderId, Long userId);
+  List<RecordSummaryResult> findAllRecordByIdAndUserId(Long userId, Long folderId);
 }
