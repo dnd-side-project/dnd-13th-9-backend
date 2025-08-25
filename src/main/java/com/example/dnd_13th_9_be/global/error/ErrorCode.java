@@ -59,7 +59,12 @@ public enum ErrorCode implements ResponseCode {
   ALREADY_DELETED_USER_REQUIRED_ITEM(HttpStatus.CONFLICT, "73002", "이미 필수 확인에서 삭제된 체크리스트입니다"),
 
   DEFAULT_FOLDER_PLAN_NOT_CREATED(HttpStatus.CONFLICT, "61000", "기본 폴더, 플랙 생성 실패"),
+
+  //placeMemo 75xxx
+  NOT_FOUND_PLACETAG(HttpStatus.NOT_FOUND, "75000", "존재하지 않는 태그 입니다")
   ;
+
+
 
   private final HttpStatus status;
   private final String code;
