@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.folder.application.dto.FolderDetailResult;
 import com.example.dnd_13th_9_be.folder.application.dto.FolderSummaryResult;
+import com.example.dnd_13th_9_be.folder.application.dto.RecordSummaryResult;
 import com.example.dnd_13th_9_be.folder.application.repository.FolderRepository;
 import com.example.dnd_13th_9_be.global.error.BusinessException;
 import com.example.dnd_13th_9_be.plan.application.repository.PlanRepository;
@@ -69,5 +70,10 @@ public class FolderService {
     if (isFailDelete) {
       throw new BusinessException(FOLDER_DELETE_FAILED);
     }
+  }
+
+  public List<RecordSummaryResult> getRecordList(Long userId, Long folderId) {
+    folderRepository.verifyById(userId, folderId);
+    return folderRepository.findAllRecordByIdAndUserId(userId, folderId);
   }
 }
