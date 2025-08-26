@@ -25,16 +25,16 @@ public record UpdatePlaceMemoRequest(
     @Schema(description = "최종 상태에 추가할 새 이미지 파일(선택, 최대 5개)") @Size(max = 5)
         List<MultipartFile> newImages) {
 
-    public PlaceMemoModel toModel(final List<String> finalImageUrls) {
-        return PlaceMemoModel.builder()
-                .title(title)
-                .placeTag(placeTag)
-                .description(description)
-                .address(address)
-                .latitude(latitude)
-                .longitude(longitude)
-                .folderId(folderId)
-                .imageUrls(finalImageUrls == null ? List.of() : List.copyOf(finalImageUrls))
-                .build();
-    }
+  public PlaceMemoModel toModel(final List<String> finalImageUrls) {
+    return PlaceMemoModel.builder()
+        .title(title)
+        .placeTag(placeTag)
+        .description(description)
+        .address(address)
+        .latitude(latitude)
+        .longitude(longitude)
+        .folderId(folderId)
+        .imageUrls(finalImageUrls == null ? List.of() : List.copyOf(finalImageUrls))
+        .build();
+  }
 }

@@ -93,10 +93,8 @@ public class PlaceMemoService {
       throw new BusinessException(ErrorCode.INVALID_IMAGE_COUNT, "이미지는 최대 5개까지 업로드할 수 있습니다.");
     }
 
-    PlaceMemoModel updatedModel = request.toModel(List.copyOf(finalSet))
-            .toBuilder()
-            .id(placeMemoId)
-            .build();
+    PlaceMemoModel updatedModel =
+        request.toModel(List.copyOf(finalSet)).toBuilder().id(placeMemoId).build();
     placeMemoRepository.update(userId, placeMemoId, updatedModel);
   }
 

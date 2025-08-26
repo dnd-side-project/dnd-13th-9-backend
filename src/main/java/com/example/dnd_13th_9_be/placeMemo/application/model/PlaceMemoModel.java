@@ -23,5 +23,4 @@ public class PlaceMemoModel implements AbstractModel {
   private String longitude;
   private Long folderId;
   @Builder.Default private List<String> imageUrls = List.of();
-
 }
