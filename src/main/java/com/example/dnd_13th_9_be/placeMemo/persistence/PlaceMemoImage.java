@@ -2,10 +2,7 @@ package com.example.dnd_13th_9_be.placeMemo.persistence;
 
 import com.example.dnd_13th_9_be.common.persistence.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "place_memo_image")
@@ -20,9 +17,10 @@ public class PlaceMemoImage extends BaseEntity {
     @Column(nullable = false)
     private String imageUrl;
 
-    @Column(name = "order_index", nullable = false)
-    private Integer orderIndex;
-
+    @Builder
+    public PlaceMemoImage(String imageUrl){
+        this.imageUrl = imageUrl;
+    }
 
 
 }
