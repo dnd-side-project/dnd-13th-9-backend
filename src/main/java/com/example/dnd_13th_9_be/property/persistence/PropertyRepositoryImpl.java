@@ -138,4 +138,16 @@ public class PropertyRepositoryImpl implements PropertyRepository {
                 folder.name))
         .fetch();
   }
+
+  @Override
+  public long countByUserId(Long userId) {
+    var property = QProperty.property;
+    Long count =
+        query
+            .select(property.count())
+            .from(property)
+            .where(property.folder.user.id.eq(userId))
+            .fetchOne();
+    return count == null ? 0 : count;
+  }
 }
