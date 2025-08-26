@@ -57,6 +57,11 @@ public enum ErrorCode implements ResponseCode {
 
   DEFAULT_FOLDER_PLAN_NOT_CREATED(HttpStatus.CONFLICT, "61000", "기본 폴더, 플랙 생성 실패"),
 
+  // placeMemo 75xxx
+  NOT_FOUND_PLACETAG(HttpStatus.NOT_FOUND, "75000", "존재하지 않는 태그 입니다"),
+  NOT_FOUND_PLACE_MEMO(HttpStatus.NOT_FOUND, "75001", "존재하지 않는 PlaceMemo 입니다"),
+  INVALID_IMAGE_COUNT(HttpStatus.BAD_REQUEST, "75002", "주변장소 메모는최대 5개의 이미지를 첨부할 있습니다]"),
+
   // property record 74xxx
   PROPERTY_RECORD_IMAGE_LIMIT(HttpStatus.BAD_REQUEST, "74000", "매물 메모는 최대 5개의 이미지를 첨부할 수 있습니다"),
   NOT_FOUND_PROPERTY(HttpStatus.NOT_FOUND, "74001", "존재하지 않는 매물입니다"),
