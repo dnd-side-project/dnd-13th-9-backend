@@ -12,4 +12,6 @@ public interface UserRequiredItemRepository {
   long delete(Long userId, Long itemId);
 
   List<UserRequiredItemModel> findAllByUserId(Long userId);
+
+  long countByUserId(Long userId);
 }

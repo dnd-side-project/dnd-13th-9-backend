@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
+import com.example.dnd_13th_9_be.property.application.model.RecentPropertyModel;
 import com.example.dnd_13th_9_be.property.presentation.dto.request.UpsertPropertyRequest;
 import com.example.dnd_13th_9_be.property.presentation.dto.response.PropertyDetailResponse;
 import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
@@ -25,6 +27,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "매물", description = "매물(Property) 관련 API")
@@ -463,4 +466,83 @@ public interface PropertyDocs {
           Long propertyId,
       @RequestPart(value = "image", required = false) List<MultipartFile> files,
       @Validated @RequestPart(value = "data") UpsertPropertyRequest request);
+
+  @Operation(
+      summary = "최근 매물 조회",
+      description =
+          """
+            사용자가 최근에 등록한 매물들을 최신 순으로 조회한다.
+            - 응답 데이터는 `size` 개수만큼 반환된다 (기본값 10).
+            - 매물에 첨부된 이미지 중 첫 번째(`order=1`) 이미지를 `imageUrl`에 담아 제공한다.
+            - 이미지가 없는 경우 `imageUrl`은 `null`일 수 있다.
+            """)
+  @ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "200",
+        description = "성공",
+        content =
+            @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiResponse.class),
+                examples =
+                    @ExampleObject(
+                        name = "성공 예시",
+                        value =
+                            """
+                        {
+                          "code": "20000",
+                          "message": "성공했습니다",
+                          "data": [
+                            {
+                              "propertyId": 47,
+                              "imageUrl": null,
+                              "feeling": "BAD",
+                              "title": "11번째 집!",
+                              "depositBig": 0,
+                              "depositSmall": 1,
+                              "managementFee": null,
+                              "contractType": "JEONSE",
+                              "planName": "기본 계획",
+                              "folderName": "관악산근처"
+                            },
+                            {
+                              "propertyId": 42,
+                              "imageUrl": "https://zipzip-bucket.s3.amazonaws.com/images/c07f1844-d1c6-414d-bd60-78c21d79ec6e.jpeg",
+                              "feeling": "SOSO",
+                              "title": "관악산",
+                              "depositBig": 100,
+                              "depositSmall": 10,
+                              "managementFee": null,
+                              "contractType": "JEONSE",
+                              "planName": "기본 계획",
+                              "folderName": "관악산근처"
+                            }
+                          ]
+                        }
+                        """))),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "401",
+        description = "인증 실패 (로그인 필요)",
+        content =
+            @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiResponse.class),
+                examples =
+                    @ExampleObject(
+                        name = "인증 실패 예시",
+                        value =
+                            """
+                        {
+                          "code": "40100",
+                          "message": "인증이 필요합니다",
+                          "data": null
+                        }
+                        """)))
+  })
+  @GetMapping("/recent")
+  ResponseEntity<ApiResponse<List<RecentPropertyModel>>> getRecentProperties(
+      @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userDetails,
+      @Parameter(name = "size", description = "응답 받을 매물 메모 갯수 (기본값 10, 옵션)", example = "5")
+          @RequestParam(name = "size", defaultValue = "10")
+          int size);
 }

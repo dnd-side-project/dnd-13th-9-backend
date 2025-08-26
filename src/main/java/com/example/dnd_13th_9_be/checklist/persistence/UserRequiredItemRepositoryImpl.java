@@ -12,9 +12,11 @@ import com.example.dnd_13th_9_be.checklist.application.model.UserRequiredItemMod
 import com.example.dnd_13th_9_be.checklist.application.model.converter.UserRequiredItemConverter;
 import com.example.dnd_13th_9_be.checklist.application.repository.UserRequiredItemRepository;
 import com.example.dnd_13th_9_be.checklist.persistence.entity.ChecklistItem;
+import com.example.dnd_13th_9_be.checklist.persistence.entity.QUserRequiredItem;
 import com.example.dnd_13th_9_be.checklist.persistence.entity.UserRequiredItem;
 import com.example.dnd_13th_9_be.checklist.persistence.repository.JpaUserRequiredItemRepository;
 import com.example.dnd_13th_9_be.user.persistence.User;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Repository
 @RequiredArgsConstructor
@@ -22,6 +24,7 @@ import com.example.dnd_13th_9_be.user.persistence.User;
 public class UserRequiredItemRepositoryImpl implements UserRequiredItemRepository {
   private final JpaUserRequiredItemRepository jpaUserRequiredItemRepository;
   private final UserRequiredItemConverter userRequiredItemConverter;
+  private final JPAQueryFactory query;
   private final EntityManager em;
 
   @Override
@@ -53,5 +56,17 @@ public class UserRequiredItemRepositoryImpl implements UserRequiredItemRepositor
     List<UserRequiredItem> requiredItems =
         jpaUserRequiredItemRepository.findAllByUserIdOrderByIdAsc(userId);
     return requiredItems.stream().map(userRequiredItemConverter::from).toList();
+  }
+
+  @Override
+  public long countByUserId(Long userId) {
+    var userRequiredItem = QUserRequiredItem.userRequiredItem;
+    Long count =
+        query
+            .select(userRequiredItem.count())
+            .from(userRequiredItem)
+            .where(userRequiredItem.user.id.eq(userId))
+            .fetchOne();
+    return count == null ? 0 : count;
   }
 }
