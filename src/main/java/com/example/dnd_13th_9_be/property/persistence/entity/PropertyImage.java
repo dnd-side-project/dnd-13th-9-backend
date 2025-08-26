@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -20,7 +21,12 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-@Table(name = "property_image")
+@Table(
+    name = "property_image",
+    uniqueConstraints =
+        @UniqueConstraint(
+            name = "uk_property_image_order",
+            columnNames = {"property_id", "image_order"}))
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PropertyImage extends BaseEntity {

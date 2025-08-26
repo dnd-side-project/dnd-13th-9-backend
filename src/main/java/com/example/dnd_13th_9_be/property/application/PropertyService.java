@@ -27,6 +27,7 @@ import com.example.dnd_13th_9_be.global.error.S3ImageException;
 import com.example.dnd_13th_9_be.property.application.model.PropertyCategoryMemoModel;
 import com.example.dnd_13th_9_be.property.application.model.PropertyImageModel;
 import com.example.dnd_13th_9_be.property.application.model.PropertyModel;
+import com.example.dnd_13th_9_be.property.application.model.RecentPropertyModel;
 import com.example.dnd_13th_9_be.property.application.repository.PropertyCategoryMemoRepository;
 import com.example.dnd_13th_9_be.property.application.repository.PropertyImageRepository;
 import com.example.dnd_13th_9_be.property.application.repository.PropertyRepository;
@@ -233,5 +234,11 @@ public class PropertyService {
                     categoryId, propertyId);
               }
             });
+  }
+
+  public List<RecentPropertyModel> findTopByUserId(Long userId, int size) {
+    return propertyRepository.findTopByUserId(userId, size).stream()
+        .map(RecentPropertyModel::from)
+        .toList();
   }
 }

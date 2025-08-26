@@ -1,5 +1,6 @@
 package com.example.dnd_13th_9_be.property.persistence;
 
+import java.util.List;
 import jakarta.persistence.EntityManager;
 
 import org.springframework.stereotype.Component;
@@ -7,12 +8,17 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.folder.persistence.entity.Folder;
+import com.example.dnd_13th_9_be.folder.persistence.entity.QFolder;
 import com.example.dnd_13th_9_be.global.error.BusinessException;
+import com.example.dnd_13th_9_be.plan.persistence.entity.QPlan;
 import com.example.dnd_13th_9_be.property.application.model.PropertyModel;
 import com.example.dnd_13th_9_be.property.application.repository.PropertyRepository;
 import com.example.dnd_13th_9_be.property.persistence.dto.PropertyResult;
+import com.example.dnd_13th_9_be.property.persistence.dto.RecentPropertyResult;
 import com.example.dnd_13th_9_be.property.persistence.entity.Property;
 import com.example.dnd_13th_9_be.property.persistence.entity.QProperty;
+import com.example.dnd_13th_9_be.property.persistence.entity.QPropertyImage;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import static com.example.dnd_13th_9_be.global.error.ErrorCode.NOT_FOUND_PROPERTY;
@@ -100,5 +106,36 @@ public class PropertyRepositoryImpl implements PropertyRepository {
     }
     savedProperty.update(dto);
     jpaPropertyRepository.save(savedProperty);
+  }
+
+  public List<RecentPropertyResult> findTopByUserId(Long userId, int size) {
+    var property = QProperty.property;
+    var propertyImage = QPropertyImage.propertyImage;
+    var plan = QPlan.plan;
+    var folder = QFolder.folder;
+
+    return query
+        .from(property)
+        .join(property.folder, folder)
+        .leftJoin(folder.plan, plan)
+        .leftJoin(propertyImage)
+        .on(propertyImage.property.eq(property).and(propertyImage.imageOrder.eq(1)))
+        .where(folder.user.id.eq(userId))
+        .orderBy(property.createdAt.desc(), property.id.desc())
+        .limit(size)
+        .select(
+            Projections.constructor(
+                RecentPropertyResult.class,
+                property.id,
+                propertyImage.imageUrl,
+                property.feeling,
+                property.title,
+                property.depositBig,
+                property.depositSmall,
+                property.managementFee,
+                property.contractType,
+                plan.name,
+                folder.name))
+        .fetch();
   }
 }
