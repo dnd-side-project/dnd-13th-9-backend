@@ -3,6 +3,7 @@ package com.example.dnd_13th_9_be.placeMemo.persistence;
 
 import com.example.dnd_13th_9_be.common.persistence.BaseEntity;
 import com.example.dnd_13th_9_be.folder.persistence.entity.Folder;
+import com.example.dnd_13th_9_be.placeMemo.application.model.PlaceMemoModel;
 import com.example.dnd_13th_9_be.user.persistence.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -78,6 +79,22 @@ public class PlaceMemo extends BaseEntity {
         this.longitude = longitude;
         if(images != null){
             this.images = images;
+        }
+    }
+
+    public void updateFrom(PlaceMemoModel model) {
+        this.title = model.getTitle();
+        this.description = model.getDescription();
+        this.address = model.getAddress();
+        this.latitude = model.getLatitude();
+        this.longitude = model.getLongitude();
+        this.placeTag = model.getPlaceTag();
+
+        this.images.clear();
+        if (model.getImageUrls() != null) {
+            model.getImageUrls().forEach(url ->
+                    this.images.add(PlaceMemoImage.builder().imageUrl(url).build())
+            );
         }
     }
 }
