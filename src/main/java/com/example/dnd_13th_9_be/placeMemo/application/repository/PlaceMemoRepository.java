@@ -11,7 +11,7 @@ public interface PlaceMemoRepository {
 
   Optional<PlaceMemoModel> findByIdAndUserId(Long placeMemoId, Long userId);
 
-  void deleteById(Long placeMemoId, Long UserId);
+  void deleteById(Long placeMemoId, Long userId);
 
   List<PlaceMemoModel> findByFolderIdAndUserId(Long folderId, Long userId);
 
