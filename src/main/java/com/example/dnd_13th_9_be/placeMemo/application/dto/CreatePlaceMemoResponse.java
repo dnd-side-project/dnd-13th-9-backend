@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class CreatePlaceMemoResponse {
-    private Long placeMemoId;
+  private Long placeMemoId;
 }
