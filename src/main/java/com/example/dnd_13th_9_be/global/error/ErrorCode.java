@@ -61,7 +61,8 @@ public enum ErrorCode implements ResponseCode {
   DEFAULT_FOLDER_PLAN_NOT_CREATED(HttpStatus.CONFLICT, "61000", "기본 폴더, 플랙 생성 실패"),
 
   //placeMemo 75xxx
-  NOT_FOUND_PLACETAG(HttpStatus.NOT_FOUND, "75000", "존재하지 않는 태그 입니다")
+  NOT_FOUND_PLACETAG(HttpStatus.NOT_FOUND, "75000", "존재하지 않는 태그 입니다"),
+  NOT_FOUND_PLACE_MEMO(HttpStatus.NOT_FOUND, "75001", "존재하지 않는 PlaceMemo 입니다")
   ;
 
 
