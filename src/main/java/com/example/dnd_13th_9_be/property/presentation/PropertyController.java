@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -74,10 +75,13 @@ public class PropertyController implements PropertyDocs {
     return ApiResponse.okEntity();
   }
 
+  @Override
   @GetMapping("/recent")
   public ResponseEntity<ApiResponse<List<RecentPropertyModel>>> getRecentProperties(
-      @AuthenticationPrincipal UserPrincipalDto userDetails) {
-    List<RecentPropertyModel> result = propertyService.findTopByUserId(userDetails.getUserId());
+      @AuthenticationPrincipal UserPrincipalDto userDetails,
+      @RequestParam(name = "size", defaultValue = "10") int size) {
+    List<RecentPropertyModel> result =
+        propertyService.findTopByUserId(userDetails.getUserId(), size);
     return ApiResponse.successEntity(result);
   }
 }

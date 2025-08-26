@@ -236,8 +236,8 @@ public class PropertyService {
             });
   }
 
-  public List<RecentPropertyModel> findTopByUserId(Long userId) {
-    return propertyRepository.findTopByUserId(userId).stream()
+  public List<RecentPropertyModel> findTopByUserId(Long userId, int size) {
+    return propertyRepository.findTopByUserId(userId, size).stream()
         .map(RecentPropertyModel::from)
         .toList();
   }

@@ -108,7 +108,7 @@ public class PropertyRepositoryImpl implements PropertyRepository {
     jpaPropertyRepository.save(savedProperty);
   }
 
-  public List<RecentPropertyResult> findTopByUserId(Long userId) {
+  public List<RecentPropertyResult> findTopByUserId(Long userId, int size) {
     var property = QProperty.property;
     var propertyImage = QPropertyImage.propertyImage;
     var plan = QPlan.plan;
@@ -122,7 +122,7 @@ public class PropertyRepositoryImpl implements PropertyRepository {
         .on(propertyImage.property.eq(property).and(propertyImage.imageOrder.eq(1)))
         .where(folder.user.id.eq(userId))
         .orderBy(property.createdAt.desc(), property.id.desc())
-        .limit(10)
+        .limit(size)
         .select(
             Projections.constructor(
                 RecentPropertyResult.class,

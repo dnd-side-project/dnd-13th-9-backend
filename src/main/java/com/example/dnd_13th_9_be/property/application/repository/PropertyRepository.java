@@ -17,5 +17,5 @@ public interface PropertyRepository {
 
   void update(Long userId, Long propertyId, PropertyModel dto);
 
-  List<RecentPropertyResult> findTopByUserId(Long userId);
+  List<RecentPropertyResult> findTopByUserId(Long userId, int size);
 }
