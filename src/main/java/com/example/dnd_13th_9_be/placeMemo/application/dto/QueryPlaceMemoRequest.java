@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
-public record PlaceMemoUpdateRequest (
+public record QueryPlaceMemoRequest(
     @NotBlank(message = "장소명은 필수값입니다.")
     @Size(max = 20, message = "장소명은 20자 이내로 입력해주세요.")
     String title,
