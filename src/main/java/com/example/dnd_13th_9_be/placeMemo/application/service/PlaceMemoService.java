@@ -1,5 +1,7 @@
 package com.example.dnd_13th_9_be.placeMemo.application.service;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -62,15 +64,39 @@ public class PlaceMemoService {
   @Transactional
   public void update(
       final Long placeMemoId, final Long userId, final UpdatePlaceMemoRequest request) {
-    List<String> uploadedUrls =
-        request.newImages() == null
-            ? List.of()
-            : request.newImages().stream()
-                .filter(f -> !f.isEmpty())
-                .map(s3Manager::upload)
-                .toList();
+    List<String> uploadedUrls = new ArrayList<>();
+    try {
+      if (request.newImages() != null) {
+        for (MultipartFile file : request.newImages()) {
+          if (file != null && !file.isEmpty()) {
+            uploadedUrls.add(s3Manager.upload(file));
+          }
+        }
+      }
+    } catch (RuntimeException e) {
+      if (!uploadedUrls.isEmpty()) {
+        s3Manager.deleteMultiple(uploadedUrls);
+      }
+      throw e;
+    }
 
-    PlaceMemoModel updatedModel = request.toModel(userId, uploadedUrls);
+    LinkedHashSet<String> finalSet = new LinkedHashSet<>();
+    if (request.existingImageUrls() != null) {
+      finalSet.addAll(request.existingImageUrls());
+    }
+    finalSet.addAll(uploadedUrls);
+
+    if (finalSet.size() > 5) {
+      if (!uploadedUrls.isEmpty()) {
+        s3Manager.deleteMultiple(uploadedUrls); // 보상 삭제
+      }
+      throw new BusinessException(ErrorCode.INVALID_IMAGE_COUNT, "이미지는 최대 5개까지 업로드할 수 있습니다.");
+    }
+
+    PlaceMemoModel updatedModel = request.toModel(List.copyOf(finalSet))
+            .toBuilder()
+            .id(placeMemoId)
+            .build();
     placeMemoRepository.update(userId, placeMemoId, updatedModel);
   }
 
