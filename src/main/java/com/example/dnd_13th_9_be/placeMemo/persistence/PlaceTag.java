@@ -1,5 +1,10 @@
 package com.example.dnd_13th_9_be.placeMemo.persistence;
 
+import com.example.dnd_13th_9_be.global.error.BusinessException;
+import com.example.dnd_13th_9_be.global.error.ErrorCode;
+
+import java.util.Arrays;
+
 public enum PlaceTag {
 
     ADVANTAGE("장점"),
@@ -17,5 +22,12 @@ public enum PlaceTag {
 
     public String getTag(){
         return tag;
+    }
+
+    public static PlaceTag find(String tag){
+        return Arrays.stream(values())
+                .filter(placeTag -> placeTag.getTag().equals(tag))
+                .findAny()
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_PLACETAG));
     }
 }
