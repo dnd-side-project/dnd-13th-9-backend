@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
 import com.example.dnd_13th_9_be.property.application.PropertyService;
+import com.example.dnd_13th_9_be.property.application.model.RecentPropertyModel;
 import com.example.dnd_13th_9_be.property.presentation.docs.PropertyDocs;
 import com.example.dnd_13th_9_be.property.presentation.dto.request.UpsertPropertyRequest;
 import com.example.dnd_13th_9_be.property.presentation.dto.response.PropertyDetailResponse;
@@ -71,5 +72,12 @@ public class PropertyController implements PropertyDocs {
     propertyService.updateProperty(userDetails.getUserId(), propertyId, files, request);
 
     return ApiResponse.okEntity();
+  }
+
+  @GetMapping("/recent")
+  public ResponseEntity<ApiResponse<List<RecentPropertyModel>>> getRecentProperties(
+      @AuthenticationPrincipal UserPrincipalDto userDetails) {
+    List<RecentPropertyModel> result = propertyService.findTopByUserId(userDetails.getUserId());
+    return ApiResponse.successEntity(result);
   }
 }
