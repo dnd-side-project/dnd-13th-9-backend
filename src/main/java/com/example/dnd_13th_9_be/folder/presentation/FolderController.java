@@ -23,6 +23,7 @@ import com.example.dnd_13th_9_be.folder.presentation.dto.request.CreateFolderReq
 import com.example.dnd_13th_9_be.folder.presentation.dto.request.RenameFolderRequest;
 import com.example.dnd_13th_9_be.folder.presentation.dto.response.FolderDetailResponse;
 import com.example.dnd_13th_9_be.folder.presentation.dto.response.FolderSummaryResponse;
+import com.example.dnd_13th_9_be.folder.presentation.dto.response.RecordSummaryResponse;
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
 import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
 
@@ -69,5 +70,17 @@ public class FolderController implements FolderDocs {
       @PathVariable("folderId") Long folderId) {
     folderService.deleteFolder(userDetails.getUserId(), folderId);
     return ApiResponse.okEntity();
+  }
+
+  @Override
+  @GetMapping("/{folderId}/records")
+  public ResponseEntity<ApiResponse<List<RecordSummaryResponse>>> getRecordList(
+      @AuthenticationPrincipal UserPrincipalDto userDetails,
+      @PathVariable("folderId") Long folderId) {
+    List<RecordSummaryResponse> result =
+        folderService.getRecordList(userDetails.getUserId(), folderId).stream()
+            .map(RecordSummaryResponse::from)
+            .toList();
+    return ApiResponse.successEntity(result);
   }
 }

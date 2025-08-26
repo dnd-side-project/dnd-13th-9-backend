@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 
 import com.example.dnd_13th_9_be.folder.application.dto.FolderDetailResult;
 import com.example.dnd_13th_9_be.folder.application.dto.FolderSummaryResult;
+import com.example.dnd_13th_9_be.folder.application.dto.RecordSummaryResult;
 import com.example.dnd_13th_9_be.folder.application.repository.FolderRepository;
+import com.example.dnd_13th_9_be.folder.persistence.dto.RecordSummary;
 import com.example.dnd_13th_9_be.folder.persistence.entity.Folder;
 import com.example.dnd_13th_9_be.global.error.BusinessException;
 import com.example.dnd_13th_9_be.plan.persistence.entity.Plan;
@@ -66,8 +68,8 @@ public class FolderRepositoryImpl implements FolderRepository {
   }
 
   @Override
-  public void verifyById(Long folderId) {
-    var isNotExist = !jpaFolderRepository.existsById(folderId);
+  public void verifyById(Long userId, Long folderId) {
+    var isNotExist = !jpaFolderRepository.existsByIdAndUserId(folderId, userId);
     if (isNotExist) {
       throw new BusinessException(NOT_FOUND_FOLDER);
     }
@@ -84,5 +86,16 @@ public class FolderRepositoryImpl implements FolderRepository {
         entity.getName(),
         entity.getCreatedAt().toLocalDateTime(),
         entity.getIsDefault());
+  }
+
+  @Override
+  public long countFolderRecord(Long folderId) {
+    return jpaFolderRepository.countFolderRecord(folderId);
+  }
+
+  @Override
+  public List<RecordSummaryResult> findAllRecordByIdAndUserId(Long userId, Long folderId) {
+    List<RecordSummary> records = jpaFolderRepository.findAllRecordByIdAndUserId(userId, folderId);
+    return records.stream().map(RecordSummaryResult::from).toList();
   }
 }

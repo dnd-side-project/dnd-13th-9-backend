@@ -17,6 +17,7 @@ import com.example.dnd_13th_9_be.folder.presentation.dto.request.CreateFolderReq
 import com.example.dnd_13th_9_be.folder.presentation.dto.request.RenameFolderRequest;
 import com.example.dnd_13th_9_be.folder.presentation.dto.response.FolderDetailResponse;
 import com.example.dnd_13th_9_be.folder.presentation.dto.response.FolderSummaryResponse;
+import com.example.dnd_13th_9_be.folder.presentation.dto.response.RecordSummaryResponse;
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
 import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -344,6 +345,85 @@ public interface FolderDocs {
   })
   @DeleteMapping("/{folderId}")
   ResponseEntity<ApiResponse<Map<String, Object>>> delete(
+      @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userDetails,
+      @Parameter(description = "폴더 고유 인덱스 값", example = "12", required = true)
+          @PathVariable("folderId")
+          Long folderId);
+
+  @Operation(summary = "폴더 내 기록 조회", description = "지정된 폴더에 포함된 매물/장소 메모 기록 목록을 조회한다.")
+  @ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "200",
+        description = "성공",
+        content =
+            @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiResponse.class),
+                examples =
+                    @ExampleObject(
+                        name = "성공 예시",
+                        value =
+                            """
+              {
+                "code": "20000",
+                "message": "성공했습니다",
+                "data": [
+                  {
+                    "id": 35,
+                    "imageUrl": "https://zipzip-bucket.s3.amazonaws.com/images/58be7686-3fcb-4655-b3aa-fe9e713c0ab7.jpeg",
+                    "recordType": "PROPERTY",
+                    "feeling": "BAD",
+                    "title": "안 괜찮은 원룸",
+                    "contractType": "JEONSE",
+                    "depositBig": 1,
+                    "depositSmall": 2,
+                    "managementFee": null,
+                    "memo": "이 집은 될 수 있으면 피할 것!",
+                    "locationTag": null,
+                    "latitude": 35.098237529977,
+                    "longitude": 128.981411608042,
+                    "createdAt": "2025-08-25T00:11:17.844533"
+                  },
+                  {
+                    "id": 34,
+                    "imageUrl": null,
+                    "recordType": "PROPERTY",
+                    "feeling": "GOOD",
+                    "title": "괜찮은 원룸",
+                    "contractType": "MONTHLY_RENT",
+                    "depositBig": 7,
+                    "depositSmall": 10,
+                    "managementFee": 10,
+                    "memo": "제일 우선 순위",
+                    "locationTag": null,
+                    "latitude": 35.098237529973,
+                    "longitude": 128.981411608041,
+                    "createdAt": "2025-08-24T23:51:03.065649"
+                  }
+                ]
+              }
+              """))),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "404",
+        description = "유효하지 않은 폴더 id",
+        content =
+            @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiResponse.class),
+                examples =
+                    @ExampleObject(
+                        name = "폴더 없음 예시",
+                        value =
+                            """
+              {
+                "code": "72000",
+                "message": "유효하지 않은 폴더입니다",
+                "data": null
+              }
+              """)))
+  })
+  @GetMapping("/{folderId}/records")
+  ResponseEntity<ApiResponse<List<RecordSummaryResponse>>> getRecordList(
       @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userDetails,
       @Parameter(description = "폴더 고유 인덱스 값", example = "12", required = true)
           @PathVariable("folderId")

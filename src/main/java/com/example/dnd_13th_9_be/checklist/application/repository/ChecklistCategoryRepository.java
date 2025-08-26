@@ -6,4 +6,6 @@ import com.example.dnd_13th_9_be.checklist.application.model.ChecklistCategoryMo
 
 public interface ChecklistCategoryRepository {
   List<ChecklistCategoryModel> findAll();
+
+  void verifyById(Long categoryId);
 }

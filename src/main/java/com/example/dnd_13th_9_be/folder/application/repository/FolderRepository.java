@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.dnd_13th_9_be.folder.application.dto.FolderDetailResult;
 import com.example.dnd_13th_9_be.folder.application.dto.FolderSummaryResult;
+import com.example.dnd_13th_9_be.folder.application.dto.RecordSummaryResult;
 
 public interface FolderRepository {
   FolderDetailResult create(Long userId, Long planId, String name, boolean isDefault);
@@ -16,7 +17,11 @@ public interface FolderRepository {
 
   long countByPlanId(Long planId);
 
-  void verifyById(Long folderId);
+  void verifyById(Long userId, Long folderId);
 
   FolderDetailResult findByIdAndUserId(Long folderId, Long userId);
+
+  long countFolderRecord(Long folderId);
+
+  List<RecordSummaryResult> findAllRecordByIdAndUserId(Long userId, Long folderId);
 }
