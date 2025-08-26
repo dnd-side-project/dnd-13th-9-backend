@@ -10,10 +10,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.dnd_13th_9_be.placeMemo.persistence.PlaceTag;
 
 public record CreatePlaceMemoRequest(
-    @NotBlank(message = "장소명은 필수값입니다.") @Size(max = 20, message = "장소명은 20자 이내로 입력해주세요.")
+    @NotBlank(message = "장소명은 필수값입니다.") @Size(max = 10, message = "장소명은 10자 이내로 입력해주세요.")
         String title,
     @NotNull(message = "장소 태그는 필수값입니다.") PlaceTag placeTag,
-    @Size(max = 100, message = "메모는 100자 이내로 입력해주세요.") String description,
+    @Size(max = 80, message = "메모는 80자 이내로 입력해주세요.") String description,
     @NotBlank(message = "주소는 필수값입니다.") @Size(max = 200, message = "주소는 200자 이내로 입력해주세요.")
         String address,
     @NotBlank(message = "위도는 필수값입니다.") String latitude,
