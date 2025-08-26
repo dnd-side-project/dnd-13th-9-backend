@@ -12,9 +12,9 @@ import com.example.dnd_13th_9_be.placeMemo.persistence.PlaceTag;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record UpdatePlaceMemoRequest(
-    @Schema(description = "장소 이름", example = "강남 카페") @NotBlank @Size(max = 20) String title,
+    @Schema(description = "장소 이름", example = "강남 카페") @NotBlank @Size(max = 10) String title,
     @Schema(description = "장소 태그", example = "CONVENIENCE") @NotNull PlaceTag placeTag,
-    @Schema(description = "메모 내용", example = "조용하고 분위기 좋은 카페") @Size(max = 100) String description,
+    @Schema(description = "메모 내용", example = "조용하고 분위기 좋은 카페") @Size(max = 80) String description,
     @Schema(description = "주소", example = "서울 강남구 테헤란로 123") @NotBlank @Size(max = 200)
         String address,
     @Schema(description = "위도", example = "37.12345") @NotBlank String latitude,
@@ -25,24 +25,16 @@ public record UpdatePlaceMemoRequest(
     @Schema(description = "최종 상태에 추가할 새 이미지 파일(선택, 최대 5개)") @Size(max = 5)
         List<MultipartFile> newImages) {
 
-  public PlaceMemoModel toModel(Long userId, List<String> uploadedNewImageUrls) {
-    List<String> finalImageUrls = new java.util.ArrayList<>();
-    if (existingImageUrls != null) {
-      finalImageUrls.addAll(existingImageUrls);
+    public PlaceMemoModel toModel(final List<String> finalImageUrls) {
+        return PlaceMemoModel.builder()
+                .title(title)
+                .placeTag(placeTag)
+                .description(description)
+                .address(address)
+                .latitude(latitude)
+                .longitude(longitude)
+                .folderId(folderId)
+                .imageUrls(finalImageUrls == null ? List.of() : List.copyOf(finalImageUrls))
+                .build();
     }
-    if (uploadedNewImageUrls != null) {
-      finalImageUrls.addAll(uploadedNewImageUrls);
-    }
-
-    return PlaceMemoModel.builder()
-        .title(title)
-        .placeTag(placeTag)
-        .description(description)
-        .address(address)
-        .latitude(latitude)
-        .longitude(longitude)
-        .folderId(folderId)
-        .imageUrls(finalImageUrls)
-        .build();
-  }
 }
