@@ -12,13 +12,15 @@ import com.example.dnd_13th_9_be.global.response.ApiResponse;
 import com.example.dnd_13th_9_be.user.application.dto.MyPageDto;
 import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
 import com.example.dnd_13th_9_be.user.application.service.MyPageService;
+import com.example.dnd_13th_9_be.user.presentation.docs.MyPageDocs;
 
 @RestController
 @RequestMapping("/api/mypage")
 @RequiredArgsConstructor
-public class MyPageController {
+public class MyPageController implements MyPageDocs {
   private final MyPageService myPageService;
 
+  @Override
   @GetMapping
   public ResponseEntity<ApiResponse<MyPageDto>> getUserInfo(
       @AuthenticationPrincipal UserPrincipalDto userDetails) {
