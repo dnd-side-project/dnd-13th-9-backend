@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import lombok.AllArgsConstructor;
 
-import com.example.dnd_13th_9_be.folder.application.repository.FolderRepository;
 import com.example.dnd_13th_9_be.folder.persistence.JpaFolderRepository;
 import com.example.dnd_13th_9_be.folder.persistence.entity.Folder;
 import com.example.dnd_13th_9_be.global.error.BusinessException;
@@ -18,15 +17,12 @@ import com.example.dnd_13th_9_be.placeMemo.application.repository.PlaceMemoRepos
 import com.example.dnd_13th_9_be.placeMemo.persistence.converter.PlaceMemoConverter;
 import com.example.dnd_13th_9_be.user.persistence.JpaUserRepository;
 import com.example.dnd_13th_9_be.user.persistence.User;
-import com.example.dnd_13th_9_be.user.persistence.UserRepositoryImpl;
 
 @Repository
 @AllArgsConstructor
 public class PlaceMemoRepositoryImpl implements PlaceMemoRepository {
   private final JpaPlaceMemoRepository jpaPlaceMemoRepository;
   private final PlaceMemoConverter placeMemoConverter;
-  private final UserRepositoryImpl userRepository;
-  private final FolderRepository folderRepository;
   private final JpaFolderRepository jpaFolderRepository;
   private final JpaUserRepository jpaUserRepository;
 
