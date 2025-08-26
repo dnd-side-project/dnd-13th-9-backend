@@ -24,15 +24,4 @@ public class PlaceMemoModel implements AbstractModel {
   private Long folderId;
   @Builder.Default private List<String> imageUrls = List.of();
 
-  public PlaceMemoModel(PlaceMemoModel model) {
-    this.id = model.getId();
-    this.title = model.getTitle();
-    this.placeTag = model.getPlaceTag();
-    this.description = model.getDescription();
-    this.address = model.getAddress();
-    this.latitude = model.getLatitude();
-    this.longitude = model.getLongitude();
-    this.folderId = model.getFolderId();
-    this.imageUrls = model.getImageUrls();
-  }
 }
