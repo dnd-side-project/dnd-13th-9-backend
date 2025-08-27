@@ -28,7 +28,7 @@ public record RecordSummaryResult(
 
     return RecordSummaryResult.builder()
         .id(recordSummary.id())
-        .imageUrl(recordSummary.images().stream().map(RecordImageSummary::url).toList())
+        .imageUrl(recordSummary.images() !=null? recordSummary.images().stream().map(RecordImageSummary::url).toList() : List.of())
         .recordType(recordSummary.recordType() != null ? recordSummary.recordType().name() : null)
         .feeling(recordSummary.feeling() != null ? recordSummary.feeling().name() : null)
         .title(recordSummary.title())
