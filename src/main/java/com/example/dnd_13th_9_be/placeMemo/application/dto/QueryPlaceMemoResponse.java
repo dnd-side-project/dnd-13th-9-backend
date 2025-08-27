@@ -18,6 +18,7 @@ public record QueryPlaceMemoResponse(
     @Schema(description = "위도", example = "37.12345") String latitude,
     @Schema(description = "경도", example = "127.12345") String longitude,
     @Schema(description = "폴더 ID", example = "1") Long folderId,
+    @Schema(description = "폴더 이름", example = "혜화동") String folderName,
     @Schema(description = "이미지 URL 리스트") List<String> imageUrls) {
 
   public static QueryPlaceMemoResponse from(PlaceMemoModel placeMemoModel) {
@@ -30,6 +31,7 @@ public record QueryPlaceMemoResponse(
         .latitude(placeMemoModel.getLatitude())
         .longitude(placeMemoModel.getLongitude())
         .folderId(placeMemoModel.getFolderId())
+        .folderName(placeMemoModel.getFolderName())
         .imageUrls(
             placeMemoModel.getImageUrls() == null
                 ? List.of()
