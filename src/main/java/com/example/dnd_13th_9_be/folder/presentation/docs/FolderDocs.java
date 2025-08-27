@@ -430,20 +430,20 @@ public interface FolderDocs {
           @PathVariable("folderId")
           Long folderId);
 
-    @Operation(
-            summary = "폴더별 메모 리스트 조회",
-            description = "특정 폴더의 메물(부동산) 메모와 주변 장소 메모를 함께 조회합니다."
-    )
-    @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                    responseCode = "200",
-                    description = "폴더 메모 조회 성공",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ApiResponse.class),
-                            examples = @ExampleObject(
-                                    name = "성공 응답 예시",
-                                    value = """
+  @Operation(summary = "폴더별 메모 리스트 조회", description = "특정 폴더의 메물(부동산) 메모와 주변 장소 메모를 함께 조회합니다.")
+  @ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "200",
+        description = "폴더 메모 조회 성공",
+        content =
+            @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiResponse.class),
+                examples =
+                    @ExampleObject(
+                        name = "성공 응답 예시",
+                        value =
+                            """
                {
                  "isSuccess": true,
                  "code": "200",
@@ -482,56 +482,50 @@ public interface FolderDocs {
                    ]
                  }
                }
-               """
-                            )
-                    )
-            ),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                    responseCode = "404",
-                    description = "폴더를 찾을 수 없음",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ApiResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
+               """))),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "404",
+        description = "폴더를 찾을 수 없음",
+        content =
+            @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiResponse.class),
+                examples =
+                    @ExampleObject(
+                        value =
+                            """
                {
                  "isSuccess": false,
                  "code": "404",
                  "message": "폴더를 찾을 수 없습니다."
                }
-               """
-                            )
-                    )
-            ),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                    responseCode = "403",
-                    description = "폴더 접근 권한 없음",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ApiResponse.class),
-                            examples = @ExampleObject(
-                                    value = """
+               """))),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "403",
+        description = "폴더 접근 권한 없음",
+        content =
+            @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiResponse.class),
+                examples =
+                    @ExampleObject(
+                        value =
+                            """
                {
                  "isSuccess": false,
                  "code": "403",
                  "message": "해당 폴더에 접근할 권한이 없습니다."
                }
-               """
-                            )
-                    )
-            )
-    })
-    @Parameter(
-            name = "folderId",
-            description = "조회할 폴더의 ID",
-            required = true,
-            example = "1",
-            schema = @Schema(type = "integer", format = "int64")
-    )
-    @GetMapping("/{folderId}/memos")
-    ResponseEntity<ApiResponse<QueryFolderMemoListResponse>> findAll(
-            @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userPrincipalDto,
-            @PathVariable("folderId") Long folderId);
-
-
+               """)))
+  })
+  @Parameter(
+      name = "folderId",
+      description = "조회할 폴더의 ID",
+      required = true,
+      example = "1",
+      schema = @Schema(type = "integer", format = "int64"))
+  @GetMapping("/{folderId}/memos")
+  ResponseEntity<ApiResponse<QueryFolderMemoListResponse>> findAll(
+      @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userPrincipalDto,
+      @PathVariable("folderId") Long folderId);
 }

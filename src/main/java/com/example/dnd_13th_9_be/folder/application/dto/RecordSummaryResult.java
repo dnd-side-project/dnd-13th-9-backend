@@ -1,12 +1,12 @@
 package com.example.dnd_13th_9_be.folder.application.dto;
 
-import com.example.dnd_13th_9_be.folder.persistence.dto.RecordSummary.RecordImageSummary;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.Builder;
 
 import com.example.dnd_13th_9_be.folder.persistence.dto.RecordSummary;
+import com.example.dnd_13th_9_be.folder.persistence.dto.RecordSummary.RecordImageSummary;
 
 @Builder
 public record RecordSummaryResult(

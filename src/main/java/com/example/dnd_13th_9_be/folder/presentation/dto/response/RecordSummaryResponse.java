@@ -1,8 +1,8 @@
 package com.example.dnd_13th_9_be.folder.presentation.dto.response;
 
 import java.time.LocalDateTime;
-
 import java.util.List;
+
 import lombok.Builder;
 
 import com.example.dnd_13th_9_be.folder.application.dto.RecordSummaryResult;
