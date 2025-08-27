@@ -430,117 +430,108 @@ public interface FolderDocs {
           @PathVariable("folderId")
           Long folderId);
 
-  @Operation(summary = "폴더 내 모든 메모 조회", description = "지정된 폴더에 포함된 주변장소 메모와 매물 메모를 모두 조회한다.")
-  @ApiResponses({
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(
-        responseCode = "200",
-        description = "성공",
-        content =
-            @Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = ApiResponse.class),
-                examples =
-                    @ExampleObject(
-                        name = "성공 예시",
-                        value =
-                            """
-                              {
-                                "code": "20000",
-                                "message": "성공했습니다",
-                                "data": {
-                                  "recordSummaryResponses": [
-                                    {
-                                      "id": 35,
-                                      "imageUrl": "https://zipzip-bucket.s3.amazonaws.com/images/58be7686-3fcb-4655-b3aa-fe9e713c0ab7.jpeg",
-                                      "recordType": "PROPERTY",
-                                      "feeling": "BAD",
-                                      "title": "안 괜찮은 원룸",
-                                      "contractType": "JEONSE",
-                                      "depositBig": 1,
-                                      "depositSmall": 2,
-                                      "managementFee": null,
-                                      "memo": "이 집은 될 수 있으면 피할 것!",
-                                      "locationTag": null,
-                                      "latitude": 35.098237529977,
-                                      "longitude": 128.981411608042,
-                                      "createdAt": "2025-08-25T00:11:17.844533"
-                                    },
-                                    {
-                                      "id": 34,
-                                      "imageUrl": null,
-                                      "recordType": "PROPERTY",
-                                      "feeling": "GOOD",
-                                      "title": "괜찮은 원룸",
-                                      "contractType": "MONTHLY_RENT",
-                                      "depositBig": 7,
-                                      "depositSmall": 10,
-                                      "managementFee": 10,
-                                      "memo": "제일 우선 순위",
-                                      "locationTag": null,
-                                      "latitude": 35.098237529973,
-                                      "longitude": 128.981411608041,
-                                      "createdAt": "2025-08-24T23:51:03.065649"
-                                    }
-                                  ],
-                                  "queryPlaceMemoResponses": [
-                                    {
-                                      "placeMemoId": 1,
-                                      "title": "스타벅스 광안리점",
-                                      "placeTag": "CONVENIENCE",
-                                      "description": "회의하기 좋은 카페",
-                                      "address": "부산 수영구 광안해변로 219",
-                                      "latitude": 35.153495,
-                                      "longitude": 129.118666,
-                                      "images": [
-                                        "https://zipzip-bucket.s3.amazonaws.com/images/starbucks1.jpg"
-                                      ],
-                                      "createdAt": "2025-08-26T14:30:22.123456"
-                                    }
-                                  ]
-                                }
-                              }
-                              """))),
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(
-        responseCode = "404",
-        description = "유효하지 않은 폴더 id",
-        content =
-            @Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = ApiResponse.class),
-                examples =
-                    @ExampleObject(
-                        name = "폴더 없음 예시",
-                        value =
-                            """
-                              {
-                                "code": "72000",
-                                "message": "유효하지 않은 폴더입니다",
-                                "data": null
-                              }
-                              """))),
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(
-        responseCode = "403",
-        description = "폴더 접근 권한 없음",
-        content =
-            @Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = ApiResponse.class),
-                examples =
-                    @ExampleObject(
-                        name = "권한 없음 예시",
-                        value =
-                            """
-                              {
-                                "code": "40300",
-                                "message": "해당 폴더에 접근할 권한이 없습니다",
-                                "data": null
-                              }
-                              """)))
-  })
-  @GetMapping("/{folderId}/memos")
-  ResponseEntity<ApiResponse<QueryFolderMemoListResponse>> findAll(
-      @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userDetails,
-      @Parameter(description = "폴더 고유 인덱스 값", example = "12", required = true)
-          @PathVariable("folderId")
-          Long folderId);
+    @Operation(
+            summary = "폴더별 메모 리스트 조회",
+            description = "특정 폴더의 메물(부동산) 메모와 주변 장소 메모를 함께 조회합니다."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "폴더 메모 조회 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ApiResponse.class),
+                            examples = @ExampleObject(
+                                    name = "성공 응답 예시",
+                                    value = """
+               {
+                 "isSuccess": true,
+                 "code": "200",
+                 "message": "요청이 성공했습니다.",
+                 "result": {
+                   "recordSummaryResponses": [
+                     {
+                       "id": 1,
+                       "imageUrls": ["https://example.com/image1.jpg", "https://example.com/image2.jpg"],
+                       "recordType": "PROPERTY",
+                       "feeling": "GOOD",
+                       "title": "강남 오피스텔",
+                       "contractType": "RENT",
+                       "depositBig": 5000,
+                       "depositSmall": 0,
+                       "managementFee": 150,
+                       "memo": "교통이 편리하고 주변 편의시설이 좋음",
+                       "locationTag": "강남구",
+                       "latitude": 37.4979,
+                       "longitude": 127.0276,
+                       "createdAt": "2024-08-27T10:30:00"
+                     }
+                   ],
+                   "queryPlaceMemoResponses": [
+                     {
+                       "id": 1,
+                       "title": "강남 카페",
+                       "placeTag": "CONVENIENCE",
+                       "description": "조용하고 분위기 좋은 카페",
+                       "address": "서울 강남구 테헤란로 123",
+                       "latitude": "37.12345",
+                       "longitude": "127.12345",
+                       "folderId": 1,
+                       "imageUrls": ["https://example.com/cafe1.jpg", "https://example.com/cafe2.jpg"]
+                     }
+                   ]
+                 }
+               }
+               """
+                            )
+                    )
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "404",
+                    description = "폴더를 찾을 수 없음",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ApiResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+               {
+                 "isSuccess": false,
+                 "code": "404",
+                 "message": "폴더를 찾을 수 없습니다."
+               }
+               """
+                            )
+                    )
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "403",
+                    description = "폴더 접근 권한 없음",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ApiResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+               {
+                 "isSuccess": false,
+                 "code": "403",
+                 "message": "해당 폴더에 접근할 권한이 없습니다."
+               }
+               """
+                            )
+                    )
+            )
+    })
+    @Parameter(
+            name = "folderId",
+            description = "조회할 폴더의 ID",
+            required = true,
+            example = "1",
+            schema = @Schema(type = "integer", format = "int64")
+    )
+    @GetMapping("/{folderId}/memos")
+    ResponseEntity<ApiResponse<QueryFolderMemoListResponse>> findAll(
+            @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userPrincipalDto,
+            @PathVariable("folderId") Long folderId);
+
+
 }
