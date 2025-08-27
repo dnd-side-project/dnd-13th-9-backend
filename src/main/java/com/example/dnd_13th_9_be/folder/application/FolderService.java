@@ -11,7 +11,11 @@ import com.example.dnd_13th_9_be.folder.application.dto.FolderDetailResult;
 import com.example.dnd_13th_9_be.folder.application.dto.FolderSummaryResult;
 import com.example.dnd_13th_9_be.folder.application.dto.RecordSummaryResult;
 import com.example.dnd_13th_9_be.folder.application.repository.FolderRepository;
+import com.example.dnd_13th_9_be.folder.presentation.dto.response.QueryFolderMemoListResponse;
+import com.example.dnd_13th_9_be.folder.presentation.dto.response.RecordSummaryResponse;
 import com.example.dnd_13th_9_be.global.error.BusinessException;
+import com.example.dnd_13th_9_be.placeMemo.application.dto.QueryPlaceMemoResponse;
+import com.example.dnd_13th_9_be.placeMemo.application.repository.PlaceMemoRepository;
 import com.example.dnd_13th_9_be.plan.application.repository.PlanRepository;
 
 import static com.example.dnd_13th_9_be.global.error.ErrorCode.DEFAULT_FOLDER_CANNOT_BE_DELETE;
@@ -26,6 +30,8 @@ public class FolderService {
   private final PlanRepository planRepository;
 
   private static final String DEFAULT_FOLDER_NAME = "기본 폴더";
+
+  private final PlaceMemoRepository placeMemoRepository;
 
   @Transactional
   public void createDefaultFolder(Long userId, Long planId) {
@@ -75,5 +81,21 @@ public class FolderService {
   public List<RecordSummaryResult> getRecordList(Long userId, Long folderId) {
     folderRepository.verifyById(userId, folderId);
     return folderRepository.findAllRecordByIdAndUserId(userId, folderId);
+  }
+
+  @Transactional
+  public QueryFolderMemoListResponse findAll(Long folderId, Long userId) {
+
+    List<QueryPlaceMemoResponse> items =
+        placeMemoRepository.findByFolderIdAndUserId(folderId, userId).stream()
+            .map(QueryPlaceMemoResponse::from)
+            .toList();
+
+    List<RecordSummaryResponse> records =
+        folderRepository.findAllRecordByIdAndUserId(userId, folderId).stream()
+            .map(RecordSummaryResponse::from)
+            .toList();
+
+    return QueryFolderMemoListResponse.of(records, items);
   }
 }

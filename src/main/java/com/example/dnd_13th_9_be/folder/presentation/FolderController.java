@@ -23,6 +23,7 @@ import com.example.dnd_13th_9_be.folder.presentation.dto.request.CreateFolderReq
 import com.example.dnd_13th_9_be.folder.presentation.dto.request.RenameFolderRequest;
 import com.example.dnd_13th_9_be.folder.presentation.dto.response.FolderDetailResponse;
 import com.example.dnd_13th_9_be.folder.presentation.dto.response.FolderSummaryResponse;
+import com.example.dnd_13th_9_be.folder.presentation.dto.response.QueryFolderMemoListResponse;
 import com.example.dnd_13th_9_be.folder.presentation.dto.response.RecordSummaryResponse;
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
 import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
@@ -73,7 +74,7 @@ public class FolderController implements FolderDocs {
   }
 
   @Override
-  @GetMapping("/{folderId}/records")
+  @GetMapping("/{folderId}/records") // 매물 메모 리스트 조회
   public ResponseEntity<ApiResponse<List<RecordSummaryResponse>>> getRecordList(
       @AuthenticationPrincipal UserPrincipalDto userDetails,
       @PathVariable("folderId") Long folderId) {
@@ -82,5 +83,14 @@ public class FolderController implements FolderDocs {
             .map(RecordSummaryResponse::from)
             .toList();
     return ApiResponse.successEntity(result);
+  }
+
+  @GetMapping("/{folderId}/memos") // 메물 메모 + 주변 장소 메모 조회
+  public ResponseEntity<ApiResponse<QueryFolderMemoListResponse>> findAll(
+      @AuthenticationPrincipal UserPrincipalDto userPrincipalDto,
+      @PathVariable("folderId") Long folderId) {
+    QueryFolderMemoListResponse response =
+        folderService.findAll(folderId, userPrincipalDto.getUserId());
+    return ApiResponse.successEntity(response);
   }
 }
