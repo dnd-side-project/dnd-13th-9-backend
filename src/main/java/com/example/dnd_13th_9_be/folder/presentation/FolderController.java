@@ -2,8 +2,6 @@ package com.example.dnd_13th_9_be.folder.presentation;
 
 import java.util.List;
 import java.util.Map;
-
-import com.example.dnd_13th_9_be.folder.presentation.dto.response.QueryFolderMemoListResponse;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
@@ -25,6 +23,7 @@ import com.example.dnd_13th_9_be.folder.presentation.dto.request.CreateFolderReq
 import com.example.dnd_13th_9_be.folder.presentation.dto.request.RenameFolderRequest;
 import com.example.dnd_13th_9_be.folder.presentation.dto.response.FolderDetailResponse;
 import com.example.dnd_13th_9_be.folder.presentation.dto.response.FolderSummaryResponse;
+import com.example.dnd_13th_9_be.folder.presentation.dto.response.QueryFolderMemoListResponse;
 import com.example.dnd_13th_9_be.folder.presentation.dto.response.RecordSummaryResponse;
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
 import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
@@ -86,12 +85,12 @@ public class FolderController implements FolderDocs {
     return ApiResponse.successEntity(result);
   }
 
-
-  @GetMapping ("/{folderId}/memos") // 메물 메모 + 주변 장소 메모 조회
+  @GetMapping("/{folderId}/memos") // 메물 메모 + 주변 장소 메모 조회
   public ResponseEntity<ApiResponse<QueryFolderMemoListResponse>> findAll(
-          @AuthenticationPrincipal UserPrincipalDto userPrincipalDto,
-          @PathVariable("folderId") Long folderId) {
-    QueryFolderMemoListResponse response = folderService.findAll(folderId, userPrincipalDto.getUserId());
+      @AuthenticationPrincipal UserPrincipalDto userPrincipalDto,
+      @PathVariable("folderId") Long folderId) {
+    QueryFolderMemoListResponse response =
+        folderService.findAll(folderId, userPrincipalDto.getUserId());
     return ApiResponse.successEntity(response);
   }
 }

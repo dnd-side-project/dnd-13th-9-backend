@@ -2,11 +2,6 @@ package com.example.dnd_13th_9_be.folder.application;
 
 import java.util.List;
 
-import com.example.dnd_13th_9_be.folder.presentation.dto.response.QueryFolderMemoListResponse;
-import com.example.dnd_13th_9_be.folder.presentation.dto.response.RecordSummaryResponse;
-import com.example.dnd_13th_9_be.placeMemo.application.dto.QueryPlaceMemoResponse;
-import com.example.dnd_13th_9_be.placeMemo.application.repository.PlaceMemoRepository;
-import com.example.dnd_13th_9_be.placeMemo.persistence.PlaceMemoRepositoryImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +11,11 @@ import com.example.dnd_13th_9_be.folder.application.dto.FolderDetailResult;
 import com.example.dnd_13th_9_be.folder.application.dto.FolderSummaryResult;
 import com.example.dnd_13th_9_be.folder.application.dto.RecordSummaryResult;
 import com.example.dnd_13th_9_be.folder.application.repository.FolderRepository;
+import com.example.dnd_13th_9_be.folder.presentation.dto.response.QueryFolderMemoListResponse;
+import com.example.dnd_13th_9_be.folder.presentation.dto.response.RecordSummaryResponse;
 import com.example.dnd_13th_9_be.global.error.BusinessException;
+import com.example.dnd_13th_9_be.placeMemo.application.dto.QueryPlaceMemoResponse;
+import com.example.dnd_13th_9_be.placeMemo.application.repository.PlaceMemoRepository;
 import com.example.dnd_13th_9_be.plan.application.repository.PlanRepository;
 
 import static com.example.dnd_13th_9_be.global.error.ErrorCode.DEFAULT_FOLDER_CANNOT_BE_DELETE;
@@ -85,20 +84,18 @@ public class FolderService {
   }
 
   @Transactional
-  public QueryFolderMemoListResponse findAll(Long folderId, Long userId){
+  public QueryFolderMemoListResponse findAll(Long folderId, Long userId) {
 
     List<QueryPlaceMemoResponse> items =
-            placeMemoRepository.findByFolderIdAndUserId(folderId, userId).stream()
-                    .map(QueryPlaceMemoResponse::from)
-                    .toList();
+        placeMemoRepository.findByFolderIdAndUserId(folderId, userId).stream()
+            .map(QueryPlaceMemoResponse::from)
+            .toList();
 
     List<RecordSummaryResponse> records =
-            folderRepository.findAllRecordByIdAndUserId(userId, folderId).stream()
-                    .map(RecordSummaryResponse::from)
-                    .toList();
+        folderRepository.findAllRecordByIdAndUserId(userId, folderId).stream()
+            .map(RecordSummaryResponse::from)
+            .toList();
 
     return QueryFolderMemoListResponse.of(records, items);
   }
-
-
 }
