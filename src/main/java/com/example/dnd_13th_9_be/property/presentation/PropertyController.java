@@ -24,6 +24,7 @@ import com.example.dnd_13th_9_be.property.application.PropertyService;
 import com.example.dnd_13th_9_be.property.application.model.RecentPropertyModel;
 import com.example.dnd_13th_9_be.property.presentation.docs.PropertyDocs;
 import com.example.dnd_13th_9_be.property.presentation.dto.request.UpsertPropertyRequest;
+import com.example.dnd_13th_9_be.property.presentation.dto.response.PropertyCreateResponse;
 import com.example.dnd_13th_9_be.property.presentation.dto.response.PropertyDetailResponse;
 import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
 
@@ -36,12 +37,13 @@ public class PropertyController implements PropertyDocs {
 
   @Override
   @PostMapping
-  public ResponseEntity<ApiResponse<Map<String, Object>>> create(
+  public ResponseEntity<ApiResponse<PropertyCreateResponse>> create(
       @AuthenticationPrincipal UserPrincipalDto userDetails,
       @RequestPart(value = "image", required = false) List<MultipartFile> files,
       @Validated @RequestPart(value = "data") UpsertPropertyRequest request) {
-    propertyService.createPropertyRecord(userDetails.getUserId(), files, request);
-    return ApiResponse.okEntity();
+    Long propertyId = propertyService.createPropertyRecord(userDetails.getUserId(), files, request);
+    return ApiResponse.successEntity(
+        PropertyCreateResponse.builder().propertyId(propertyId).build());
   }
 
   @Override

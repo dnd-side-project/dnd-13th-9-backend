@@ -51,6 +51,9 @@ public record UpsertPropertyRequest(
     @NotNull(message = "만원 단위는 필수 값입니다") @Min(value = 0, message = "만원 단위는 필수 값입니다")
         @Max(value = 9999, message = "만원 단위는 9999만원 이상이 될 수 없습니다")
         Integer depositSmall,
+    @Min(value = 0, message = "월세는 최소 0만원 부터 가능합니다")
+        @Max(value = 10000, message = "월세는 1억 미만이어야 합니다")
+        Integer monthlyFee,
     @Min(value = 0, message = "관리비는 최소 0만원 부터 가능합니다")
         @Max(value = 10000, message = "관리비는 1억 미만이어야 합니다")
         Integer managementFee,
@@ -60,13 +63,13 @@ public record UpsertPropertyRequest(
         Long folderId) {
 
   @JsonIgnore
-  @AssertTrue(message = "계약 형태가 월세일 때만 managementFee 값이 허용됩니다")
+  @AssertTrue(message = "계약 형태가 월세일 때 monthlyFee 값이 필요합니다")
   public boolean isValidManagementFee() {
     if (contractType == ContractType.MONTHLY_RENT) {
-      return true;
+      return monthlyFee != null;
     }
 
-    return managementFee == null;
+    return monthlyFee == null;
   }
 
   @JsonIgnore
