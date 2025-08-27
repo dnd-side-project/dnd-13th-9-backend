@@ -86,6 +86,7 @@ public class PropertyRepositoryImpl implements PropertyRepository {
             .depositBig(dto.depositBig())
             .depositSmall(dto.depositSmall())
             .managementFee(dto.managementFee())
+            .monthlyFee(dto.monthlyFee())
             .moveInInfo(dto.moveInInfo())
             .requiredCheckMemo(dto.requiredCheckMemo())
             .build();

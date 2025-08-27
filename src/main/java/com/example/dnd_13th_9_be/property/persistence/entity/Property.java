@@ -97,6 +97,10 @@ public class Property extends BaseEntity {
   @Column(name = "management_fee")
   private Integer managementFee;
 
+  @Comment("월세")
+  @Column(name = "monthly_fee")
+  private Integer monthlyFee;
+
   @Comment("입주 가능 시기 (예: 9월 초, 즉시입주, 협의 가능)")
   @Column(name = "move_in_info", length = 50)
   private String moveInInfo;
@@ -121,6 +125,7 @@ public class Property extends BaseEntity {
       Integer depositBig,
       Integer depositSmall,
       Integer managementFee,
+      Integer monthlyFee,
       String moveInInfo,
       String requiredCheckMemo,
       List<PropertyImage> images) {

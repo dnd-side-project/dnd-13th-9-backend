@@ -57,7 +57,7 @@ public class PropertyService {
   private final PropertyCategoryMemoRepository propertyCategoryMemoRepository;
 
   @Transactional(rollbackFor = {S3ImageException.class})
-  public void createPropertyRecord(
+  public Long createPropertyRecord(
       Long userId, List<MultipartFile> files, UpsertPropertyRequest request) {
 
     // 이미지 갯수 확인
@@ -107,6 +107,7 @@ public class PropertyService {
                         .build())
             .toList();
     images.forEach(propertyImageRepository::save);
+    return savedProperty.propertyId();
   }
 
   @Transactional

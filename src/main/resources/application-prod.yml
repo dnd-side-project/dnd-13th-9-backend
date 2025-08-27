@@ -36,8 +36,8 @@ spring:
             user-name-attribute: id
   servlet:
     multipart:
-      max-file-size: 50MB
-      max-request-size: 50MB
+      max-file-size: 100MB
+      max-request-size: 100MB
   cloud:
     aws:
       region:
@@ -61,3 +61,8 @@ logging:
     org.springframework.security.oauth2: INFO
     org.springframework.web.client.RestTemplate: INFO
     com.example.dnd_13th_9_be: INFO
+
+server:
+  tomcat:
+    max-http-form-post-size: 100MB
+    max-swallow-size: -1
