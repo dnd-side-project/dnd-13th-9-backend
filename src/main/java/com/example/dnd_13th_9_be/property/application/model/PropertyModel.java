@@ -23,6 +23,7 @@ public record PropertyModel(
     Integer depositBig,
     Integer depositSmall,
     Integer managementFee,
+    Integer monthlyFee,
     String moveInInfo,
     String requiredCheckMemo) {
   public static PropertyModel from(UpsertPropertyRequest request) {
@@ -41,6 +42,7 @@ public record PropertyModel(
         .depositBig(request.depositBig())
         .depositSmall(request.depositSmall())
         .managementFee(request.managementFee())
+        .monthlyFee(request.monthlyFee())
         .moveInInfo(request.moveInInfo())
         .requiredCheckMemo(request.getRequiredCheckMemo())
         .build();

@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
 import com.example.dnd_13th_9_be.property.application.model.RecentPropertyModel;
 import com.example.dnd_13th_9_be.property.presentation.dto.request.UpsertPropertyRequest;
+import com.example.dnd_13th_9_be.property.presentation.dto.response.PropertyCreateResponse;
 import com.example.dnd_13th_9_be.property.presentation.dto.response.PropertyDetailResponse;
 import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -59,6 +60,7 @@ public interface PropertyDocs {
                       "longitude":"128.981411608041",
                       "latitude":"35.098237529973",
                       "contractType":"MONTHLY_RENT",
+                      "monthlyFee":10,
                       "houseType":"ETC",
                       "depositBig":7,
                       "depositSmall":10,
@@ -87,11 +89,13 @@ public interface PropertyDocs {
                         name = "성공 예시",
                         value =
                             """
-                      {
-                        "code": "20000",
-                        "message": "성공했습니다",
-                        "data": {}
-                      }
+                                {
+                                    "code": "20000",
+                                    "message": "성공했습니다",
+                                    "data": {
+                                        "propertyId": 52
+                                    }
+                                }
                       """))),
     @io.swagger.v3.oas.annotations.responses.ApiResponse(
         responseCode = "400",
@@ -134,7 +138,7 @@ public interface PropertyDocs {
                 schema = @Schema(implementation = ApiResponse.class)))
   })
   @PostMapping
-  ResponseEntity<ApiResponse<Map<String, Object>>> create(
+  ResponseEntity<ApiResponse<PropertyCreateResponse>> create(
       @Parameter(hidden = true) UserPrincipalDto userDetails,
       @Parameter(
               description = "이미지 파일들 (여러 장 가능, 키는 `image`로 고정)",
