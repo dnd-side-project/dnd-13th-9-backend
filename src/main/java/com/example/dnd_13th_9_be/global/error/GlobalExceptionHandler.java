@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public ResponseEntity<ApiResponse<Map<String, Object>>> handleHttpMessageNotReadable(
       HttpMessageNotReadableException ex) {
-    log.warn("HttpMessageNotReadableException: {}", ex.getMessage(), ex);
+    log.warn("HttpMessageNotReadableException: {}", ex.getMessage());
 
     Map<String, Object> body = new LinkedHashMap<>();
 
@@ -86,7 +86,7 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(BindException.class)
   public ResponseEntity<ApiResponse<Map<String, String>>> handleBind(BindException ex) {
-    log.warn(ex.getMessage(), ex);
+    log.warn("BindException: {}", ex.getMessage());
     Map<String, String> fieldErrors = new LinkedHashMap<>();
     ex.getFieldErrors().forEach(fe -> fieldErrors.put(fe.getField(), fe.getDefaultMessage()));
     return ApiResponse.entity(ErrorCode.VALIDATION_ERROR, fieldErrors);
@@ -95,7 +95,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(ConstraintViolationException.class)
   public ResponseEntity<ApiResponse<Map<String, String>>> handleConstraintViolation(
       ConstraintViolationException ex) {
-    log.warn(ex.getMessage(), ex);
+    log.warn("ConstraintViolationException: {}", ex.getMessage());
     Map<String, String> fieldErrors = new LinkedHashMap<>();
     for (ConstraintViolation<?> v : ex.getConstraintViolations()) {
       fieldErrors.put(
@@ -106,15 +106,13 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(BusinessException.class)
   public ResponseEntity<ApiResponse<Void>> handleBusiness(BusinessException ex) {
-    // BusinessException의 message는 디버깅을 위한 로깅으로 사용되며
-    // 클라이언트는 message를 보는 것이 아닌 ErrorCode의 message를 전달 받습니다
-    log.warn(ex.getMessage(), ex);
+    log.warn("BusinessException: {}", ex.getMessage());
     return ApiResponse.errorEntity(ex.getErrorCode());
   }
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ApiResponse<Void>> handleGeneric(Exception ex) {
-    log.error(ex.getMessage(), ex);
+    log.warn("Exception: {}", ex.getMessage());
     return ApiResponse.errorEntity(ErrorCode.INTERNAL_ERROR);
   }
 }
