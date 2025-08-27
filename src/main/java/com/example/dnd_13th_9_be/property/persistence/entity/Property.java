@@ -143,6 +143,7 @@ public class Property extends BaseEntity {
     this.depositBig = depositBig;
     this.depositSmall = depositSmall;
     this.managementFee = managementFee;
+    this.monthlyFee = monthlyFee;
     this.moveInInfo = moveInInfo;
     this.requiredCheckMemo = requiredCheckMemo;
   }
@@ -161,6 +162,7 @@ public class Property extends BaseEntity {
     this.depositBig = dto.depositBig();
     this.depositSmall = dto.depositSmall();
     this.managementFee = dto.managementFee();
+    this.monthlyFee = dto.monthlyFee();
     this.moveInInfo = dto.moveInInfo();
     this.requiredCheckMemo = dto.requiredCheckMemo();
   }
