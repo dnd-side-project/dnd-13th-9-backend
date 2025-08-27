@@ -61,3 +61,6 @@ logging:
     org.springframework.security.oauth2: INFO
     org.springframework.web.client.RestTemplate: INFO
     com.example.dnd_13th_9_be: INFO
+
+aes:
+  private-key: ${AES_PRIVATE_KEY}
