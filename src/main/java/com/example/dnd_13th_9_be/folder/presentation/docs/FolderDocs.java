@@ -448,7 +448,41 @@ public interface FolderDocs {
                                 "code": "20000",
                                 "message": "성공했습니다",
                                 "data": {
-                                  "placeMemos": [
+                                  "recordSummaryResponses": [
+                                    {
+                                      "id": 35,
+                                      "imageUrl": "https://zipzip-bucket.s3.amazonaws.com/images/58be7686-3fcb-4655-b3aa-fe9e713c0ab7.jpeg",
+                                      "recordType": "PROPERTY",
+                                      "feeling": "BAD",
+                                      "title": "안 괜찮은 원룸",
+                                      "contractType": "JEONSE",
+                                      "depositBig": 1,
+                                      "depositSmall": 2,
+                                      "managementFee": null,
+                                      "memo": "이 집은 될 수 있으면 피할 것!",
+                                      "locationTag": null,
+                                      "latitude": 35.098237529977,
+                                      "longitude": 128.981411608042,
+                                      "createdAt": "2025-08-25T00:11:17.844533"
+                                    },
+                                    {
+                                      "id": 34,
+                                      "imageUrl": null,
+                                      "recordType": "PROPERTY",
+                                      "feeling": "GOOD",
+                                      "title": "괜찮은 원룸",
+                                      "contractType": "MONTHLY_RENT",
+                                      "depositBig": 7,
+                                      "depositSmall": 10,
+                                      "managementFee": 10,
+                                      "memo": "제일 우선 순위",
+                                      "locationTag": null,
+                                      "latitude": 35.098237529973,
+                                      "longitude": 128.981411608041,
+                                      "createdAt": "2025-08-24T23:51:03.065649"
+                                    }
+                                  ],
+                                  "queryPlaceMemoResponses": [
                                     {
                                       "placeMemoId": 1,
                                       "title": "스타벅스 광안리점",
@@ -461,23 +495,6 @@ public interface FolderDocs {
                                         "https://zipzip-bucket.s3.amazonaws.com/images/starbucks1.jpg"
                                       ],
                                       "createdAt": "2025-08-26T14:30:22.123456"
-                                    }
-                                  ],
-                                  "propertyMemos": [
-                                    {
-                                      "propertyId": 2,
-                                      "title": "괜찮은 원룸",
-                                      "feeling": "GOOD",
-                                      "contractType": "MONTHLY_RENT",
-                                      "depositBig": 500,
-                                      "depositSmall": 30,
-                                      "managementFee": 10,
-                                      "memo": "제일 우선 순위로 고려할 것",
-                                      "address": "부산 해운대구 센텀남대로 35",
-                                      "latitude": 35.171877,
-                                      "longitude": 129.128654,
-                                      "imageUrl": "https://zipzip-bucket.s3.amazonaws.com/images/room1.jpg",
-                                      "createdAt": "2025-08-26T13:45:11.987654"
                                     }
                                   ]
                                 }
