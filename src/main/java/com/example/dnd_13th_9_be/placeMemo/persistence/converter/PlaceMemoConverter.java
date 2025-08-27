@@ -22,6 +22,7 @@ public class PlaceMemoConverter implements AbstractEntityConverter<PlaceMemo, Pl
         .placeTag(placeMemo.getPlaceTag())
         .description(placeMemo.getDescription())
         .folderId(placeMemo.getFolder().getId())
+        .folderName(placeMemo.getFolder().getName())
         .address(placeMemo.getAddress())
         .latitude(placeMemo.getLatitude())
         .longitude(placeMemo.getLongitude())
