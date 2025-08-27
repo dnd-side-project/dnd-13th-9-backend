@@ -2,6 +2,8 @@ package com.example.dnd_13th_9_be.folder.presentation;
 
 import java.util.List;
 import java.util.Map;
+
+import com.example.dnd_13th_9_be.folder.presentation.dto.response.QueryFolderMemoListResponse;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
@@ -73,7 +75,7 @@ public class FolderController implements FolderDocs {
   }
 
   @Override
-  @GetMapping("/{folderId}/records")
+  @GetMapping("/{folderId}/records") // 매물 메모 리스트 조회
   public ResponseEntity<ApiResponse<List<RecordSummaryResponse>>> getRecordList(
       @AuthenticationPrincipal UserPrincipalDto userDetails,
       @PathVariable("folderId") Long folderId) {
@@ -82,5 +84,14 @@ public class FolderController implements FolderDocs {
             .map(RecordSummaryResponse::from)
             .toList();
     return ApiResponse.successEntity(result);
+  }
+
+
+  @GetMapping ("/{folderId}/memos") // 메물 메모 + 주변 장소 메모 조회
+  public ResponseEntity<ApiResponse<QueryFolderMemoListResponse>> findAll(
+          @AuthenticationPrincipal UserPrincipalDto userPrincipalDto,
+          @PathVariable("folderId") Long folderId) {
+    QueryFolderMemoListResponse response = folderService.findAll(folderId, userPrincipalDto.getUserId());
+    return ApiResponse.successEntity(response);
   }
 }
