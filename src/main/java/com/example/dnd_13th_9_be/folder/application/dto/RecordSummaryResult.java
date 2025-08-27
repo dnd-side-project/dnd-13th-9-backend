@@ -1,19 +1,17 @@
 package com.example.dnd_13th_9_be.folder.application.dto;
 
+import com.example.dnd_13th_9_be.folder.persistence.dto.RecordSummary.RecordImageSummary;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.List;
 
 import lombok.Builder;
 
 import com.example.dnd_13th_9_be.folder.persistence.dto.RecordSummary;
-import com.example.dnd_13th_9_be.folder.persistence.dto.RecordSummary.RecordImageSummary;
 
 @Builder
 public record RecordSummaryResult(
     Long id,
-    String imageUrl,
+    List<String> imageUrl,
     String recordType,
     String feeling,
     String title,
@@ -30,12 +28,7 @@ public record RecordSummaryResult(
 
     return RecordSummaryResult.builder()
         .id(recordSummary.id())
-        .imageUrl(
-            Optional.ofNullable(recordSummary.images()).orElseGet(Collections::emptyList).stream()
-                .filter(i -> Objects.equals(i.order(), 1))
-                .findFirst()
-                .map(RecordImageSummary::url)
-                .orElse(null))
+        .imageUrl(recordSummary.images().stream().map(RecordImageSummary::url).toList())
         .recordType(recordSummary.recordType() != null ? recordSummary.recordType().name() : null)
         .feeling(recordSummary.feeling() != null ? recordSummary.feeling().name() : null)
         .title(recordSummary.title())
