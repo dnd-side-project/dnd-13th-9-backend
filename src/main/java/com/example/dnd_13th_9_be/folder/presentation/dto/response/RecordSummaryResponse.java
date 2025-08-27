@@ -1,6 +1,7 @@
 package com.example.dnd_13th_9_be.folder.presentation.dto.response;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.Builder;
 
@@ -9,7 +10,7 @@ import com.example.dnd_13th_9_be.folder.application.dto.RecordSummaryResult;
 @Builder
 public record RecordSummaryResponse(
     Long id,
-    String imageUrl,
+    List<String> imageUrls,
     String recordType,
     String feeling,
     String title,
@@ -25,7 +26,7 @@ public record RecordSummaryResponse(
   public static RecordSummaryResponse from(RecordSummaryResult result) {
     return RecordSummaryResponse.builder()
         .id(result.id())
-        .imageUrl(result.imageUrl())
+        .imageUrls(result.imageUrls())
         .recordType(result.recordType())
         .feeling(result.feeling())
         .title(result.title())
