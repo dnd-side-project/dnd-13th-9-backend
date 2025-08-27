@@ -26,7 +26,7 @@ public record RecordSummaryResponse(
   public static RecordSummaryResponse from(RecordSummaryResult result) {
     return RecordSummaryResponse.builder()
         .id(result.id())
-        .imageUrls(result.imageUrl())
+        .imageUrls(result.imageUrls())
         .recordType(result.recordType())
         .feeling(result.feeling())
         .title(result.title())

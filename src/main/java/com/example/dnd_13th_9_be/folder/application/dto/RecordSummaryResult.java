@@ -11,7 +11,7 @@ import com.example.dnd_13th_9_be.folder.persistence.dto.RecordSummary.RecordImag
 @Builder
 public record RecordSummaryResult(
     Long id,
-    List<String> imageUrl,
+    List<String> imageUrls,
     String recordType,
     String feeling,
     String title,
@@ -28,7 +28,7 @@ public record RecordSummaryResult(
 
     return RecordSummaryResult.builder()
         .id(recordSummary.id())
-        .imageUrl(
+        .imageUrls(
             recordSummary.images() != null
                 ? recordSummary.images().stream().map(RecordImageSummary::url).toList()
                 : List.of())
