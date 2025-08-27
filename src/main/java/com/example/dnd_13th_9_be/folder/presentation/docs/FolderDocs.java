@@ -17,6 +17,7 @@ import com.example.dnd_13th_9_be.folder.presentation.dto.request.CreateFolderReq
 import com.example.dnd_13th_9_be.folder.presentation.dto.request.RenameFolderRequest;
 import com.example.dnd_13th_9_be.folder.presentation.dto.response.FolderDetailResponse;
 import com.example.dnd_13th_9_be.folder.presentation.dto.response.FolderSummaryResponse;
+import com.example.dnd_13th_9_be.folder.presentation.dto.response.QueryFolderMemoListResponse;
 import com.example.dnd_13th_9_be.folder.presentation.dto.response.RecordSummaryResponse;
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
 import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
@@ -424,6 +425,120 @@ public interface FolderDocs {
   })
   @GetMapping("/{folderId}/records")
   ResponseEntity<ApiResponse<List<RecordSummaryResponse>>> getRecordList(
+      @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userDetails,
+      @Parameter(description = "폴더 고유 인덱스 값", example = "12", required = true)
+          @PathVariable("folderId")
+          Long folderId);
+
+  @Operation(summary = "폴더 내 모든 메모 조회", description = "지정된 폴더에 포함된 주변장소 메모와 매물 메모를 모두 조회한다.")
+  @ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "200",
+        description = "성공",
+        content =
+            @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiResponse.class),
+                examples =
+                    @ExampleObject(
+                        name = "성공 예시",
+                        value =
+                            """
+                              {
+                                "code": "20000",
+                                "message": "성공했습니다",
+                                "data": {
+                                  "recordSummaryResponses": [
+                                    {
+                                      "id": 35,
+                                      "imageUrl": "https://zipzip-bucket.s3.amazonaws.com/images/58be7686-3fcb-4655-b3aa-fe9e713c0ab7.jpeg",
+                                      "recordType": "PROPERTY",
+                                      "feeling": "BAD",
+                                      "title": "안 괜찮은 원룸",
+                                      "contractType": "JEONSE",
+                                      "depositBig": 1,
+                                      "depositSmall": 2,
+                                      "managementFee": null,
+                                      "memo": "이 집은 될 수 있으면 피할 것!",
+                                      "locationTag": null,
+                                      "latitude": 35.098237529977,
+                                      "longitude": 128.981411608042,
+                                      "createdAt": "2025-08-25T00:11:17.844533"
+                                    },
+                                    {
+                                      "id": 34,
+                                      "imageUrl": null,
+                                      "recordType": "PROPERTY",
+                                      "feeling": "GOOD",
+                                      "title": "괜찮은 원룸",
+                                      "contractType": "MONTHLY_RENT",
+                                      "depositBig": 7,
+                                      "depositSmall": 10,
+                                      "managementFee": 10,
+                                      "memo": "제일 우선 순위",
+                                      "locationTag": null,
+                                      "latitude": 35.098237529973,
+                                      "longitude": 128.981411608041,
+                                      "createdAt": "2025-08-24T23:51:03.065649"
+                                    }
+                                  ],
+                                  "queryPlaceMemoResponses": [
+                                    {
+                                      "placeMemoId": 1,
+                                      "title": "스타벅스 광안리점",
+                                      "placeTag": "CONVENIENCE",
+                                      "description": "회의하기 좋은 카페",
+                                      "address": "부산 수영구 광안해변로 219",
+                                      "latitude": 35.153495,
+                                      "longitude": 129.118666,
+                                      "images": [
+                                        "https://zipzip-bucket.s3.amazonaws.com/images/starbucks1.jpg"
+                                      ],
+                                      "createdAt": "2025-08-26T14:30:22.123456"
+                                    }
+                                  ]
+                                }
+                              }
+                              """))),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "404",
+        description = "유효하지 않은 폴더 id",
+        content =
+            @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiResponse.class),
+                examples =
+                    @ExampleObject(
+                        name = "폴더 없음 예시",
+                        value =
+                            """
+                              {
+                                "code": "72000",
+                                "message": "유효하지 않은 폴더입니다",
+                                "data": null
+                              }
+                              """))),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "403",
+        description = "폴더 접근 권한 없음",
+        content =
+            @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiResponse.class),
+                examples =
+                    @ExampleObject(
+                        name = "권한 없음 예시",
+                        value =
+                            """
+                              {
+                                "code": "40300",
+                                "message": "해당 폴더에 접근할 권한이 없습니다",
+                                "data": null
+                              }
+                              """)))
+  })
+  @GetMapping("/{folderId}/memos")
+  ResponseEntity<ApiResponse<QueryFolderMemoListResponse>> findAll(
       @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userDetails,
       @Parameter(description = "폴더 고유 인덱스 값", example = "12", required = true)
           @PathVariable("folderId")
