@@ -46,6 +46,7 @@ public class UserController {
     Optional<Cookie> refreshCookie = cookieUtil.find(request.getCookies(), "Refresh");
     refreshCookie.ifPresent(cookie -> refreshTokenService.deleteByToken(cookie.getValue()));
     response.addCookie(cookieUtil.remove("Refresh"));
+    response.addCookie(cookieUtil.remove("Access"));
     return ResponseEntity.ok(ApiResponse.success("로그아웃 완료"));
   }
 
