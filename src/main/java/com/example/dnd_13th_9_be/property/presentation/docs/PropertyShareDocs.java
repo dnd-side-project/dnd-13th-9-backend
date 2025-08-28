@@ -1,5 +1,8 @@
 package com.example.dnd_13th_9_be.property.presentation.docs;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
 import com.example.dnd_13th_9_be.property.presentation.dto.response.PropertyDetailResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,30 +11,27 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Tag(name = "매물 공유", description = "매물 공유(Property Share) 관련 API")
 public interface PropertyShareDocs {
-    @Operation(
-        summary = "매물 메모 공유 화면 데이터 조회",
-        description =
-            """
+  @Operation(
+      summary = "매물 메모 공유 화면 데이터 조회",
+      description = """
             공유 토큰(shareLink)으로 매물 메모 상세 데이터를 조회합니다.
             """)
-    @ApiResponses({
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "200",
-            description = "성공",
-            content =
+  @ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "200",
+        description = "성공",
+        content =
             @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = ApiResponse.class),
                 examples =
-                @ExampleObject(
-                    name = "성공 예시",
-                    value =
-                        """
+                    @ExampleObject(
+                        name = "성공 예시",
+                        value =
+                            """
                         {
                           "code": "20000",
                           "message": "성공했습니다",
@@ -128,25 +128,25 @@ public interface PropertyShareDocs {
                           }
                         }
                         """))),
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "500",
-            description = "복호화 실패 (유효하지 않은 공유 토큰)",
-            content =
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "500",
+        description = "복호화 실패 (유효하지 않은 공유 토큰)",
+        content =
             @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = ApiResponse.class),
                 examples =
-                @ExampleObject(
-                    name = "복호화 실패 예시",
-                    value =
-                        """
+                    @ExampleObject(
+                        name = "복호화 실패 예시",
+                        value =
+                            """
                         {
                           "code": "51001",
                           "message": "복호화에 실패했습니다",
                           "data": null
                         }
                         """)))
-    })
-    ResponseEntity<ApiResponse<PropertyDetailResponse>> getProperty(
-        @PathVariable("shareLink") String shareLink);
+  })
+  ResponseEntity<ApiResponse<PropertyDetailResponse>> getProperty(
+      @PathVariable("shareLink") String shareLink);
 }
