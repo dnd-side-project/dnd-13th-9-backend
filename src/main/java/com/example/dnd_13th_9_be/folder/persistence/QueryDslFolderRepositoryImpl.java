@@ -10,11 +10,13 @@ import com.example.dnd_13th_9_be.folder.persistence.dto.RecordSummary;
 import com.example.dnd_13th_9_be.folder.persistence.entity.QFolder;
 import com.example.dnd_13th_9_be.folder.persistence.entity.RecordType;
 import com.example.dnd_13th_9_be.location.persistence.QLocationRecordEntity;
+import com.example.dnd_13th_9_be.placeMemo.persistence.QPlaceMemo;
 import com.example.dnd_13th_9_be.property.persistence.entity.QProperty;
 import com.example.dnd_13th_9_be.property.persistence.entity.QPropertyImage;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import static com.querydsl.core.group.GroupBy.groupBy;
@@ -27,13 +29,14 @@ public class QueryDslFolderRepositoryImpl implements QueryDslFolderRepository {
   @Override
   public List<FolderSummary> findSummariesByPlanId(Long userId, Long planId) {
     var folder = QFolder.folder;
-    var location = QLocationRecordEntity.locationRecordEntity;
     var property = QProperty.property;
 
-    var locationCnt =
-        JPAExpressions.select(location.id.count())
-            .from(location)
-            .where(location.folder.id.eq(folder.id));
+    QPlaceMemo placeMemo = QPlaceMemo.placeMemo;
+
+    JPQLQuery<Long> placeMemoCnt =
+        JPAExpressions.select(placeMemo.id.count())
+            .from(placeMemo)
+            .where(placeMemo.folder.id.eq(folder.id));
 
     var propertyCnt =
         JPAExpressions.select(property.id.count())
@@ -47,7 +50,7 @@ public class QueryDslFolderRepositoryImpl implements QueryDslFolderRepository {
                 folder.id,
                 folder.name,
                 folder.createdAt,
-                locationCnt,
+                placeMemoCnt,
                 propertyCnt,
                 folder.isDefault))
         .from(folder)
