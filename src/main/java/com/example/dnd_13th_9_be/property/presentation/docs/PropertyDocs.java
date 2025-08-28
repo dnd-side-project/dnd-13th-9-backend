@@ -1,6 +1,5 @@
 package com.example.dnd_13th_9_be.property.presentation.docs;
 
-import com.example.dnd_13th_9_be.property.presentation.dto.response.SharePropertyResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +20,7 @@ import com.example.dnd_13th_9_be.property.application.model.RecentPropertyModel;
 import com.example.dnd_13th_9_be.property.presentation.dto.request.UpsertPropertyRequest;
 import com.example.dnd_13th_9_be.property.presentation.dto.response.PropertyCreateResponse;
 import com.example.dnd_13th_9_be.property.presentation.dto.response.PropertyDetailResponse;
+import com.example.dnd_13th_9_be.property.presentation.dto.response.SharePropertyResponse;
 import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -551,29 +551,29 @@ public interface PropertyDocs {
           @RequestParam(name = "size", defaultValue = "10")
           int size);
 
-    @Operation(
-        summary = "매물 공유 링크 생성",
-        description =
-            """
+  @Operation(
+      summary = "매물 공유 링크 생성",
+      description =
+          """
                 1. `/api/property/sharelink/{propertyId}` api를 호출해서 응답의 `shareLink`라는 토큰 값을 얻습니다.
                 2. 클라이언트는 로그인 하지 않은 사용자에게 매물 메모를 보여줄 화면 url을 가지고 있을 겁니다. 이 url과 sharedLink 토큰을 조합하여 사용자에게 공유합니다. (ex: 만약 매물 메모 공유 화면 링크가 [www.zipzip.cloud/share/property](http://www.zipzip.cloud/share/property) 일경우 www.zipzip.cloud/share/property/{shareLink} 와 같은 url을 사용자에게 전달합니다. 이 부분은 클라이언트 부분이므로 프론트에서 작업하시기 편리한 방법을 선택하시면 됩니다.)
                 3. 로그인 하지 않은 사용자는 매물 메모 공유 링크를 가지고 해당 웹페이지로 접근합니다.
                 4. 클라이언트는 사용자가 접속한 링크에서 sharedLink 부분을 얻어, `/api/property/share/{shareLink}` api로 전달 주세요. 해당 api문서는 [매물 메모 공유 화면 데이터 조회](https://www.notion.so/25cb87ed31df80a39b20c7f5ce6af65f?pvs=21) 입니다.
                 5. 매물 메모 공유 테스트 할때는 access 토큰과 refresh 토큰 없이 확인해 주세요!
             """)
-    @ApiResponses({
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "200",
-            description = "성공 (공유 토큰 발급)",
-            content =
+  @ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "200",
+        description = "성공 (공유 토큰 발급)",
+        content =
             @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = ApiResponse.class),
                 examples =
-                @ExampleObject(
-                    name = "성공 예시",
-                    value =
-                        """
+                    @ExampleObject(
+                        name = "성공 예시",
+                        value =
+                            """
                         {
                           "code": "20000",
                           "message": "성공했습니다",
@@ -582,45 +582,45 @@ public interface PropertyDocs {
                           }
                         }
                         """))),
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "401",
-            description = "인증 실패 (로그인 필요)",
-            content =
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "401",
+        description = "인증 실패 (로그인 필요)",
+        content =
             @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = ApiResponse.class),
                 examples =
-                @ExampleObject(
-                    name = "인증 실패 예시",
-                    value =
-                        """
+                    @ExampleObject(
+                        name = "인증 실패 예시",
+                        value =
+                            """
                         {
                           "code": "40100",
                           "message": "인증이 필요합니다",
                           "data": null
                         }
                         """))),
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "404",
-            description = "유효하지 않은 매물 ID",
-            content =
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+        responseCode = "404",
+        description = "유효하지 않은 매물 ID",
+        content =
             @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = ApiResponse.class),
                 examples =
-                @ExampleObject(
-                    name = "매물 없음 예시",
-                    value =
-                        """
+                    @ExampleObject(
+                        name = "매물 없음 예시",
+                        value =
+                            """
                         {
                           "code": "71000",
                           "message": "유효하지 않은 매물입니다",
                           "data": null
                         }
                         """)))
-    })
-    @GetMapping("/sharelink/{propertyId}")
-    ResponseEntity<ApiResponse<SharePropertyResponse>> getShareLink(
-        @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userDetails,
-        @PathVariable("propertyId") Long propertyId);
+  })
+  @GetMapping("/sharelink/{propertyId}")
+  ResponseEntity<ApiResponse<SharePropertyResponse>> getShareLink(
+      @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipalDto userDetails,
+      @PathVariable("propertyId") Long propertyId);
 }

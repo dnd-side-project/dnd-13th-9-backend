@@ -1,6 +1,5 @@
 package com.example.dnd_13th_9_be.property.presentation;
 
-import com.example.dnd_13th_9_be.property.presentation.docs.PropertyShareDocs;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +13,7 @@ import com.example.dnd_13th_9_be.common.cipher.AESCipherUtil;
 import com.example.dnd_13th_9_be.common.utils.JsonUtil;
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
 import com.example.dnd_13th_9_be.property.application.PropertyService;
+import com.example.dnd_13th_9_be.property.presentation.docs.PropertyShareDocs;
 import com.example.dnd_13th_9_be.property.presentation.dto.request.SharePropertyRequest;
 import com.example.dnd_13th_9_be.property.presentation.dto.response.PropertyDetailResponse;
 
