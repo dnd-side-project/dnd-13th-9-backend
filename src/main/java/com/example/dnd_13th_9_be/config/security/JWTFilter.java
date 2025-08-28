@@ -41,7 +41,7 @@ public class JWTFilter extends OncePerRequestFilter {
         || request.getRequestURI().startsWith("/oauth2/authorization")
         || request.getRequestURI().equals("/api/auth/refresh")
         || request.getRequestURI().equals("/api/test/auth/token")
-        || request.getRequestURI().startsWith("/api/property/share")) {
+        || request.getRequestURI().startsWith("/api/property/share/")) {
       filterChain.doFilter(request, response);
       return;
     }
