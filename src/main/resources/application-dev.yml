@@ -63,3 +63,6 @@ logging:
     org.springframework.security.oauth2: DEBUG
     org.springframework.web.client.RestTemplate: DEBUG
     com.example.dnd_13th_9_be: DEBUG
+
+aes:
+  private-key: ${AES_PRIVATE_KEY}
