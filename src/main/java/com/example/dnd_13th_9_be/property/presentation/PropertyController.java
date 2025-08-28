@@ -90,6 +90,7 @@ public class PropertyController implements PropertyDocs {
     return ApiResponse.successEntity(result);
   }
 
+  @Override
   @GetMapping("/sharelink/{propertyId}")
   public ResponseEntity<ApiResponse<SharePropertyResponse>> getShareLink(
       @AuthenticationPrincipal UserPrincipalDto userDetails,

@@ -1,5 +1,6 @@
 package com.example.dnd_13th_9_be.property.presentation;
 
+import com.example.dnd_13th_9_be.property.presentation.docs.PropertyShareDocs;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,10 +21,11 @@ import com.example.dnd_13th_9_be.property.presentation.dto.response.PropertyDeta
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/property/share")
-public class PropertyShareController {
+public class PropertyShareController implements PropertyShareDocs {
   private final PropertyService propertyService;
   private final AESCipherUtil aesCipherUtil;
 
+  @Override
   @GetMapping("/{shareLink}")
   public ResponseEntity<ApiResponse<PropertyDetailResponse>> getProperty(
       @PathVariable("shareLink") String shareLink) {
