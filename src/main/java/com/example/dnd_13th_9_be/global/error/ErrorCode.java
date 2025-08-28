@@ -37,6 +37,9 @@ public enum ErrorCode implements ResponseCode {
   CIPHER_ENCODE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "51000", "암호화에 실패했습니다"),
   CIPHER_DECODE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "51001", "복호화에 실패했습니다"),
 
+  // json error 52000
+  JSON_PROCESSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "52000", "json<->string 변환에 실패했습니다"),
+
   // plan 71xxx,
   NOT_FOUND_PLAN(HttpStatus.NOT_FOUND, "71000", "유효하지 않은 계획입니다"),
   PLAN_CREATION_LIMIT(HttpStatus.BAD_REQUEST, "71001", "최대 생성할 수 있는 계획 갯수를 초과했습니다"),

@@ -29,7 +29,7 @@ public class AESCipherUtil implements CipherUtil {
       final IvParameterSpec IV = new IvParameterSpec(privateKey.substring(0, 16).getBytes());
 
       final Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
-      cipher.init(Cipher.DECRYPT_MODE, keySpec, IV);
+      cipher.init(Cipher.ENCRYPT_MODE, keySpec, IV);
 
       byte[] encrypted = cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
       return Base64.getEncoder().encodeToString(encrypted);
