@@ -29,9 +29,13 @@ public enum ErrorCode implements ResponseCode {
   USER_NOT_FOUND(HttpStatus.NOT_FOUND, "60000", "해당 id에 맞는 유저가 없습니다"),
   USER_ACCESS_DENIED(HttpStatus.FORBIDDEN, "60001", "권한이 없습니다"),
 
-  // server error
+  // server error 50000
   INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "50000", "서버 내부 오류입니다"),
   SERVICE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "50300", "일시적으로 이용할 수 없습니다"),
+
+  // cipher error 51000
+  CIPHER_ENCODE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "51000", "암호화에 실패했습니다"),
+  CIPHER_DECODE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "51001", "복호화에 실패했습니다"),
 
   // plan 71xxx,
   NOT_FOUND_PLAN(HttpStatus.NOT_FOUND, "71000", "유효하지 않은 계획입니다"),
