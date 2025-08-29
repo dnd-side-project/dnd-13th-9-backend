@@ -48,10 +48,14 @@ public class PropertyController implements PropertyDocs {
       @AuthenticationPrincipal UserPrincipalDto userDetails,
       @RequestPart(value = "image", required = false) List<MultipartFile> files,
       @Validated @RequestPart(value = "data") UpsertPropertyRequest request) {
-    files.forEach(
-        file -> {
-          log.info("요청된 이미지 이름 : {}", file.getOriginalFilename());
-        });
+    if (files != null) {
+      files.forEach(
+          file -> {
+            log.info(file.getOriginalFilename());
+            log.info(String.valueOf(file.getSize()));
+          });
+    }
+
     Long propertyId = propertyService.createPropertyRecord(userDetails.getUserId(), files, request);
     return ApiResponse.successEntity(
         PropertyCreateResponse.builder().propertyId(propertyId).build());

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.example.dnd_13th_9_be.common.utils.S3Manager;
 import com.example.dnd_13th_9_be.global.error.BusinessException;
@@ -18,6 +19,7 @@ import com.example.dnd_13th_9_be.placeMemo.application.model.PlaceMemoModel;
 import com.example.dnd_13th_9_be.placeMemo.application.model.converter.PlaceMemoRequestConverter;
 import com.example.dnd_13th_9_be.placeMemo.application.repository.PlaceMemoRepository;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -33,6 +35,16 @@ public class PlaceMemoService {
     List<String> urls =
         (request.images() == null ? List.<MultipartFile>of() : request.images())
             .stream().filter(f -> !f.isEmpty()).map(s3Manager::upload).toList();
+
+    if (request.images() != null) {
+      request
+          .images()
+          .forEach(
+              image -> {
+                log.info(image.getOriginalFilename());
+                log.info(String.valueOf(image.getSize()));
+              });
+    }
 
     PlaceMemoModel model = placeMemoModelRequestConverter.from(request, urls);
     PlaceMemoModel savedModel = placeMemoRepository.save(userId, model);
