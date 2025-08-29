@@ -19,4 +19,4 @@ public record CreatePlaceMemoRequest(
     @NotBlank(message = "위도는 필수값입니다.") String latitude,
     @NotBlank(message = "경도는 필수값입니다.") String longitude,
     @NotNull(message = "폴더는 필수값입니다.") Long folderId,
-    @Size(max = 5, message = "이미지는 최대 5개까지 첨부할 수 있습니다.") List<MultipartFile> images) {}
+    @Size(max = 6, message = "이미지는 최대 5개까지 첨부할 수 있습니다.") List<MultipartFile> images) {}
