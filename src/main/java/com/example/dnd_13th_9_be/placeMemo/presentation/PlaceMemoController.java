@@ -7,7 +7,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import com.example.dnd_13th_9_be.global.response.ApiResponse;
 import com.example.dnd_13th_9_be.placeMemo.application.dto.*;
@@ -15,7 +14,6 @@ import com.example.dnd_13th_9_be.placeMemo.application.service.PlaceMemoService;
 import com.example.dnd_13th_9_be.placeMemo.presentation.docs.PlaceMemoDocs;
 import com.example.dnd_13th_9_be.user.application.dto.UserPrincipalDto;
 
-@Slf4j
 @RestController
 @RequestMapping("api/placeMemo")
 @RequiredArgsConstructor
@@ -27,12 +25,6 @@ public class PlaceMemoController implements PlaceMemoDocs {
   public ResponseEntity<ApiResponse<CreatePlaceMemoResponse>> create(
       @AuthenticationPrincipal UserPrincipalDto userPrincipalDto,
       @Valid @ModelAttribute CreatePlaceMemoRequest request) {
-    request
-        .images()
-        .forEach(
-            image -> {
-              log.info("요청된 이미지 이름 : {}", image.getOriginalFilename());
-            });
     CreatePlaceMemoResponse response =
         placeMemoService.create(userPrincipalDto.getUserId(), request);
     return ApiResponse.successEntity(response);
