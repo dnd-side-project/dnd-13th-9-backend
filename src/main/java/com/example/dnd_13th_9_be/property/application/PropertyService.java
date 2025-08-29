@@ -61,7 +61,7 @@ public class PropertyService {
       Long userId, List<MultipartFile> files, UpsertPropertyRequest request) {
 
     // 이미지 갯수 확인
-    if (files != null && files.size() > 5) {
+    if (files != null && files.size() > 6) {
       throw new BusinessException(PROPERTY_RECORD_IMAGE_LIMIT);
     }
 
