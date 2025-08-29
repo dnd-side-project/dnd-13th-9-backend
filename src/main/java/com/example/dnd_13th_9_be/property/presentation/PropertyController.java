@@ -3,7 +3,6 @@ package com.example.dnd_13th_9_be.property.presentation;
 import java.util.List;
 import java.util.Map;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.example.dnd_13th_9_be.common.cipher.AESCipherUtil;
 import com.example.dnd_13th_9_be.common.utils.JsonUtil;
@@ -48,9 +48,10 @@ public class PropertyController implements PropertyDocs {
       @AuthenticationPrincipal UserPrincipalDto userDetails,
       @RequestPart(value = "image", required = false) List<MultipartFile> files,
       @Validated @RequestPart(value = "data") UpsertPropertyRequest request) {
-    files.forEach(file -> {
-      log.info("요청된 이미지 이름 : {}", file.getOriginalFilename());
-    });
+    files.forEach(
+        file -> {
+          log.info("요청된 이미지 이름 : {}", file.getOriginalFilename());
+        });
     Long propertyId = propertyService.createPropertyRecord(userDetails.getUserId(), files, request);
     return ApiResponse.successEntity(
         PropertyCreateResponse.builder().propertyId(propertyId).build());
