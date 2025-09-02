@@ -37,12 +37,12 @@ public class CookieUtil {
     return cookie;
   }
 
-  private void configureCookie(Cookie cookie){
+  private void configureCookie(Cookie cookie) {
     cookie.setPath("/");
     cookie.setHttpOnly(true);
     cookie.setSecure(secure);
     cookie.setAttribute("SameSite", sameSite);
-    if(!domain.isEmpty()){
+    if (!domain.isEmpty()) {
       cookie.setDomain(domain);
     }
   }
@@ -50,7 +50,7 @@ public class CookieUtil {
   public Optional<Cookie> find(Cookie[] cookies, String key) {
     if (cookies == null || cookies.length == 0) return Optional.empty();
     return Arrays.stream(cookies)
-            .filter(cookie -> Objects.equals(key, cookie.getName()))
-            .findFirst();
+        .filter(cookie -> Objects.equals(key, cookie.getName()))
+        .findFirst();
   }
 }
