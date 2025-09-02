@@ -64,3 +64,8 @@ logging:
 
 aes:
   private-key: ${AES_PRIVATE_KEY}
+
+cookie:
+  secure: true
+  same-site: None
+  domain: "zipzip.cloud"
