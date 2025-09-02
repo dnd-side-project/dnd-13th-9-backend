@@ -26,19 +26,18 @@ public class CookieUtil {
   public Cookie create(String key, String value, long expirationMs) {
     Cookie cookie = new Cookie(key, value);
     cookie.setMaxAge((int) (expirationMs / 1000)); // 초 단위로 변환
-    cookie.setPath("/");
-    cookie.setHttpOnly(true);
-    cookie.setSecure(secure);
-    cookie.setAttribute("SameSite", sameSite);
-    if(!domain.isEmpty()){
-      cookie.setDomain(domain);
-    }
+    configureCookie(cookie);
     return cookie;
   }
 
   public Cookie remove(String key) {
     Cookie cookie = new Cookie(key, null);
     cookie.setMaxAge(0);
+    configureCookie(cookie);
+    return cookie;
+  }
+
+  private void configureCookie(Cookie cookie){
     cookie.setPath("/");
     cookie.setHttpOnly(true);
     cookie.setSecure(secure);
@@ -46,7 +45,6 @@ public class CookieUtil {
     if(!domain.isEmpty()){
       cookie.setDomain(domain);
     }
-    return cookie;
   }
 
   public Optional<Cookie> find(Cookie[] cookies, String key) {
